@@ -176,3 +176,36 @@ test('followUp: an installer sees only รพ.สต. they visited, topics count
   const team = Core.followUp(ds, ds.records, '', now);
   assert.ok(team.team.some((t) => t.name === staff));
 });
+
+test('follow-up-later topics (Cleansing Data, ติดตาม Drug Catalog, Lab Online) are always listed last', () => {
+  const later = ['Cleansing Data', 'ติดตาม Drug Catalog', 'Lab Online'];
+  assert.deepEqual([...Core.STANDARD_TOPICS.slice(-3).map((t) => t.label)], later);
+  const ds = Core.loadDataset(sample);
+  assert.deepEqual([...ds.topics.slice(-3).map((t) => Core.topicLabel(t))], later);
+  const fu = Core.followUp(ds, ds.records, '', new Date(2030, 0, 1));
+  const firstLater = fu.topicGaps.findIndex((g) => g.later);
+  if (firstLater >= 0) assert.ok(fu.topicGaps.slice(firstLater).every((g) => g.later), 'main topic gaps come first');
+});
+
+test('follow-up-later gaps keep Cleansing Data before ติดตาม Drug Catalog, whatever the counts', () => {
+  const ds = Core.loadDataset(sample);
+  const cleansing = ds.topics.find((t) => Core.topicLabel(t) === 'Cleansing Data');
+  // Mark Cleansing Data done on one record so it lacks fewer รพ.สต. than ติดตาม Drug Catalog.
+  const records = ds.records.map((r, i) => (i === 0 && r.hospitalKey ? { ...r, topics: [...r.topics, cleansing] } : r));
+  const labels = Core.followUp(ds, records, '', new Date(2030, 0, 1)).topicGaps.filter((g) => g.later).map((g) => g.label);
+  const ci = labels.indexOf('Cleansing Data'), di = labels.indexOf('ติดตาม Drug Catalog');
+  if (ci >= 0 && di >= 0) assert.ok(ci < di);
+});
+
+test('followUp score: success % and work quality', () => {
+  const ds = Core.loadDataset(sample);
+  const fu = Core.followUp(ds, ds.records, '', new Date(2030, 0, 1));
+  const sc = fu.score;
+  const hs = Core.summarize(ds, ds.records).hospitals;
+  const done = hs.reduce((n, h) => n + h.doneCount, 0);
+  assert.equal(sc.topicsDone, done);
+  assert.equal(sc.topicsPossible, hs.length * ds.topics.length);
+  assert.equal(sc.topicPct, done / (hs.length * ds.topics.length));
+  assert.equal(sc.completeHospitals, fu.complete);
+  for (const t of fu.team) assert.ok(t.score.hospitals <= sc.hospitals);
+});
