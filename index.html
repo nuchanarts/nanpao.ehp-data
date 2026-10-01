@@ -5,26 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>EHP On Cloud น่าน</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop stop-color=%27%232563eb%27/%3E%3Cstop offset=%271%27 stop-color=%27%237c3aed%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27url(%23g)%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-size=%2717%27 font-family=%27sans-serif%27 font-weight=%27700%27 fill=%27white%27 text-anchor=%27middle%27%3EE%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
   color-scheme: light;
-  --bg: #f4f3f0;
+  --bg: #f3f6fb;
   --surface: #fcfcfb;
-  --surface-2: #f0efec;
-  --border: #dddcd7;
-  --text: #0b0b0b;
-  --text-2: #52514e;
-  --text-3: #6d6c68;
+  --surface-2: #f1f4f9;
+  --border: #e3e8f0;
+  --text: #101828;
+  --text-2: #475467;
+  --text-3: #667085;
   --accent: #2a78d6;
   --accent-ink: #1c5cab;
   --bar: #2a78d6;
-  --bar-track: #e6e5e1;
+  --bar-track: #e7ecf3;
   --done-bg: #cde2fb;
   --done-ink: #104281;
-  --todo-bg: #f0efec;
+  --todo-bg: #f1f4f9;
   --todo-ink: #6d6c68;
   --good: #0ca30c;
   --good-ink: #006300;
@@ -33,16 +34,23 @@
   --err-bg: #fde8e8;
   --err-ink: #8f1d1d;
   --focus: #2a78d6;
-  --radius: 10px;
-  --shadow: 0 1px 2px rgb(0 0 0 / .06);
+  --side-1: #1e3a8a;
+  --side-2: #2563eb;
+  --brand-grad: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+  --k-blue: #2a78d6;   --k-blue-bg: #e3eefc;
+  --k-green: #0e9f6e;  --k-green-bg: #dcf5ea;
+  --k-orange: #eb6834; --k-orange-bg: #fde9df;
+  --k-violet: #6d4fd8; --k-violet-bg: #ece8fb;
+  --radius: 14px;
+  --shadow: 0 1px 2px rgb(16 24 40 / .05), 0 8px 24px -12px rgb(16 24 40 / .14);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --bg: #111110;
-    --surface: #1a1a19;
-    --surface-2: #232321;
-    --border: #383835;
+    --bg: #0d1117;
+    --surface: #161b24;
+    --surface-2: #1e2532;
+    --border: #2b3444;
     --text: #ffffff;
     --text-2: #c3c2b7;
     --text-3: #a3a29a;
@@ -61,15 +69,22 @@
     --err-bg: #3d1a1a;
     --err-ink: #f4b4b4;
     --focus: #86b6ef;
-    --shadow: none;
+    --side-1: #0f1f4a;
+    --side-2: #1b3f91;
+    --brand-grad: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+    --k-blue: #6da7ec;   --k-blue-bg: #17305a;
+    --k-green: #3ccf91;  --k-green-bg: #12382a;
+    --k-orange: #f08a5d; --k-orange-bg: #3d2216;
+    --k-violet: #a99af0; --k-violet-bg: #2a2350;
+    --shadow: 0 1px 2px rgb(0 0 0 / .4);
   }
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #111110;
-  --surface: #1a1a19;
-  --surface-2: #232321;
-  --border: #383835;
+  --bg: #0d1117;
+  --surface: #161b24;
+  --surface-2: #1e2532;
+  --border: #2b3444;
   --text: #ffffff;
   --text-2: #c3c2b7;
   --text-3: #a3a29a;
@@ -116,17 +131,19 @@ button, .btn {
   padding: 7px 14px; border-radius: 8px; min-height: 38px;
 }
 button:hover, .btn:hover { background: var(--surface-2); }
-.btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-.btn-primary:hover { background: var(--accent-ink); }
+.btn-primary { background: var(--brand-grad); border-color: transparent; color: #fff; font-weight: 500; box-shadow: 0 4px 12px -4px rgb(37 99 235 / .5); }
+.btn-primary:hover { background: var(--brand-grad); filter: brightness(1.08); }
+.btn-primary:disabled { opacity: .7; cursor: progress; }
+button { border-radius: 10px; }
 button.link { border: 0; background: none; padding: 0; min-height: 0; color: var(--accent-ink); text-decoration: underline; text-underline-offset: 2px; font-size: inherit; }
 select, input[type="search"], textarea {
   font: inherit; font-size: .9rem; color: var(--text); background: var(--surface);
   border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; min-height: 38px; max-width: 100%;
 }
 
-main { padding: 16px 24px 32px; display: grid; gap: 16px; max-width: 1200px; }
+main { padding: 16px 24px 32px; display: grid; gap: 16px; max-width: 1600px; width: 100%; }
 .stack { display: grid; gap: 16px; min-width: 0; }
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); min-width: 0; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); min-width: 0; }
 .card-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
 .note { font-size: .82rem; color: var(--text-3); margin: 8px 0 0; }
 
@@ -152,13 +169,20 @@ main { padding: 16px 24px 32px; display: grid; gap: 16px; max-width: 1200px; }
 
 /* KPI */
 .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
-.kpi { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; box-shadow: var(--shadow); }
-.kpi .label { font-size: .85rem; color: var(--text-2); }
-.kpi .value { font-size: 1.9rem; font-weight: 700; line-height: 1.2; margin-top: 2px; }
+.kpi { position: relative; overflow: hidden; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); --k: var(--k-blue); --k-bg: var(--k-blue-bg); }
+.kpi::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 4px; background: var(--k); }
+.kpi.green { --k: var(--k-green); --k-bg: var(--k-green-bg); }
+.kpi.orange { --k: var(--k-orange); --k-bg: var(--k-orange-bg); }
+.kpi.violet { --k: var(--k-violet); --k-bg: var(--k-violet-bg); }
+.kpi-head { display: flex; align-items: center; gap: 10px; }
+.kpi-ico { flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 10px; background: var(--k-bg); color: var(--k); }
+.kpi-ico svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.kpi .label { font-size: .85rem; color: var(--text-2); line-height: 1.3; }
+.kpi .value { font-size: 2rem; font-weight: 700; line-height: 1.2; margin-top: 10px; letter-spacing: -.01em; }
 .kpi .value small { font-size: 1rem; font-weight: 500; color: var(--text-2); }
 .kpi .sub { font-size: .82rem; color: var(--text-3); margin-top: 4px; }
-.meter { height: 8px; border-radius: 4px; background: var(--bar-track); margin-top: 8px; overflow: hidden; }
-.meter > span { display: block; height: 100%; background: var(--bar); border-radius: 0 4px 4px 0; }
+.meter { height: 8px; border-radius: 4px; background: var(--bar-track); margin-top: 10px; overflow: hidden; }
+.meter > span { display: block; height: 100%; background: var(--k); border-radius: 0 4px 4px 0; }
 
 /* Bars */
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -167,7 +191,7 @@ main { padding: 16px 24px 32px; display: grid; gap: 16px; max-width: 1200px; }
 .bar-row { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) auto; gap: 10px; align-items: center; font-size: .88rem; }
 .bar-row .name { overflow-wrap: anywhere; }
 .bar-row .track { height: 12px; background: var(--bar-track); border-radius: 4px; overflow: hidden; }
-.bar-row .track > span { display: block; height: 100%; background: var(--bar); border-radius: 0 4px 4px 0; min-width: 0; }
+.bar-row .track > span { display: block; height: 100%; background: linear-gradient(90deg, var(--k-blue), var(--bar)); border-radius: 0 4px 4px 0; min-width: 0; }
 .bar-row .val { font-variant-numeric: tabular-nums; color: var(--text-2); white-space: nowrap; text-align: right; min-width: 7.5em; }
 @media (max-width: 520px) {
   .bar-row { grid-template-columns: 1fr auto; }
@@ -215,43 +239,60 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
 footer { padding: 0 24px 28px; font-size: .8rem; color: var(--text-3); }
 
 /* App shell: left menu + content */
-.app { display: grid; grid-template-columns: 236px minmax(0, 1fr); min-height: 100vh; }
-.side { position: sticky; top: 0; height: 100vh; overflow-y: auto; background: var(--surface); border-right: 1px solid var(--border); padding: 18px 12px; display: flex; flex-direction: column; gap: 18px; }
-.brand { display: flex; gap: 10px; align-items: center; padding: 0 8px; }
-.brand strong { display: block; font-size: 1rem; line-height: 1.2; }
-.brand small { display: block; font-size: .78rem; color: var(--text-3); }
-.brand-mark { flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 10px; background: var(--accent); color: #fff; font-weight: 700; }
-.menu { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
-.menu a { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; color: var(--text-2); text-decoration: none; font-size: .93rem; min-height: 42px; }
-.menu a:hover { background: var(--surface-2); color: var(--text); }
-.menu a[aria-current="page"] { background: var(--done-bg); color: var(--done-ink); font-weight: 600; }
-.menu svg { width: 20px; height: 20px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.menu-badge { margin-left: auto; font-size: .72rem; background: var(--warn-bg); color: var(--warn-ink); border-radius: 999px; padding: 0 7px; }
-.side-note { margin: auto 8px 0; font-size: .76rem; color: var(--text-3); }
+.app { display: grid; grid-template-columns: 248px minmax(0, 1fr); min-height: 100vh; }
+.side { position: sticky; top: 0; height: 100vh; overflow-y: auto; background: linear-gradient(180deg, var(--side-1), var(--side-2)); color: #fff; padding: 20px 14px; display: flex; flex-direction: column; gap: 22px; z-index: 30; }
+.brand { display: flex; gap: 12px; align-items: center; padding: 0 6px; }
+.brand strong { display: block; font-size: 1.02rem; line-height: 1.2; }
+.brand small { display: block; font-size: .78rem; color: rgb(255 255 255 / .75); }
+.brand-mark { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: rgb(255 255 255 / .18); color: #fff; font-weight: 700; font-size: 1.1rem; box-shadow: inset 0 0 0 1px rgb(255 255 255 / .25); }
+.menu { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.menu a { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; color: rgb(255 255 255 / .82); text-decoration: none; font-size: .95rem; min-height: 44px; }
+.menu a:hover { background: rgb(255 255 255 / .1); color: #fff; }
+.menu a[aria-current="page"] { background: #fff; color: var(--side-1); font-weight: 600; box-shadow: 0 6px 16px -8px rgb(0 0 0 / .45); }
+.menu svg { width: 20px; height: 20px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.menu-badge { margin-left: auto; font-size: .72rem; background: #fbbf24; color: #3b2a00; border-radius: 999px; padding: 0 8px; }
+.side .side-foot { margin-top: auto; display: grid; gap: 10px; padding: 0 6px; }
+.side .side-foot button { background: rgb(255 255 255 / .12); color: #fff; border-color: rgb(255 255 255 / .25); }
+.side .side-foot button:hover { background: rgb(255 255 255 / .2); }
+.side-note { margin: 0; font-size: .76rem; color: rgb(255 255 255 / .7); }
+.side :focus-visible { outline-color: #fff; }
 .content { min-width: 0; display: flex; flex-direction: column; }
-.topbar { display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; padding: 16px 24px; border-bottom: 1px solid var(--border); background: var(--surface); }
-.filters-bar { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 16px; }
+.topbar { position: sticky; top: 0; z-index: 20; display: flex; gap: 12px; align-items: center; justify-content: space-between; padding: 16px 28px; background: color-mix(in srgb, var(--bg) 85%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+.topbar-title { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.topbar h1 { font-size: 1.4rem; }
+.icon-btn { display: inline-grid; place-items: center; gap: 6px; grid-auto-flow: column; }
+.icon-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.icon-btn.spin svg { animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+#menuBtn { display: none; width: 42px; padding: 0; }
+.scrim { display: none; }
+main { padding: 20px 28px 32px; }
+.filters-bar { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 18px; box-shadow: var(--shadow); }
 #errorBox, #loading { margin: 0; }
 
 @media (max-width: 860px) {
   .app { display: block; }
-  .side { position: sticky; top: 0; z-index: 10; height: auto; flex-direction: row; align-items: center; gap: 8px; padding: 6px 8px; border-right: 0; border-bottom: 1px solid var(--border); overflow: visible; }
-  .brand { padding: 0 4px; }
-  .brand > span:last-child, .side-note { display: none; }
-  .brand-mark { width: 32px; height: 32px; }
-  .side nav { min-width: 0; flex: 1; overflow-x: auto; scrollbar-width: none; }
-  .menu { display: flex; gap: 4px; }
-  .menu a { white-space: nowrap; padding: 6px 10px; min-height: 40px; font-size: .86rem; gap: 6px; }
-  .menu svg { width: 18px; height: 18px; }
-  .topbar { padding: 12px 16px; }
-  .topbar h1 { font-size: 1.15rem; }
-  main { padding: 12px 16px 24px; gap: 12px; }
+  .side { position: fixed; inset: 0 auto 0 0; width: min(280px, 84vw); height: 100%; transform: translateX(-105%); transition: transform .22s ease; box-shadow: 0 0 40px rgb(0 0 0 / .35); }
+  body.menu-open .side { transform: none; }
+  .scrim { display: block; position: fixed; inset: 0; z-index: 25; background: rgb(8 12 24 / .45); opacity: 0; pointer-events: none; transition: opacity .2s; }
+  body.menu-open .scrim { opacity: 1; pointer-events: auto; }
+  body.menu-open { overflow: hidden; }
+  #menuBtn { display: inline-grid; }
+  .topbar { padding: 10px 14px; }
+  .topbar h1 { font-size: 1.12rem; }
+  .topbar #dataStatus { font-size: .76rem; }
+  #refreshBtn .lbl { display: none; }
+  #refreshBtn { width: 42px; padding: 0; }
+  main { padding: 12px 14px 24px; gap: 12px; }
   .stack { gap: 12px; }
-  footer { padding: 0 16px 24px; }
+  footer { padding: 0 14px 24px; }
   .card { padding: 14px; }
   .kpis { grid-template-columns: 1fr 1fr; gap: 10px; }
-  .kpi { padding: 12px; }
-  .kpi .value { font-size: 1.5rem; }
+  .kpi { padding: 12px 14px; }
+  .kpi-ico { width: 30px; height: 30px; border-radius: 8px; }
+  .kpi-ico svg { width: 17px; height: 17px; }
+  .kpi .label { font-size: .8rem; }
+  .kpi .value { font-size: 1.5rem; margin-top: 8px; }
   .filters { gap: 8px 10px; }
   .filters label { flex: 1 1 140px; }
   .filters .reset { flex: 1 1 140px; }
@@ -261,7 +302,7 @@ footer { padding: 0 24px 28px; font-size: .8rem; color: var(--text-3); }
   .matrix td.first, .matrix th.first { min-width: 0; position: static; }
 }
 @media (max-width: 380px) { .kpis { grid-template-columns: 1fr; } }
-@media print { .app { display: block; } }
+@media print { .app { display: block; } .side, .scrim { display: none; } }
 [hidden] { display: none !important; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 @media print { .no-print { display: none !important; } body { background: #fff; } }
@@ -270,7 +311,7 @@ footer { padding: 0 24px 28px; font-size: .8rem; color: var(--text-3); }
 <body>
 <a class="sr-only" href="#main">ข้ามไปยังเนื้อหา</a>
 <div class="app">
-  <aside class="side no-print" aria-label="เมนูหลัก">
+  <aside class="side no-print" id="sideMenu" aria-label="เมนูหลัก">
     <div class="brand">
       <span class="brand-mark" aria-hidden="true">E</span>
       <span><strong>EHP On Cloud</strong><small>อบจ.น่าน · รพ.สต. 106 แห่ง</small></span>
@@ -285,18 +326,24 @@ footer { padding: 0 24px 28px; font-size: .8rem; color: var(--text-3); }
         <li><a href="#source" data-view="source"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v14H5zM5 10h14M10 10v9"/></svg><span>แหล่งข้อมูล</span><b id="warnBadge" class="menu-badge" hidden></b></a></li>
       </ul>
     </nav>
-    <p class="side-note">ใช้ภายในทีมเท่านั้น<br>มีชื่อบุคคล ห้ามเผยแพร่</p>
+    <div class="side-foot">
+      <button type="button" id="themeBtn" aria-label="สลับโหมดสว่าง/มืด">โหมดมืด</button>
+      <p class="side-note">ใช้ภายในทีมเท่านั้น · มีชื่อบุคคล</p>
+    </div>
   </aside>
+  <div class="scrim no-print" id="scrim"></div>
 
   <div class="content">
     <header class="topbar">
-      <div style="min-width:0">
-        <h1 id="viewTitle">ภาพรวม</h1>
-        <div id="dataStatus" class="small muted" aria-live="polite">ยังไม่มีข้อมูล</div>
+      <div class="topbar-title">
+        <button type="button" id="menuBtn" class="icon-btn no-print" aria-label="เปิดเมนู" aria-expanded="false" aria-controls="sideMenu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        <div style="min-width:0">
+          <h1 id="viewTitle">ภาพรวม</h1>
+          <div id="dataStatus" class="small muted" aria-live="polite">ยังไม่มีข้อมูล</div>
+        </div>
       </div>
       <div class="top-actions no-print">
-        <button type="button" id="refreshBtn" class="btn-primary">โหลดข้อมูลล่าสุด</button>
-        <button type="button" id="themeBtn" aria-label="สลับโหมดสว่าง/มืด">โหมดมืด</button>
+        <button type="button" id="refreshBtn" class="btn-primary icon-btn" aria-label="โหลดข้อมูลล่าสุด"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg><span class="lbl">โหลดข้อมูลล่าสุด</span></button>
       </div>
     </header>
 
@@ -312,9 +359,9 @@ footer { padding: 0 24px 28px; font-size: .8rem; color: var(--text-3); }
       <div id="dashboard" class="stack" hidden>
         <section class="filters-bar no-print" aria-label="ตัวกรอง">
           <div class="filters">
-            <label>อำเภอ<select id="fDistrict"></select></label>
-            <label>รอบที่ขึ้นระบบ<select id="fRound"></select></label>
-            <label>เจ้าหน้าที่<select id="fStaff"></select></label>
+            <label>อำเภอ<select id="fDistrict" autocomplete="off"></select></label>
+            <label>รอบที่ขึ้นระบบ<select id="fRound" autocomplete="off"></select></label>
+            <label>เจ้าหน้าที่<select id="fStaff" autocomplete="off"></select></label>
             <button type="button" id="resetBtn" class="reset">ล้างตัวกรอง</button>
           </div>
           <div id="activeFilter" class="active-filter" aria-live="polite"></div>
@@ -408,7 +455,7 @@ footer { padding: 0 24px 28px; font-size: .8rem; color: var(--text-3); }
         <div id="warnBox" class="alert alert-warn" hidden style="margin-top:14px"></div>
       </section>
     </main>
-    <footer>เครื่องมือภายในทีม — ห้ามเผยแพร่ลิงก์สาธารณะ · ตัวเลขทั้งหมดคำนวณจากการตอบกลับของฟอร์มเท่านั้น</footer>
+    <footer>เครื่องมือของทีม — มีชื่อบุคคล โปรดแชร์ลิงก์เฉพาะในทีม · ตัวเลขทั้งหมดคำนวณจากการตอบกลับของฟอร์มเท่านั้น</footer>
   </div>
 </div>
 
@@ -782,7 +829,8 @@ var EHPCore = (function () {
     state.loading = on;
     $('loading').hidden = !on;
     $('refreshBtn').disabled = on;
-    $('refreshBtn').textContent = on ? 'กำลังโหลด…' : 'โหลดข้อมูลล่าสุด';
+    $('refreshBtn').classList.toggle('spin', on);
+    $('refreshBtn').querySelector('.lbl').textContent = on ? 'กำลังโหลด…' : 'โหลดข้อมูลล่าสุด';
   }
 
   function renderSource() {
@@ -923,8 +971,15 @@ var EHPCore = (function () {
       : 'แสดงทั้งหมด ' + fmt(total) + ' บันทึก';
   }
 
-  function kpi(label, value, sub, ratio) {
-    return '<div class="kpi"><div class="label">' + label + '</div><div class="value num">' + value + '</div>' +
+  var KPI_ICONS = {
+    blue: '<path d="M4 20V9l8-5 8 5v11zM12 10v6M9 13h6"/>',
+    green: '<path d="M5 12l4 4L19 6"/>',
+    orange: '<circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/>',
+    violet: '<path d="M4 6h16M4 12h10M4 18h6"/>'
+  };
+  function kpi(label, value, sub, ratio, color) {
+    return '<div class="kpi ' + color + '"><div class="kpi-head"><span class="kpi-ico" aria-hidden="true"><svg viewBox="0 0 24 24">' + KPI_ICONS[color] + '</svg></span>' +
+      '<div class="label">' + label + '</div></div><div class="value num">' + value + '</div>' +
       (ratio != null ? '<div class="meter" role="img" aria-label="' + pct(ratio) + '">' + bar(ratio) + '</div>' : '') +
       '<div class="sub">' + sub + '</div></div>';
   }
@@ -932,13 +987,13 @@ var EHPCore = (function () {
   function renderKpis(s, f) {
     // Coverage over 106 is province-wide only; a district has no honest denominator yet (constitution III).
     var cover = f.district
-      ? kpi('รพ.สต. ที่ได้รับการดูแล', fmt(s.hospitalCount) + ' <small>แห่ง</small>', 'ในอำเภอ' + esc(f.district) + ' · ยังไม่มีจำนวน รพ.สต. รายอำเภอ จึงไม่แสดงร้อยละ', null)
-      : kpi('รพ.สต. ที่ได้รับการดูแล', fmt(s.hospitalCount) + '<small>/' + s.totalHospitals + ' แห่ง</small>', pct(s.coverage) + ' ของ รพ.สต. ที่ถ่ายโอนทั้งหมด · คงเหลือ ' + fmt(s.totalHospitals - s.hospitalCount) + ' แห่ง', s.coverage);
+      ? kpi('รพ.สต. ที่ได้รับการดูแล', fmt(s.hospitalCount) + ' <small>แห่ง</small>', 'ในอำเภอ' + esc(f.district) + ' · ยังไม่มีจำนวน รพ.สต. รายอำเภอ จึงไม่แสดงร้อยละ', null, 'blue')
+      : kpi('รพ.สต. ที่ได้รับการดูแล', fmt(s.hospitalCount) + '<small>/' + s.totalHospitals + ' แห่ง</small>', pct(s.coverage) + ' ของ รพ.สต. ที่ถ่ายโอนทั้งหมด · คงเหลือ ' + fmt(s.totalHospitals - s.hospitalCount) + ' แห่ง', s.coverage, 'blue');
     $('kpis').innerHTML = [
       cover,
-      kpi('ความครบของหัวข้อ (เฉลี่ย)', pct(s.avgCompleteness), 'เฉลี่ยจาก ' + fmt(s.hospitalCount) + ' แห่ง · ครบทุกหัวข้อ ' + fmt(s.completeHospitals) + ' แห่ง', s.avgCompleteness),
-      kpi('บันทึกการเข้าแนะนำ', fmt(s.totalRecords) + ' <small>ครั้ง</small>', s.lastRecord ? 'ล่าสุด ' + Core.formatThaiDate(s.lastRecord) : 'ยังไม่มีบันทึก', null),
-      kpi('หัวข้อ Checklist', fmt(state.ds.topics.length) + ' <small>หัวข้อ</small>', state.ds.newTopics.length ? 'มาตรฐาน 15 + หัวข้อใหม่จากฟอร์ม ' + state.ds.newTopics.length : 'ตามมาตรฐาน 15 หัวข้อ', null)
+      kpi('ความครบของหัวข้อ (เฉลี่ย)', pct(s.avgCompleteness), 'เฉลี่ยจาก ' + fmt(s.hospitalCount) + ' แห่ง · ครบทุกหัวข้อ ' + fmt(s.completeHospitals) + ' แห่ง', s.avgCompleteness, 'green'),
+      kpi('บันทึกการเข้าแนะนำ', fmt(s.totalRecords) + ' <small>ครั้ง</small>', s.lastRecord ? 'ล่าสุด ' + Core.formatThaiDate(s.lastRecord) : 'ยังไม่มีบันทึก', null, 'orange'),
+      kpi('หัวข้อ Checklist', fmt(state.ds.topics.length) + ' <small>หัวข้อ</small>', state.ds.newTopics.length ? 'มาตรฐาน 15 + หัวข้อใหม่จากฟอร์ม ' + state.ds.newTopics.length : 'ตามมาตรฐาน 15 หัวข้อ', null, 'violet')
     ].join('');
   }
 
@@ -1064,11 +1119,23 @@ var EHPCore = (function () {
   }
 
   // ---------- Events ----------
+  // Mobile drawer (☰)
+  function setMenu(open) {
+    document.body.classList.toggle('menu-open', open);
+    $('menuBtn').setAttribute('aria-expanded', String(open));
+    $('menuBtn').setAttribute('aria-label', open ? 'ปิดเมนู' : 'เปิดเมนู');
+    if (open) { var a = document.querySelector('.menu a[aria-current]') || document.querySelector('.menu a'); a.focus(); }
+  }
+  $('menuBtn').addEventListener('click', function () { setMenu(!document.body.classList.contains('menu-open')); });
+  $('scrim').addEventListener('click', function () { setMenu(false); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && document.body.classList.contains('menu-open')) { setMenu(false); $('menuBtn').focus(); }
+  });
+  document.querySelector('.menu').addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
+
   window.addEventListener('hashchange', function () {
     setView(location.hash.slice(1));
     window.scrollTo(0, 0);
-    var active = document.querySelector('.menu a[aria-current]');
-    if (active && active.scrollIntoView) active.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   });
   $('refreshBtn').addEventListener('click', function () { loadFromSheet(false); });
   $('autoRefresh').addEventListener('change', function () {
