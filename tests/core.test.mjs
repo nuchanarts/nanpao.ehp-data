@@ -157,3 +157,22 @@ test('sheetCsvUrl rejects links that are not Google Sheets with a Thai message',
 test('loadDataset explains when Google returns a login page instead of CSV', () => {
   assert.throws(() => Core.loadDataset('<!DOCTYPE html><html><body>Sign in</body></html>'), /แชร์/);
 });
+
+test('followUp: an installer sees only รพ.สต. they visited, topics counted from everyone', () => {
+  const ds = Core.loadDataset(sample);
+  const staff = ds.records.find((r) => r.hospitalKey).staff;
+  const now = new Date(2030, 0, 1);
+  const fu = Core.followUp(ds, ds.records, staff, now);
+  const all = Core.summarize(ds, ds.records).hospitals;
+  const mine = all.filter((h) => h.staff.includes(staff));
+  assert.equal(fu.hospitals, mine.length);
+  assert.equal(fu.items.length, mine.filter((h) => h.missing.length).length);
+  assert.equal(fu.complete + fu.items.length, fu.hospitals);
+  for (let i = 1; i < fu.items.length; i++) {
+    assert.ok(fu.items[i - 1].hospital.missing.length >= fu.items[i].hospital.missing.length, 'most missing first');
+  }
+  assert.ok(fu.items.every((i) => i.stale), 'every visit is long before "now"');
+  assert.equal(fu.team.length, 0);
+  const team = Core.followUp(ds, ds.records, '', now);
+  assert.ok(team.team.some((t) => t.name === staff));
+});

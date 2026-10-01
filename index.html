@@ -235,6 +235,20 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
 .recent dt { color: var(--text-3); }
 .recent dd { margin: 0; overflow-wrap: anywhere; }
 
+/* Follow-up */
+.insight { border-radius: var(--radius); padding: 16px 18px; background: var(--k-violet-bg); color: var(--text); border: 1px solid var(--border); }
+.insight h2 { font-size: 1.05rem; margin-bottom: 6px; }
+.insight ul { margin: 6px 0 0; padding-left: 20px; display: grid; gap: 4px; }
+.fu-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.fu-item { border: 1px solid var(--border); border-left: 4px solid var(--k-blue); border-radius: 10px; padding: 12px 14px; }
+.fu-item.stale { border-left-color: var(--k-orange); }
+.fu-item .row1 { display: flex; justify-content: space-between; gap: 6px 12px; flex-wrap: wrap; align-items: baseline; }
+.fu-item .title { font-weight: 600; }
+.fu-item .meta { font-size: .82rem; color: var(--text-2); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 0; padding: 0; list-style: none; }
+.chip { font-size: .78rem; border-radius: 999px; padding: 2px 10px; background: var(--k-orange-bg); color: var(--text); border: 1px solid var(--border); }
+.tag-stale { font-size: .75rem; border-radius: 999px; padding: 1px 8px; background: var(--warn-bg); color: var(--warn-ink); white-space: nowrap; }
+.fu-note { font-size: .84rem; color: var(--text-2); margin-top: 6px; overflow-wrap: anywhere; }
 .empty-state { text-align: center; padding: 28px 12px; color: var(--text-2); }
 footer { padding: 0 24px 28px; font-size: .8rem; color: var(--text-3); }
 
@@ -319,6 +333,7 @@ main { padding: 20px 28px 32px; }
     <nav>
       <ul class="menu">
         <li><a href="#overview" data-view="overview"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg><span>ภาพรวม</span></a></li>
+        <li><a href="#followup" data-view="followup"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6l1 1 2-2M4 12l1 1 2-2M4 18h2"/></svg><span>ติดตามงาน</span></a></li>
         <li><a href="#topics" data-view="topics"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h10M4 18h6"/></svg><span>รายหัวข้อ</span></a></li>
         <li><a href="#hospitals" data-view="hospitals"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V9l8-5 8 5v11zM12 10v6M9 13h6"/></svg><span>ราย รพ.สต.</span></a></li>
         <li><a href="#staff" data-view="staff"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4.5-6 8-6s7 2 8 6"/></svg><span>เจ้าหน้าที่ / รอบ</span></a></li>
@@ -376,6 +391,25 @@ main { padding: 20px 28px 32px; }
             </div>
             <div class="table-scroll"><table id="distTable"></table></div>
             <p class="note">แสดงจำนวน รพ.สต. ที่มีบันทึก ยังไม่แสดงร้อยละรายอำเภอ จนกว่าจะมีรายชื่อ รพ.สต. ครบทั้ง 106 แห่ง · ความครบเฉลี่ย = ค่าเฉลี่ยของ (หัวข้อที่แนะนำแล้ว ÷ หัวข้อทั้งหมด) ของ รพ.สต. ในอำเภอ</p>
+          </section>
+        </div>
+
+        <div class="stack" data-panel="followup">
+          <section class="insight" id="fuInsight" aria-live="polite"></section>
+          <section class="card" id="fuTeamCard" aria-labelledby="fuTeamHead">
+            <div class="card-head">
+              <h2 id="fuTeamHead">งานค้างของแต่ละคน</h2>
+              <span class="small muted">แตะชื่อเพื่อดูรายการของคนนั้น</span>
+            </div>
+            <div class="table-scroll"><table id="fuTeam"></table></div>
+          </section>
+          <section class="card" aria-labelledby="fuHead">
+            <div class="card-head">
+              <h2 id="fuHead">รพ.สต. ที่ต้องติดตาม</h2>
+              <span class="small muted" id="fuCount"></span>
+            </div>
+            <p class="note" style="margin:0 0 12px">เรียงจากหัวข้อที่ยังขาดมากที่สุด แล้วตามวันที่เข้าครั้งล่าสุดนานที่สุด · นับหัวข้อจากทุกครั้งที่มีผู้เข้าแนะนำ (ไม่ว่าใครเข้า) · ขอบสีส้ม = ไม่ได้เข้านาน <span id="fuStaleDays"></span> วันขึ้นไป</p>
+            <ol class="fu-list" id="fuList"></ol>
           </section>
         </div>
 
@@ -468,6 +502,7 @@ var EHPCore = (function () {
   // Response sheet of the form; can be changed from the page ("เปลี่ยนลิงก์").
   var DEFAULT_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1KnS4ozW6cf5eS70iFk6FxopSt4M737AEnMGvvLnWqc0/edit?gid=1304924102#gid=1304924102';
   var NO_ROUND = 'ไม่ระบุรอบ';
+  var STALE_DAYS = 14; // no visit for this many days → flag for follow-up
   var UNSPECIFIED = 'ไม่ระบุ';
   var TH_MONTHS = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
 
@@ -701,7 +736,7 @@ var EHPCore = (function () {
       var h = map[r.hospitalKey];
       if (!h) {
         h = map[r.hospitalKey] = { key: r.hospitalKey, code: r.hospitalCode, name: r.hospitalName, district: r.district,
-          visits: 0, topicSet: {}, staff: [], recipients: [], rounds: [], lastVisit: null };
+          visits: 0, topicSet: {}, staff: [], recipients: [], rounds: [], lastVisit: null, lastNote: '', lastNoteAt: null };
         list.push(h);
       }
       h.visits++;
@@ -710,6 +745,8 @@ var EHPCore = (function () {
       if (h.recipients.indexOf(r.recipient) < 0) h.recipients.push(r.recipient);
       if (h.rounds.indexOf(r.round) < 0) h.rounds.push(r.round);
       if (r.timestamp && (!h.lastVisit || r.timestamp > h.lastVisit)) h.lastVisit = r.timestamp;
+      var note = [r.suggestion, r.otherAdvice].filter(Boolean).join(' · ');
+      if (note && (!h.lastNote || (r.timestamp && (!h.lastNoteAt || r.timestamp >= h.lastNoteAt)))) { h.lastNote = note; h.lastNoteAt = r.timestamp; }
     });
     var total = ds.topics.length;
     list.forEach(function (h) {
@@ -777,8 +814,51 @@ var EHPCore = (function () {
     };
   }
 
+  function daysBetween(from, to) {
+    return from ? Math.max(0, Math.floor((to.getTime() - from.getTime()) / 86400000)) : null;
+  }
+
+  // Follow-up list for an installer: รพ.สต. they have visited, with completeness from every visit
+  // (anyone's), so a topic another staff member covered is not shown as missing.
+  // records: already filtered by district/round but NOT by staff. staff '' = whole team.
+  function followUp(ds, records, staff, now) {
+    now = now || new Date();
+    var all = buildHospitals(ds, records);
+    var mine = staff ? all.filter(function (h) { return h.staff.indexOf(staff) >= 0; }) : all;
+    var items = mine.filter(function (h) { return h.missing.length; }).map(function (h) {
+      var days = daysBetween(h.lastVisit, now);
+      return { hospital: h, daysSince: days, stale: days == null || days >= STALE_DAYS };
+    });
+    // Most missing topics first, then the longest without a visit.
+    items.sort(function (a, b) {
+      return b.hospital.missing.length - a.hospital.missing.length ||
+        (b.daysSince == null ? Infinity : b.daysSince) - (a.daysSince == null ? Infinity : a.daysSince) ||
+        thSort(a.hospital.name, b.hospital.name);
+    });
+    var topicGaps = ds.topics.map(function (t) {
+      return { text: t, label: topicLabel(t), hospitals: items.filter(function (i) { return !i.hospital.topicSet[t]; }).length };
+    }).filter(function (g) { return g.hospitals; }).sort(function (a, b) { return b.hospitals - a.hospitals; });
+    var team = [];
+    if (!staff) {
+      var names = [];
+      records.forEach(function (r) { if (r.hospitalKey && names.indexOf(r.staff) < 0) names.push(r.staff); });
+      team = names.map(function (n) {
+        var hs = all.filter(function (h) { return h.staff.indexOf(n) >= 0; });
+        var open = hs.filter(function (h) { return h.missing.length; });
+        return { name: n, hospitals: hs.length, incomplete: open.length,
+          stale: open.filter(function (h) { var d = daysBetween(h.lastVisit, now); return d == null || d >= STALE_DAYS; }).length };
+      }).sort(function (a, b) { return b.incomplete - a.incomplete || thSort(a.name, b.name); });
+    }
+    return {
+      staff: staff || '', staleDays: STALE_DAYS,
+      hospitals: mine.length, complete: mine.length - items.length,
+      stale: items.filter(function (i) { return i.stale; }).length,
+      items: items, topicGaps: topicGaps, team: team
+    };
+  }
+
   return {
-    TOTAL_HOSPITALS: TOTAL_HOSPITALS, NO_ROUND: NO_ROUND, STANDARD_TOPICS: STANDARD_TOPICS,
+    TOTAL_HOSPITALS: TOTAL_HOSPITALS, followUp: followUp, NO_ROUND: NO_ROUND, STANDARD_TOPICS: STANDARD_TOPICS,
     DEFAULT_SHEET_URL: DEFAULT_SHEET_URL, sheetCsvUrl: sheetCsvUrl,
     parseTable: parseTable, parseThaiDate: parseThaiDate, formatThaiDate: formatThaiDate,
     detectColumns: detectColumns, splitTopics: splitTopics, hospitalKey: hospitalKey,
@@ -800,7 +880,7 @@ var EHPCore = (function () {
   var RECENT_PAGE = 15;
   var AUTO_REFRESH_MS = 60 * 1000;
   var state = { ds: null, loadedAt: null, recentShown: RECENT_PAGE, loading: false, timer: null, view: 'overview' };
-  var VIEWS = { overview: 'ภาพรวม', topics: 'รายหัวข้อ', hospitals: 'ราย รพ.สต.', staff: 'เจ้าหน้าที่ / รอบ', recent: 'บันทึกล่าสุด', source: 'แหล่งข้อมูล' };
+  var VIEWS = { overview: 'ภาพรวม', followup: 'ติดตามงาน', topics: 'รายหัวข้อ', hospitals: 'ราย รพ.สต.', staff: 'เจ้าหน้าที่ / รอบ', recent: 'บันทึกล่าสุด', source: 'แหล่งข้อมูล' };
   var $ = function (id) { return document.getElementById(id); };
 
   function esc(s) {
@@ -949,6 +1029,57 @@ var EHPCore = (function () {
     renderCountTable($('staffTable'), 'เจ้าหน้าที่', s.staffStats);
     renderCountTable($('roundTable'), 'รอบ', s.roundStats);
     renderRecent(s);
+    if (state.view === 'followup') renderFollowUp(ds, f);
+  }
+
+  // Per-installer follow-up: which รพ.สต. still need work and which topics to bring next visit.
+  function renderFollowUp(ds, f) {
+    var fu = Core.followUp(ds, Core.filterRecords(ds.records, { district: f.district, round: f.round }), f.staff);
+    var who = f.staff ? 'คุณ' + f.staff : 'ทั้งทีม';
+    var tips = [];
+    if (!fu.hospitals) {
+      tips.push('ยังไม่มีบันทึกการเข้าแนะนำของ' + esc(who) + 'ตามตัวกรองนี้');
+    } else if (!fu.items.length) {
+      tips.push('✓ รพ.สต. ทั้ง ' + fmt(fu.hospitals) + ' แห่งที่' + esc(who) + 'ดูแล ได้รับคำแนะนำครบทุกหัวข้อแล้ว');
+    } else {
+      tips.push('ดูแล ' + fmt(fu.hospitals) + ' แห่ง · ครบแล้ว ' + fmt(fu.complete) + ' แห่ง · <b>ต้องติดตามอีก ' + fmt(fu.items.length) + ' แห่ง</b>');
+      if (fu.stale) tips.push('มี <b>' + fmt(fu.stale) + ' แห่ง</b> ที่ยังไม่ครบและไม่ได้เข้านาน ' + fu.staleDays + ' วันขึ้นไป — ควรนัดเข้าก่อน');
+      var top = fu.items[0];
+      tips.push('เริ่มที่ <b>' + esc(top.hospital.name) + '</b> (อ.' + esc(top.hospital.district) + ') ยังขาด ' + top.hospital.missing.length + ' หัวข้อ');
+      if (fu.topicGaps.length) {
+        tips.push('หัวข้อที่ควรเตรียมไปแนะนำ: ' + fu.topicGaps.slice(0, 3).map(function (g) {
+          return '<b>' + esc(g.label) + '</b> (' + fmt(g.hospitals) + ' แห่ง)';
+        }).join(', '));
+      }
+    }
+    $('fuInsight').innerHTML = '<h2>คำแนะนำสำหรับ' + esc(who) + '</h2>' +
+      (f.staff ? '' : '<p class="small muted" style="margin:0">เลือกชื่อของคุณที่ตัวกรอง “เจ้าหน้าที่” ด้านบน หรือแตะชื่อในตาราง เพื่อดูเฉพาะงานของตัวเอง</p>') +
+      '<ul>' + tips.map(function (t) { return '<li>' + t + '</li>'; }).join('') + '</ul>';
+
+    $('fuTeamCard').hidden = !!f.staff;
+    if (!f.staff) {
+      $('fuTeam').innerHTML = fu.team.length
+        ? '<thead><tr><th scope="col">เจ้าหน้าที่</th><th class="n" scope="col">ดูแล</th><th class="n" scope="col">ยังไม่ครบ</th><th class="n" scope="col">ไม่ได้เข้า ≥' + fu.staleDays + ' วัน</th></tr></thead><tbody>' +
+          fu.team.map(function (t) {
+            return '<tr><th scope="row" style="font-weight:500"><button type="button" class="link" data-staff="' + esc(t.name) + '">' + esc(t.name) + '</button></th>' +
+              '<td class="n">' + fmt(t.hospitals) + ' แห่ง</td><td class="n">' + fmt(t.incomplete) + ' แห่ง</td><td class="n">' + fmt(t.stale) + ' แห่ง</td></tr>';
+          }).join('') + '</tbody>'
+        : '<tbody><tr><td class="empty-state">ไม่มีบันทึกตามตัวกรอง</td></tr></tbody>';
+    }
+
+    $('fuStaleDays').textContent = fu.staleDays;
+    $('fuCount').textContent = fmt(fu.items.length) + ' แห่ง';
+    $('fuList').innerHTML = fu.items.length ? fu.items.map(function (i) {
+      var h = i.hospital;
+      return '<li class="fu-item' + (i.stale ? ' stale' : '') + '"><div class="row1"><span class="title">' + esc(h.name) + '</span>' +
+        '<span class="meta">ขาด ' + h.missing.length + '/' + h.totalTopics + ' หัวข้อ</span></div>' +
+        '<div class="meta">' + (h.code ? esc(h.code) + ' · ' : '') + 'อ.' + esc(h.district) + ' · เข้าแล้ว ' + h.visits + ' ครั้ง · ล่าสุด ' +
+        Core.formatThaiDate(h.lastVisit, false) + (i.daysSince != null ? ' (' + fmt(i.daysSince) + ' วันก่อน)' : '') +
+        (i.stale ? ' <span class="tag-stale">ควรนัดเข้า</span>' : '') +
+        (f.staff ? '' : ' · โดย ' + esc(h.staff.join(', '))) + '</div>' +
+        '<ul class="chips" aria-label="หัวข้อที่ยังขาด">' + h.missing.map(function (t) { return '<li class="chip">' + esc(Core.topicLabel(t)) + '</li>'; }).join('') + '</ul>' +
+        (h.lastNote ? '<div class="fu-note">ข้อเสนอแนะล่าสุด: ' + esc(h.lastNote) + '</div>' : '') + '</li>';
+    }).join('') : '<li class="empty-state">ไม่มี รพ.สต. ที่ต้องติดตาม</li>';
   }
 
   function renderWarnings(ds) {
@@ -1166,6 +1297,13 @@ var EHPCore = (function () {
     var d = b.getAttribute('data-district');
     $('fDistrict').value = $('fDistrict').value === d ? '' : d;
     render();
+  });
+  $('fuTeam').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-staff]');
+    if (!b) return;
+    $('fStaff').value = b.getAttribute('data-staff');
+    render();
+    window.scrollTo(0, 0);
   });
   $('moreBtn').addEventListener('click', function () { state.recentShown += RECENT_PAGE; render(); });
   $('themeBtn').addEventListener('click', function () {
