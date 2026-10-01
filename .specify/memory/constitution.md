@@ -1,30 +1,26 @@
 <!--
 Sync Impact Report
 ==================
-Version change: (template, unversioned) → 1.0.0
-Bump rationale: Initial ratification — all principles and sections defined for the first time.
+Version change: 1.0.0 → 1.1.0
+Bump rationale: MINOR — merged the "React Web Application Constitution (Enterprise Standard)"
+reference; new principles and sections added, existing ones materially expanded. No principle
+removed or redefined.
 
-Modified principles (placeholder → defined):
-  - [PRINCIPLE_1_NAME] → I. Code Quality
-  - [PRINCIPLE_2_NAME] → II. Test-Driven Development (NON-NEGOTIABLE)
-  - [PRINCIPLE_3_NAME] → III. User Experience Consistency
-  - [PRINCIPLE_4_NAME] → IV. Performance Requirements
-  - [PRINCIPLE_5_NAME] → V. Reusable Components & Functions
+Modified principles:
+  - VI. Centralized Business Logic → expanded with strict layering and state-management rules
+  - VII. Commit Early, Commit Often → added PR review, CI, and no-direct-push-to-main rules
 
 Added principles:
-  - VI. Centralized Business Logic
-  - VII. Commit Early, Commit Often
-  - VIII. Skill-Assisted Development
+  - IX. Type Safety (TypeScript Strict)
+  - X. Error Handling & Security
 
 Added sections:
-  - Quality Gates (was [SECTION_2_NAME])
-  - Development Workflow (was [SECTION_3_NAME])
-  - Governance (filled)
+  - Documentation & Continuous Improvement
 
 Removed sections: none
 
 Templates reviewed (not modified by this command — they read the constitution at runtime):
-  - .specify/templates/plan-template.md      ✅ "Constitution Check" gate picks up principles I–VIII
+  - .specify/templates/plan-template.md      ✅ "Constitution Check" gate picks up principles I–X
   - .specify/templates/spec-template.md      ✅ no conflict
   - .specify/templates/tasks-template.md     ✅ no conflict; tests-first ordering aligns with II
 
@@ -125,6 +121,12 @@ at once.
   central configuration and imported, never re-typed as literals.
 - Data access MUST go through one data layer (repositories/API client); components MUST NOT
   call databases or external APIs directly.
+- The codebase MUST use a feature-based modular structure with strictly separated layers:
+  **UI** (presentation only) → **Business Logic** → **API/Service** → **State Management**.
+- Reusable stateful logic MUST be extracted into custom hooks; async state MUST be handled in
+  hooks or the service layer, never inline in JSX.
+- State: prefer local state before global state; duplicated or derived state MUST NOT be stored;
+  global state logic MUST be centralized in one store module.
 
 **Rationale**: When a health indicator's definition changes, it must change in exactly one
 place, with tests proving the new behavior.
@@ -138,8 +140,10 @@ place, with tests proving the new behavior.
   `docs:`, `chore:`) and describe *why* when it is not obvious.
 - Before risky changes (refactors, dependency upgrades, migrations), the current state MUST be
   committed first so it can be restored.
-- Commits MUST be pushed to `origin` regularly; feature work SHOULD happen on a feature branch
-  and be merged to `main` only when quality gates pass.
+- Commits MUST be pushed to `origin` regularly.
+- Feature work MUST happen on a feature branch; direct pushes to `main` are NOT permitted
+  (initial repository bootstrap excepted). Changes reach `main` only through a Pull Request
+  that has been reviewed and whose CI checks pass.
 
 **Rationale**: Frequent commits are the undo button that prevents mistakes from becoming lost
 work.
@@ -165,6 +169,35 @@ practices:
 **Rationale**: Skills encode tested workflows; using them consistently raises the quality floor
 for every contributor, human or AI.
 
+### IX. Type Safety (TypeScript Strict)
+
+- The application MUST be written in TypeScript with `strict` mode enabled.
+- `any` MUST NOT be used; use `unknown` plus narrowing, generics, or precise types instead.
+- Every API request and response MUST have a defined interface, validated at the boundary.
+- API DTO types MUST be kept separate from UI/domain models, with explicit mapping functions in
+  the service layer.
+- Shared types MUST live in one centralized types location; component props MUST be typed
+  explicitly.
+
+**Rationale**: Health indicator data passes through several layers; types catch shape mismatches
+before they reach a chart.
+
+### X. Error Handling & Security
+
+- Error handling MUST be centralized: API errors are normalized into one error shape by the
+  service layer, and every async action shows loading, error, and success states.
+- Developer logs MUST be separate from user messages; users see friendly Thai messages, never
+  stack traces or internal error details. No silent failures.
+- Sensitive data (tokens, personal or patient data) MUST NOT be stored in `localStorage` or
+  `sessionStorage`.
+- All user input MUST be validated and sanitized; secrets MUST come from environment variables
+  and never be committed.
+- Access MUST be controlled by role-based access control (RBAC) enforced on the server, not only
+  hidden in the UI.
+
+**Rationale**: The dashboard handles hospital data; a leak or a misleading error has real-world
+consequences.
+
 ## Quality Gates
 
 A change MAY be merged to `main` only when all of the following pass:
@@ -189,6 +222,16 @@ A change MAY be merged to `main` only when all of the following pass:
    (Principle VII).
 5. **Verify & review** — run all quality gates, then review before merging.
 
+## Documentation & Continuous Improvement
+
+- Each feature module MUST include a short README describing its purpose and public API.
+- Reusable components MUST include a usage example; API contracts MUST be documented and kept
+  current; the architecture diagram MUST be updated when layers or modules change.
+- Code MUST favor clarity over cleverness and simplicity over premature optimization; optimize
+  only when a measurable need exists (Principle IV).
+- Refactor as soon as duplication or complexity appears; remove dead code and technical debt
+  proactively. Every change SHOULD leave the codebase cleaner than before.
+
 ## Governance
 
 - This constitution supersedes all other development practices and guidance for this project.
@@ -204,4 +247,4 @@ A change MAY be merged to `main` only when all of the following pass:
 - Compliance SHOULD be reviewed at the start of each new feature and whenever the tech stack
   changes.
 
-**Version**: 1.0.0 | **Ratified**: 2026-10-01 | **Last Amended**: 2026-10-01
+**Version**: 1.1.0 | **Ratified**: 2026-10-01 | **Last Amended**: 2026-10-01

@@ -1,2 +1,5 @@
 # Local Claude Code settings may hold machine-specific or private data
 .claude/settings.local.json
+
+# Playwright MCP snapshots and logs
+.playwright-mcp/
