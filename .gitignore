@@ -3,3 +3,8 @@
 
 # Playwright MCP snapshots and logs
 .playwright-mcp/
+
+# Form responses contain personal names — never commit real data (constitution V)
+*.csv
+*.tsv
+!tests/fixtures/*.csv

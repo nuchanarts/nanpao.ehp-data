@@ -1,0 +1,967 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>EHP On Cloud น่าน</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f4f3f0;
+  --surface: #fcfcfb;
+  --surface-2: #f0efec;
+  --border: #dddcd7;
+  --text: #0b0b0b;
+  --text-2: #52514e;
+  --text-3: #6d6c68;
+  --accent: #2a78d6;
+  --accent-ink: #1c5cab;
+  --bar: #2a78d6;
+  --bar-track: #e6e5e1;
+  --done-bg: #cde2fb;
+  --done-ink: #104281;
+  --todo-bg: #f0efec;
+  --todo-ink: #6d6c68;
+  --good: #0ca30c;
+  --good-ink: #006300;
+  --warn-bg: #fff4d6;
+  --warn-ink: #6b4a00;
+  --err-bg: #fde8e8;
+  --err-ink: #8f1d1d;
+  --focus: #2a78d6;
+  --radius: 10px;
+  --shadow: 0 1px 2px rgb(0 0 0 / .06);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #111110;
+    --surface: #1a1a19;
+    --surface-2: #232321;
+    --border: #383835;
+    --text: #ffffff;
+    --text-2: #c3c2b7;
+    --text-3: #a3a29a;
+    --accent: #3987e5;
+    --accent-ink: #86b6ef;
+    --bar: #3987e5;
+    --bar-track: #2c2c2a;
+    --done-bg: #184f95;
+    --done-ink: #e6f0fd;
+    --todo-bg: #232321;
+    --todo-ink: #a3a29a;
+    --good: #0ca30c;
+    --good-ink: #5fd35f;
+    --warn-bg: #3a2f10;
+    --warn-ink: #f5d68a;
+    --err-bg: #3d1a1a;
+    --err-ink: #f4b4b4;
+    --focus: #86b6ef;
+    --shadow: none;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #111110;
+  --surface: #1a1a19;
+  --surface-2: #232321;
+  --border: #383835;
+  --text: #ffffff;
+  --text-2: #c3c2b7;
+  --text-3: #a3a29a;
+  --accent: #3987e5;
+  --accent-ink: #86b6ef;
+  --bar: #3987e5;
+  --bar-track: #2c2c2a;
+  --done-bg: #184f95;
+  --done-ink: #e6f0fd;
+  --todo-bg: #232321;
+  --todo-ink: #a3a29a;
+  --good: #0ca30c;
+  --good-ink: #5fd35f;
+  --warn-bg: #3a2f10;
+  --warn-ink: #f5d68a;
+  --err-bg: #3d1a1a;
+  --err-ink: #f4b4b4;
+  --focus: #86b6ef;
+  --shadow: none;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.6 "IBM Plex Sans Thai", "Noto Sans Thai", "Leelawadee UI", Tahoma, sans-serif;
+}
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 0 16px; }
+h1, h2, h3 { line-height: 1.3; margin: 0; }
+h1 { font-size: 1.35rem; font-weight: 700; }
+h2 { font-size: 1.1rem; font-weight: 600; }
+.muted { color: var(--text-2); }
+.small { font-size: .85rem; }
+.num { font-variant-numeric: tabular-nums; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+header.top { background: var(--surface); border-bottom: 1px solid var(--border); }
+header.top .wrap { display: flex; gap: 12px; align-items: center; justify-content: space-between; padding-top: 14px; padding-bottom: 14px; flex-wrap: wrap; }
+.top-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+button, .btn {
+  font: inherit; font-size: .9rem; cursor: pointer;
+  border: 1px solid var(--border); background: var(--surface); color: var(--text);
+  padding: 7px 14px; border-radius: 8px; min-height: 38px;
+}
+button:hover, .btn:hover { background: var(--surface-2); }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-ink); }
+button.link { border: 0; background: none; padding: 0; min-height: 0; color: var(--accent-ink); text-decoration: underline; text-underline-offset: 2px; font-size: inherit; }
+select, input[type="search"], textarea {
+  font: inherit; font-size: .9rem; color: var(--text); background: var(--surface);
+  border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; min-height: 38px; max-width: 100%;
+}
+
+main { padding: 20px 0 40px; display: grid; gap: 20px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); min-width: 0; }
+.card-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.note { font-size: .82rem; color: var(--text-3); margin: 8px 0 0; }
+
+/* Data input */
+.drop {
+  border: 2px dashed var(--border); border-radius: var(--radius); padding: 18px;
+  display: grid; gap: 12px; text-align: center; transition: border-color .15s, background .15s;
+}
+.drop.over { border-color: var(--accent); background: var(--surface-2); }
+.drop-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+#pasteBox { width: 100%; min-height: 70px; resize: vertical; font-size: .85rem; }
+.data-bar { display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.privacy { font-size: .82rem; color: var(--text-3); }
+.alert { border-radius: 8px; padding: 10px 14px; font-size: .9rem; }
+.alert-error { background: var(--err-bg); color: var(--err-ink); }
+.alert-warn { background: var(--warn-bg); color: var(--warn-ink); }
+.alert ul { margin: 6px 0 0; padding-left: 20px; }
+.alert summary { cursor: pointer; font-weight: 500; }
+
+/* Filters */
+.filters { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
+.filters label { display: grid; gap: 4px; font-size: .82rem; color: var(--text-2); min-width: 0; flex: 1 1 160px; }
+.filters label select { width: 100%; }
+.filters .reset { flex: 0 0 auto; }
+.active-filter { font-size: .85rem; color: var(--text-2); margin-top: 8px; }
+
+/* KPI */
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+.kpi { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; box-shadow: var(--shadow); }
+.kpi .label { font-size: .85rem; color: var(--text-2); }
+.kpi .value { font-size: 1.9rem; font-weight: 700; line-height: 1.2; margin-top: 2px; }
+.kpi .value small { font-size: 1rem; font-weight: 500; color: var(--text-2); }
+.kpi .sub { font-size: .82rem; color: var(--text-3); margin-top: 4px; }
+.meter { height: 8px; border-radius: 4px; background: var(--bar-track); margin-top: 8px; overflow: hidden; }
+.meter > span { display: block; height: 100%; background: var(--bar); border-radius: 0 4px 4px 0; }
+
+/* Bars */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
+.bars { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.bar-row { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) auto; gap: 10px; align-items: center; font-size: .88rem; }
+.bar-row .name { overflow-wrap: anywhere; }
+.bar-row .track { height: 12px; background: var(--bar-track); border-radius: 4px; overflow: hidden; }
+.bar-row .track > span { display: block; height: 100%; background: var(--bar); border-radius: 0 4px 4px 0; min-width: 0; }
+.bar-row .val { font-variant-numeric: tabular-nums; color: var(--text-2); white-space: nowrap; text-align: right; min-width: 7.5em; }
+@media (max-width: 520px) {
+  .bar-row { grid-template-columns: 1fr auto; }
+  .bar-row .track { grid-column: 1 / -1; grid-row: 2; }
+}
+.new-tag { font-size: .72rem; background: var(--warn-bg); color: var(--warn-ink); border-radius: 4px; padding: 1px 6px; margin-left: 4px; white-space: nowrap; }
+
+/* Tables */
+.table-scroll { position: relative; overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: .88rem; }
+th, td { padding: 8px 10px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+thead th { background: var(--surface-2); font-weight: 600; color: var(--text-2); font-size: .82rem; position: sticky; top: 0; }
+tbody tr:last-child td { border-bottom: 0; }
+td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.badge { display: inline-block; font-size: .78rem; border-radius: 999px; padding: 1px 10px; background: var(--todo-bg); color: var(--todo-ink); border: 1px solid var(--border); white-space: nowrap; }
+.mini { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.mini .track { width: 64px; height: 8px; background: var(--bar-track); border-radius: 4px; overflow: hidden; flex: none; }
+.mini .track > span { display: block; height: 100%; background: var(--bar); }
+
+/* Matrix */
+.matrix th.t, .matrix td.t { text-align: center; padding: 6px 4px; min-width: 34px; }
+.matrix td.first, .matrix th.first { position: sticky; left: 0; background: var(--surface); z-index: 1; min-width: 190px; }
+.matrix thead th.first { background: var(--surface-2); z-index: 2; }
+.cell { position: relative; display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 6px; font-weight: 700; font-size: .85rem; }
+.cell.done { background: var(--done-bg); color: var(--done-ink); }
+.cell.todo { background: var(--todo-bg); color: var(--todo-ink); font-weight: 400; }
+.legend { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 4px 16px; margin: 0 0 12px; padding: 0; list-style: none; font-size: .82rem; color: var(--text-2); }
+.legend b { display: inline-block; min-width: 1.8em; color: var(--text); }
+.legend-key { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; font-size: .82rem; color: var(--text-2); margin-bottom: 10px; }
+.tools { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+.tools input[type="search"] { flex: 1 1 220px; }
+.tools label.check { display: flex; gap: 6px; align-items: center; font-size: .88rem; }
+.missing { font-size: .8rem; color: var(--text-2); margin-top: 4px; }
+
+/* Recent */
+.recent { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.recent li { border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; }
+.recent .meta { display: flex; gap: 6px 14px; flex-wrap: wrap; font-size: .82rem; color: var(--text-2); }
+.recent .title { font-weight: 600; margin: 2px 0; }
+.recent dl { margin: 6px 0 0; display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; font-size: .85rem; }
+.recent dt { color: var(--text-3); }
+.recent dd { margin: 0; overflow-wrap: anywhere; }
+
+.empty-state { text-align: center; padding: 28px 12px; color: var(--text-2); }
+footer { padding: 0 0 28px; font-size: .8rem; color: var(--text-3); }
+[hidden] { display: none !important; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+@media print { .no-print { display: none !important; } body { background: #fff; } }
+</style>
+</head>
+<body>
+<a class="sr-only" href="#main">ข้ามไปยังเนื้อหา</a>
+<header class="top">
+  <div class="wrap">
+    <div>
+      <h1>EHP On Cloud อบจ.น่าน</h1>
+      <div class="muted small">ติดตามการดูแลการใช้งานระบบ ของ รพ.สต. ที่ถ่ายโอน 106 แห่ง</div>
+    </div>
+    <div class="top-actions no-print">
+      <span id="dataStatus" class="small muted" aria-live="polite">ยังไม่มีข้อมูล</span>
+      <button type="button" id="themeBtn" aria-label="สลับโหมดสว่าง/มืด">โหมดมืด</button>
+    </div>
+  </div>
+</header>
+
+<main id="main" class="wrap">
+  <!-- Data input (constitution VI: upload, drag-and-drop, paste) -->
+  <section class="card no-print" aria-labelledby="dataHead">
+    <div class="card-head">
+      <h2 id="dataHead">นำเข้าข้อมูลจาก Google Sheet</h2>
+      <button type="button" id="clearBtn" hidden>ล้างข้อมูล</button>
+    </div>
+    <div id="drop" class="drop">
+      <div>
+        <strong>ลากไฟล์ CSV มาวางที่นี่</strong>
+        <div class="small muted">หรือเลือกไฟล์ หรือคัดลอกทั้งตาราง (รวมแถวหัวตาราง) จาก Google Sheet แล้ววางในช่องด้านล่าง</div>
+      </div>
+      <div class="drop-actions">
+        <label class="btn btn-primary" for="fileInput">เลือกไฟล์ CSV</label>
+        <input id="fileInput" type="file" accept=".csv,.tsv,.txt,text/csv,text/tab-separated-values" class="sr-only">
+      </div>
+      <label for="pasteBox" class="sr-only">วางข้อมูลจาก Google Sheet</label>
+      <textarea id="pasteBox" placeholder="วางข้อมูลที่นี่ (Ctrl+V / ⌘V)"></textarea>
+      <div class="small muted">ดาวน์โหลดจาก Google Sheet: ไฟล์ → ดาวน์โหลด → ค่าที่คั่นด้วยจุลภาค (.csv)</div>
+    </div>
+    <div id="loading" class="small muted" role="status" hidden>กำลังอ่านข้อมูล…</div>
+    <div id="errorBox" class="alert alert-error" role="alert" hidden style="margin-top:12px"></div>
+    <div id="warnBox" class="alert alert-warn" hidden style="margin-top:12px"></div>
+    <p class="privacy">ข้อมูลถูกอ่านและเก็บไว้ในเบราว์เซอร์เครื่องนี้เท่านั้น ไม่ถูกส่งไปที่ใด · Dashboard นี้มีชื่อบุคคล ใช้ภายในทีมเท่านั้น</p>
+  </section>
+
+  <section id="emptyState" class="card empty-state">
+    <h2>ยังไม่มีข้อมูล</h2>
+    <p>นำเข้าไฟล์การตอบกลับของฟอร์ม “Checklist ยืนยันการดำเนินงานดูแลการใช้งานระบบ EHP On Cloud อบจ.น่าน” เพื่อดูสรุปผล</p>
+  </section>
+
+  <div id="dashboard" hidden style="display:grid;gap:20px">
+    <section class="card no-print" aria-label="ตัวกรอง">
+      <div class="filters">
+        <label>อำเภอ<select id="fDistrict"></select></label>
+        <label>รอบที่ขึ้นระบบ<select id="fRound"></select></label>
+        <label>เจ้าหน้าที่ให้คำแนะนำ<select id="fStaff"></select></label>
+        <button type="button" id="resetBtn" class="reset">ล้างตัวกรอง</button>
+      </div>
+      <div id="activeFilter" class="active-filter" aria-live="polite"></div>
+    </section>
+
+    <section class="kpis" id="kpis" aria-label="ตัวชี้วัดหลัก"></section>
+
+    <div class="grid-2">
+      <section class="card" aria-labelledby="distHead">
+        <div class="card-head">
+          <h2 id="distHead">ภาพรวมรายอำเภอ</h2>
+          <span class="small muted">ไม่กรองตามอำเภอ เพื่อเปรียบเทียบ</span>
+        </div>
+        <div class="table-scroll"><table id="distTable"></table></div>
+        <p class="note">แสดงจำนวน รพ.สต. ที่มีบันทึก ยังไม่แสดงร้อยละรายอำเภอ จนกว่าจะมีรายชื่อ รพ.สต. ครบทั้ง 106 แห่ง · ความครบเฉลี่ย = ค่าเฉลี่ยของ (หัวข้อที่แนะนำแล้ว ÷ หัวข้อทั้งหมด) ของ รพ.สต. ในอำเภอ</p>
+      </section>
+
+      <section class="card" aria-labelledby="topicHead">
+        <div class="card-head">
+          <h2 id="topicHead">ความครอบคลุมรายหัวข้อ</h2>
+          <span class="small muted" id="topicBase"></span>
+        </div>
+        <ol class="bars" id="topicBars"></ol>
+      </section>
+    </div>
+
+    <section class="card" aria-labelledby="hospHead">
+      <div class="card-head">
+        <h2 id="hospHead">สถานะราย รพ.สต. (รวมทุกครั้งที่เข้าแนะนำ)</h2>
+        <span class="small muted" id="hospCount"></span>
+      </div>
+      <div class="tools no-print">
+        <label for="hospSearch" class="sr-only">ค้นหา รพ.สต.</label>
+        <input type="search" id="hospSearch" placeholder="ค้นหาชื่อหรือรหัส รพ.สต.">
+        <label class="check"><input type="checkbox" id="onlyIncomplete"> เฉพาะที่ยังไม่ครบ</label>
+        <label class="check">เรียงตาม
+          <select id="hospSort">
+            <option value="low">ความครบ น้อย → มาก</option>
+            <option value="high">ความครบ มาก → น้อย</option>
+            <option value="district">อำเภอ</option>
+            <option value="recent">เข้าแนะนำล่าสุด</option>
+          </select>
+        </label>
+      </div>
+      <div class="legend-key"><span><span class="cell done" aria-hidden="true">✓</span> แนะนำแล้ว</span><span><span class="cell todo" aria-hidden="true">–</span> ยังไม่ได้แนะนำ</span></div>
+      <details><summary class="small">หมายเลขหัวข้อ</summary><ol class="legend" id="topicLegend"></ol></details>
+      <div class="table-scroll" style="margin-top:10px"><table class="matrix" id="hospTable"></table></div>
+    </section>
+
+    <div class="grid-2">
+      <section class="card" aria-labelledby="staffHead">
+        <div class="card-head"><h2 id="staffHead">เจ้าหน้าที่ให้คำแนะนำ</h2></div>
+        <div class="table-scroll"><table id="staffTable"></table></div>
+      </section>
+      <section class="card" aria-labelledby="roundHead">
+        <div class="card-head"><h2 id="roundHead">รอบที่ขึ้นระบบ</h2></div>
+        <div class="table-scroll"><table id="roundTable"></table></div>
+      </section>
+    </div>
+
+    <section class="card" aria-labelledby="recentHead">
+      <div class="card-head">
+        <h2 id="recentHead">บันทึกล่าสุด</h2>
+        <span class="small muted" id="recentCount"></span>
+      </div>
+      <ul class="recent" id="recentList"></ul>
+      <div style="text-align:center;margin-top:12px"><button type="button" id="moreBtn" hidden>แสดงเพิ่ม</button></div>
+    </section>
+  </div>
+</main>
+<footer class="wrap">เครื่องมือภายในทีม — ห้ามเผยแพร่ลิงก์สาธารณะ · ตัวเลขทั้งหมดคำนวณจากการตอบกลับของฟอร์มเท่านั้น</footer>
+
+<!-- ===== Business logic (pure, no DOM). Tested by tests/core.test.mjs ===== -->
+<script id="ehp-core">
+var EHPCore = (function () {
+  'use strict';
+
+  var TOTAL_HOSPITALS = 106;
+  var NO_ROUND = 'ไม่ระบุรอบ';
+  var UNSPECIFIED = 'ไม่ระบุ';
+  var TH_MONTHS = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+
+  // The 15 checklist options exactly as written in the Google Form (constitution IV).
+  var STANDARD_TOPICS = [
+    { label: 'ผูกบุคลากรกับ User/Login', text: 'แนะนำการผูกบุคลากรกับ User และตรวจสอบว่า Login ของทุก User ใน รพ.สต.สามารถเข้าใช้งานได้' },
+    { label: 'ตรวจสอบสิทธิ', text: 'สามารถตรวจสอบสิทธิการรักษาได้' },
+    { label: 'ปิดสิทธิ', text: 'สามารถดำเนินการปิดสิทธิการรักษาได้' },
+    { label: 'พิมพ์สติกเกอร์', text: 'สามารถพิมพ์สติกเกอร์ได้' },
+    { label: 'เปิด EHP Agent', text: 'สามารถเปิด EHP Agent ได้ด้วยตนเอง' },
+    { label: 'Remed ยา', text: 'สามารถดำเนินการ Remed ยาได้' },
+    { label: 'Claim Ready', text: 'แนะนำการใช้งานระบบ Claim Ready ในการตั้งค่าข้อมูลก่อนส่งออกข้อมูล' },
+    { label: 'Cleansing Data', text: 'เปรียบเทียบประวัติการรักษา (Cleansing Data)' },
+    { label: 'ส่งออก 13 แฟ้ม', text: 'มีการแนะนำการส่งออก 13 แฟ้มเรียบร้อยแล้ว' },
+    { label: 'ส่งออก 43 แฟ้ม', text: 'มีการแนะนำการส่งออก 43 แฟ้มเรียบร้อยแล้ว' },
+    { label: 'ตัดจ่าย + Sub Stock', text: 'มีการแนะนำการตัดจ่ายแบบ Manual และ Realtime รวมถึงการผูก Sub Stock สำหรับการตัดจ่ายได้เรียบร้อย' },
+    { label: 'ผูกวิธีใช้ตั้งต้น', text: 'มีการแนะนำการผูกวิธีใช้งานตั้งต้น' },
+    { label: 'Drug Catalog MY PCU', text: 'กรณีที่เป็นระบบ MY PCU เจ้าหน้าที่มีการแนะนำการทำ Drug Catalog ใน MY PCU ให้แล้วเสร็จ' },
+    { label: 'ติดตาม Drug Catalog', text: 'ติดตามและตรวจสอบเรื่อง Drug Catalog เช่น ราคายา และรายการที่ยังไม่แจ้ง Drug Catalog' },
+    { label: 'Lab Online', text: 'แนะนำการใช้งาน Lab Online' }
+  ];
+
+  function norm(s) { return String(s == null ? '' : s).replace(/\s+/g, ' ').trim(); }
+
+  function DataError(message) {
+    var e = new Error(message);
+    e.name = 'DataError';
+    return e;
+  }
+
+  // CSV or TSV → array of rows. Delimiter is detected from the first line.
+  function parseTable(text) {
+    var src = String(text || '').replace(/^﻿/, '');
+    var firstLine = src.split(/\r?\n/, 1)[0] || '';
+    var delim = firstLine.indexOf('\t') >= 0 ? '\t' : ',';
+    var rows = [], row = [], field = '', inQuotes = false;
+    for (var i = 0; i < src.length; i++) {
+      var c = src[i];
+      if (inQuotes) {
+        if (c === '"') {
+          if (src[i + 1] === '"') { field += '"'; i++; } else { inQuotes = false; }
+        } else { field += c; }
+      } else if (c === '"' && field === '') { inQuotes = true; }
+      else if (c === delim) { row.push(field); field = ''; }
+      else if (c === '\n') { row.push(field); rows.push(row); row = []; field = ''; }
+      else if (c !== '\r') { field += c; }
+    }
+    if (field !== '' || row.length) { row.push(field); rows.push(row); }
+    return rows;
+  }
+
+  // "d/m/yyyy, HH:mm:ss" in ค.ศ. or พ.ศ. → Date (local time), or null.
+  function parseThaiDate(value) {
+    var m = String(value || '').match(/^\s*(\d{1,2})\/(\d{1,2})\/(\d{4})(?:,?\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
+    if (!m) return null;
+    var d = +m[1], mo = +m[2], y = +m[3];
+    if (y > 2400) y -= 543;
+    if (mo < 1 || mo > 12 || d < 1 || d > 31) return null;
+    var date = new Date(y, mo - 1, d, +(m[4] || 0), +(m[5] || 0), +(m[6] || 0));
+    return isNaN(date.getTime()) ? null : date;
+  }
+
+  function pad2(n) { return (n < 10 ? '0' : '') + n; }
+
+  function formatThaiDate(date, withTime) {
+    if (!date) return 'ไม่ระบุวันที่';
+    var s = date.getDate() + ' ' + TH_MONTHS[date.getMonth()] + ' ' + (date.getFullYear() + 543);
+    if (withTime !== false) s += ' ' + pad2(date.getHours()) + ':' + pad2(date.getMinutes()) + ' น.';
+    return s;
+  }
+
+  // Locate columns by header text, never by position (constitution II).
+  function detectColumns(headerRow) {
+    var h = headerRow.map(norm);
+    var find = function (pred) { for (var i = 0; i < h.length; i++) if (pred(h[i])) return i; return -1; };
+    var cols = {
+      timestamp: find(function (x) { return x === 'ประทับเวลา' || x === 'Timestamp'; }),
+      round: find(function (x) { return x.indexOf('รอบที่ขึ้นระบบ') >= 0; }),
+      checklist: find(function (x) { return x.indexOf('Checklist') >= 0; }),
+      otherAdvice: find(function (x) { return x.indexOf('การให้คำแนะนำอื่น') >= 0; }),
+      suggestion: find(function (x) { return x.indexOf('เสนอแนะ') >= 0; }),
+      staff: find(function (x) { return x.indexOf('เจ้าหน้าที่ให้คำแนะนำ') >= 0; }),
+      districtSelects: [],
+      hospitalCols: []
+    };
+    h.forEach(function (x, i) {
+      if (x === 'กรุณาเลือกอำเภอ') cols.districtSelects.push(i);
+      var m = x.match(/รพ\.\s*สต\.\s*ในอำเภอ\s*(.+)$/);
+      if (m) cols.hospitalCols.push({ district: norm(m[1]), col: i, recipientCol: i + 1 });
+    });
+    var missing = [];
+    if (cols.timestamp < 0) missing.push('“ประทับเวลา”');
+    if (!cols.hospitalCols.length) missing.push('“กรุณาเลือก รพ.สต. ในอำเภอ…” (อย่างน้อย 1 อำเภอ)');
+    if (cols.checklist < 0) missing.push('“…Checklist…”');
+    if (cols.staff < 0) missing.push('“เจ้าหน้าที่ให้คำแนะนำ”');
+    if (missing.length) {
+      throw DataError('ไม่พบคอลัมน์ที่จำเป็น: ' + missing.join(', ') +
+        ' — ตรวจสอบว่านำเข้าไฟล์การตอบกลับของฟอร์มที่ถูกต้อง, คัดลอกแถวหัวตาราง (แถวแรก) มาด้วย และหัวคอลัมน์ใน Sheet ไม่ถูกแก้ชื่อ');
+    }
+    return cols;
+  }
+
+  // Match checklist options by full text (options may contain commas); leftovers become new topics.
+  function splitTopics(cell, knownTopics) {
+    var rest = String(cell || '');
+    var matched = [];
+    knownTopics.slice().sort(function (a, b) { return b.length - a.length; }).forEach(function (t) {
+      if (t && rest.indexOf(t) >= 0) {
+        matched.push(t);
+        rest = rest.split(t).join('\u0000');
+      }
+    });
+    var unknown = rest.split(/[\u0000,]/).map(norm).filter(Boolean);
+    return { matched: matched, unknown: unknown };
+  }
+
+  function splitHospital(value) {
+    var v = norm(value);
+    var m = v.match(/^(\d{5})\s*(.*)$/);
+    return m ? { code: m[1], name: m[2] || v } : { code: null, name: v };
+  }
+
+  function hospitalKey(district, value) {
+    var h = splitHospital(value);
+    return h.code || (norm(district) + '|' + h.name);
+  }
+
+  function cell(row, i) { return i >= 0 ? norm(row[i]) : ''; }
+
+  function loadDataset(text) {
+    var rows = parseTable(text);
+    if (!rows.length || rows[0].every(function (c) { return !norm(c); })) {
+      throw DataError('ไม่พบข้อมูล — ไฟล์ว่าง หรือยังไม่ได้วางข้อมูล');
+    }
+    var cols = detectColumns(rows[0]);
+    var standardTexts = STANDARD_TOPICS.map(function (t) { return t.text; });
+    var topics = standardTexts.slice();
+    var districts = [];
+    cols.hospitalCols.forEach(function (h) { if (districts.indexOf(h.district) < 0) districts.push(h.district); });
+    var records = [], warnings = [];
+
+    for (var r = 1; r < rows.length; r++) {
+      var row = rows[r];
+      if (row.every(function (c) { return !norm(c); })) continue;
+      var line = 'แถวที่ ' + (r + 1);
+      var filled = cols.hospitalCols.filter(function (h) { return cell(row, h.col); });
+      var district = '', hospitalRaw = '', recipient = '';
+      if (filled.length) {
+        district = filled[0].district;
+        hospitalRaw = cell(row, filled[0].col);
+        recipient = cell(row, filled[0].recipientCol);
+        if (filled.length > 1) warnings.push(line + ': เลือก รพ.สต. มากกว่า 1 อำเภอ — ใช้อำเภอ' + district);
+      } else {
+        for (var k = 0; k < cols.districtSelects.length && !district; k++) district = cell(row, cols.districtSelects[k]);
+        warnings.push(line + ': ไม่ได้เลือก รพ.สต. — นับเป็นบันทึก แต่ไม่นับในความครอบคลุม');
+      }
+      district = district || UNSPECIFIED;
+      if (districts.indexOf(district) < 0) districts.push(district);
+
+      var rawTime = cell(row, cols.timestamp);
+      var timestamp = parseThaiDate(rawTime);
+      if (!timestamp) warnings.push(line + ': อ่านวันที่ “' + (rawTime || 'ว่าง') + '” ไม่ได้');
+
+      var split = splitTopics(cell(row, cols.checklist), topics);
+      split.unknown.forEach(function (t) { if (topics.indexOf(t) < 0) topics.push(t); });
+      var h = splitHospital(hospitalRaw);
+
+      records.push({
+        row: r + 1,
+        timestamp: timestamp,
+        round: cell(row, cols.round) || NO_ROUND,
+        district: district,
+        hospitalKey: hospitalRaw ? hospitalKey(district, hospitalRaw) : null,
+        hospitalCode: h.code,
+        hospitalName: h.name || UNSPECIFIED,
+        recipient: recipient || UNSPECIFIED,
+        topics: split.matched.concat(split.unknown),
+        otherAdvice: cell(row, cols.otherAdvice),
+        suggestion: cell(row, cols.suggestion),
+        staff: cell(row, cols.staff) || UNSPECIFIED
+      });
+    }
+    if (cols.round < 0) warnings.push('ไม่พบคอลัมน์ “รอบที่ขึ้นระบบ” — ทุกบันทึกแสดงเป็น “' + NO_ROUND + '”');
+    var newTopics = topics.filter(function (t) { return standardTexts.indexOf(t) < 0; });
+    return { records: records, warnings: warnings, districts: districts, topics: topics, newTopics: newTopics };
+  }
+
+  function topicLabel(text) {
+    for (var i = 0; i < STANDARD_TOPICS.length; i++) if (STANDARD_TOPICS[i].text === text) return STANDARD_TOPICS[i].label;
+    return text;
+  }
+
+  function filterRecords(records, f) {
+    f = f || {};
+    return records.filter(function (r) {
+      return (!f.district || r.district === f.district) &&
+        (!f.round || r.round === f.round) &&
+        (!f.staff || r.staff === f.staff);
+    });
+  }
+
+  function thSort(a, b) { return a.localeCompare(b, 'th', { numeric: true }); }
+
+  function filterOptions(ds) {
+    var rounds = [], staff = [];
+    ds.records.forEach(function (r) {
+      if (rounds.indexOf(r.round) < 0) rounds.push(r.round);
+      if (staff.indexOf(r.staff) < 0) staff.push(r.staff);
+    });
+    rounds.sort(function (a, b) { return (a === NO_ROUND) - (b === NO_ROUND) || thSort(a, b); });
+    staff.sort(thSort);
+    return { districts: ds.districts.slice(), rounds: rounds, staff: staff };
+  }
+
+  function buildHospitals(ds, records) {
+    var map = {}, list = [];
+    records.forEach(function (r) {
+      if (!r.hospitalKey) return;
+      var h = map[r.hospitalKey];
+      if (!h) {
+        h = map[r.hospitalKey] = { key: r.hospitalKey, code: r.hospitalCode, name: r.hospitalName, district: r.district,
+          visits: 0, topicSet: {}, staff: [], recipients: [], rounds: [], lastVisit: null };
+        list.push(h);
+      }
+      h.visits++;
+      r.topics.forEach(function (t) { h.topicSet[t] = true; });
+      if (h.staff.indexOf(r.staff) < 0) h.staff.push(r.staff);
+      if (h.recipients.indexOf(r.recipient) < 0) h.recipients.push(r.recipient);
+      if (h.rounds.indexOf(r.round) < 0) h.rounds.push(r.round);
+      if (r.timestamp && (!h.lastVisit || r.timestamp > h.lastVisit)) h.lastVisit = r.timestamp;
+    });
+    var total = ds.topics.length;
+    list.forEach(function (h) {
+      h.done = ds.topics.filter(function (t) { return h.topicSet[t]; });
+      h.missing = ds.topics.filter(function (t) { return !h.topicSet[t]; });
+      h.doneCount = h.done.length;
+      h.totalTopics = total;
+      h.completeness = total ? h.doneCount / total : 0;
+    });
+    return list;
+  }
+
+  function average(nums) {
+    return nums.length ? nums.reduce(function (a, b) { return a + b; }, 0) / nums.length : null;
+  }
+
+  function countBy(records, field) {
+    var map = {}, out = [];
+    records.forEach(function (r) {
+      var k = r[field], e = map[k];
+      if (!e) { e = map[k] = { name: k, records: 0, hospitalKeys: {} }; out.push(e); }
+      e.records++;
+      if (r.hospitalKey) e.hospitalKeys[r.hospitalKey] = true;
+    });
+    out.forEach(function (e) { e.hospitals = Object.keys(e.hospitalKeys).length; delete e.hospitalKeys; });
+    return out;
+  }
+
+  // districtRecords: records for the district overview, which ignores the district filter.
+  function summarize(ds, records, districtRecords) {
+    var hospitals = buildHospitals(ds, records);
+    var districtHospitals = buildHospitals(ds, districtRecords || records);
+    var byDistrict = ds.districts.map(function (d) {
+      var hs = districtHospitals.filter(function (h) { return h.district === d; });
+      return {
+        district: d,
+        records: (districtRecords || records).filter(function (r) { return r.district === d; }).length,
+        hospitals: hs.length,
+        avgCompleteness: average(hs.map(function (h) { return h.completeness; }))
+      };
+    });
+    var topicCoverage = ds.topics.map(function (t) {
+      return { text: t, label: topicLabel(t), isNew: ds.newTopics.indexOf(t) >= 0,
+        hospitals: hospitals.filter(function (h) { return h.topicSet[t]; }).length };
+    });
+    var staffStats = countBy(records, 'staff').sort(function (a, b) { return b.records - a.records || thSort(a.name, b.name); });
+    var roundStats = countBy(records, 'round').sort(function (a, b) { return (a.name === NO_ROUND) - (b.name === NO_ROUND) || thSort(a.name, b.name); });
+    var recent = records.slice().sort(function (a, b) {
+      return (b.timestamp ? b.timestamp.getTime() : 0) - (a.timestamp ? a.timestamp.getTime() : 0) || b.row - a.row;
+    });
+    return {
+      totalRecords: records.length,
+      hospitalCount: hospitals.length,
+      totalHospitals: TOTAL_HOSPITALS,
+      coverage: hospitals.length / TOTAL_HOSPITALS,
+      avgCompleteness: average(hospitals.map(function (h) { return h.completeness; })),
+      completeHospitals: hospitals.filter(function (h) { return h.doneCount === h.totalTopics; }).length,
+      hospitals: hospitals,
+      byDistrict: byDistrict,
+      topicCoverage: topicCoverage,
+      staffStats: staffStats,
+      roundStats: roundStats,
+      recent: recent,
+      lastRecord: recent.length ? recent[0].timestamp : null
+    };
+  }
+
+  return {
+    TOTAL_HOSPITALS: TOTAL_HOSPITALS, NO_ROUND: NO_ROUND, STANDARD_TOPICS: STANDARD_TOPICS,
+    parseTable: parseTable, parseThaiDate: parseThaiDate, formatThaiDate: formatThaiDate,
+    detectColumns: detectColumns, splitTopics: splitTopics, hospitalKey: hospitalKey,
+    loadDataset: loadDataset, topicLabel: topicLabel, filterRecords: filterRecords,
+    filterOptions: filterOptions, summarize: summarize
+  };
+})();
+</script>
+
+<!-- ===== UI: rendering and user intent only ===== -->
+<script>
+(function () {
+  'use strict';
+  var Core = EHPCore;
+  var STORE_KEY = 'ehp-nan-dashboard:data:v1';
+  var THEME_KEY = 'ehp-nan-dashboard:theme';
+  var RECENT_PAGE = 15;
+  var state = { ds: null, source: '', loadedAt: null, recentShown: RECENT_PAGE };
+  var $ = function (id) { return document.getElementById(id); };
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function pct(x) { return x == null ? '–' : Math.round(x * 100) + '%'; }
+  function fmt(n) { return Number(n).toLocaleString('th-TH'); }
+  function bar(ratio) { return '<span style="width:' + Math.max(0, Math.min(100, ratio * 100)).toFixed(1) + '%"></span>'; }
+
+  function storage(fn) { try { return fn(window.localStorage); } catch (e) { return null; } }
+
+  // ---------- Loading ----------
+  function loadText(text, source) {
+    $('errorBox').hidden = true;
+    try {
+      var ds = Core.loadDataset(text);
+      state.ds = ds;
+      state.source = source;
+      state.loadedAt = new Date();
+      state.recentShown = RECENT_PAGE;
+      storage(function (s) { s.setItem(STORE_KEY, JSON.stringify({ text: text, source: source, loadedAt: state.loadedAt.toISOString() })); });
+      buildFilters();
+      render();
+    } catch (e) {
+      console.error('[EHP dashboard] load failed', e);
+      showError(e.name === 'DataError' ? e.message : 'อ่านข้อมูลไม่สำเร็จ — ตรวจสอบว่าเป็นไฟล์ CSV จาก Google Sheet ของฟอร์มนี้');
+    }
+  }
+
+  function showError(msg) {
+    var box = $('errorBox');
+    box.textContent = msg;
+    box.hidden = false;
+  }
+
+  function readFile(file) {
+    if (!file) return;
+    $('loading').hidden = false;
+    var reader = new FileReader();
+    reader.onload = function () { $('loading').hidden = true; loadText(String(reader.result), 'ไฟล์ ' + file.name); };
+    reader.onerror = function () { $('loading').hidden = true; showError('เปิดไฟล์ไม่สำเร็จ — ลองดาวน์โหลด CSV จาก Google Sheet ใหม่'); };
+    reader.readAsText(file, 'utf-8');
+  }
+
+  // ---------- Filters ----------
+  function fillSelect(sel, allLabel, values, current) {
+    sel.innerHTML = '<option value="">' + esc(allLabel) + '</option>' + values.map(function (v) {
+      return '<option value="' + esc(v) + '"' + (v === current ? ' selected' : '') + '>' + esc(v) + '</option>';
+    }).join('');
+  }
+
+  function buildFilters() {
+    var o = Core.filterOptions(state.ds);
+    fillSelect($('fDistrict'), 'ทุกอำเภอ', o.districts, $('fDistrict').value);
+    fillSelect($('fRound'), 'ทุกรอบ', o.rounds, $('fRound').value);
+    fillSelect($('fStaff'), 'ทุกคน', o.staff, $('fStaff').value);
+  }
+
+  function currentFilter() {
+    return { district: $('fDistrict').value, round: $('fRound').value, staff: $('fStaff').value };
+  }
+
+  // ---------- Render ----------
+  function render() {
+    var ds = state.ds;
+    var has = !!ds;
+    $('dashboard').hidden = !has;
+    $('emptyState').hidden = has;
+    $('clearBtn').hidden = !has;
+    renderWarnings(ds);
+    if (!has) { $('dataStatus').textContent = 'ยังไม่มีข้อมูล'; return; }
+
+    var f = currentFilter();
+    var records = Core.filterRecords(ds.records, f);
+    var districtRecords = Core.filterRecords(ds.records, { round: f.round, staff: f.staff });
+    var s = Core.summarize(ds, records, districtRecords);
+
+    $('dataStatus').textContent = fmt(ds.records.length) + ' บันทึก · ' + state.source +
+      (state.loadedAt ? ' · นำเข้า ' + Core.formatThaiDate(state.loadedAt) : '');
+    renderActiveFilter(f, records.length, ds.records.length);
+    renderKpis(s, f);
+    renderDistricts(s, f);
+    renderTopics(s);
+    renderHospitals(s, ds);
+    renderCountTable($('staffTable'), 'เจ้าหน้าที่', s.staffStats);
+    renderCountTable($('roundTable'), 'รอบ', s.roundStats);
+    renderRecent(s);
+  }
+
+  function renderWarnings(ds) {
+    var box = $('warnBox');
+    if (!ds || !ds.warnings.length) { box.hidden = true; return; }
+    box.hidden = false;
+    box.innerHTML = '<details><summary>ข้อสังเกตจากข้อมูล ' + ds.warnings.length + ' รายการ (ไม่มีบันทึกใดถูกทิ้ง)</summary><ul>' +
+      ds.warnings.map(function (w) { return '<li>' + esc(w) + '</li>'; }).join('') + '</ul></details>';
+  }
+
+  function renderActiveFilter(f, shown, total) {
+    var parts = [];
+    if (f.district) parts.push('อำเภอ' + f.district);
+    if (f.round) parts.push(f.round);
+    if (f.staff) parts.push('เจ้าหน้าที่: ' + f.staff);
+    $('activeFilter').textContent = parts.length
+      ? 'กำลังกรอง: ' + parts.join(' · ') + ' — แสดง ' + fmt(shown) + ' จาก ' + fmt(total) + ' บันทึก'
+      : 'แสดงทั้งหมด ' + fmt(total) + ' บันทึก';
+  }
+
+  function kpi(label, value, sub, ratio) {
+    return '<div class="kpi"><div class="label">' + label + '</div><div class="value num">' + value + '</div>' +
+      (ratio != null ? '<div class="meter" role="img" aria-label="' + pct(ratio) + '">' + bar(ratio) + '</div>' : '') +
+      '<div class="sub">' + sub + '</div></div>';
+  }
+
+  function renderKpis(s, f) {
+    // Coverage over 106 is province-wide only; a district has no honest denominator yet (constitution III).
+    var cover = f.district
+      ? kpi('รพ.สต. ที่ได้รับการดูแล', fmt(s.hospitalCount) + ' <small>แห่ง</small>', 'ในอำเภอ' + esc(f.district) + ' · ยังไม่มีจำนวน รพ.สต. รายอำเภอ จึงไม่แสดงร้อยละ', null)
+      : kpi('รพ.สต. ที่ได้รับการดูแล', fmt(s.hospitalCount) + '<small>/' + s.totalHospitals + ' แห่ง</small>', pct(s.coverage) + ' ของ รพ.สต. ที่ถ่ายโอนทั้งหมด · คงเหลือ ' + fmt(s.totalHospitals - s.hospitalCount) + ' แห่ง', s.coverage);
+    $('kpis').innerHTML = [
+      cover,
+      kpi('ความครบของหัวข้อ (เฉลี่ย)', pct(s.avgCompleteness), 'เฉลี่ยจาก ' + fmt(s.hospitalCount) + ' แห่ง · ครบทุกหัวข้อ ' + fmt(s.completeHospitals) + ' แห่ง', s.avgCompleteness),
+      kpi('บันทึกการเข้าแนะนำ', fmt(s.totalRecords) + ' <small>ครั้ง</small>', s.lastRecord ? 'ล่าสุด ' + Core.formatThaiDate(s.lastRecord) : 'ยังไม่มีบันทึก', null),
+      kpi('หัวข้อ Checklist', fmt(state.ds.topics.length) + ' <small>หัวข้อ</small>', state.ds.newTopics.length ? 'มาตรฐาน 15 + หัวข้อใหม่จากฟอร์ม ' + state.ds.newTopics.length : 'ตามมาตรฐาน 15 หัวข้อ', null)
+    ].join('');
+  }
+
+  function renderDistricts(s, f) {
+    var max = Math.max.apply(null, s.byDistrict.map(function (d) { return d.hospitals; }).concat([1]));
+    $('distTable').innerHTML = '<thead><tr><th scope="col">อำเภอ</th><th scope="col">รพ.สต. ที่มีบันทึก</th><th class="n" scope="col">บันทึก</th><th class="n" scope="col">ความครบเฉลี่ย</th></tr></thead><tbody>' +
+      s.byDistrict.map(function (d) {
+        var selected = f.district === d.district;
+        return '<tr' + (selected ? ' aria-current="true" style="background:var(--surface-2)"' : '') + '>' +
+          '<th scope="row" style="font-weight:500"><button type="button" class="link" data-district="' + esc(d.district) + '" title="กรองเฉพาะอำเภอนี้">' + esc(d.district) + '</button></th>' +
+          '<td>' + (d.records
+            ? '<div class="mini"><span class="track">' + bar(d.hospitals / max) + '</span><span class="num">' + fmt(d.hospitals) + ' แห่ง</span></div>'
+            : '<span class="badge">ยังไม่มีบันทึก</span>') + '</td>' +
+          '<td class="n">' + fmt(d.records) + '</td>' +
+          '<td class="n">' + pct(d.avgCompleteness) + '</td></tr>';
+      }).join('') + '</tbody>';
+  }
+
+  function renderTopics(s) {
+    var base = s.hospitalCount;
+    $('topicBase').textContent = 'จาก รพ.สต. ที่มีบันทึก ' + fmt(base) + ' แห่ง';
+    $('topicBars').innerHTML = s.topicCoverage.map(function (t, i) {
+      var ratio = base ? t.hospitals / base : 0;
+      return '<li class="bar-row" title="' + esc(t.text) + '"><span class="name">' + (i + 1) + '. ' + esc(t.label) +
+        (t.isNew ? '<span class="new-tag">ใหม่</span>' : '') + '</span>' +
+        '<span class="track" aria-hidden="true">' + bar(ratio) + '</span>' +
+        '<span class="val">' + fmt(t.hospitals) + '/' + fmt(base) + ' แห่ง (' + pct(base ? ratio : null) + ')</span></li>';
+    }).join('');
+  }
+
+  function sortHospitals(list, mode, districtOrder) {
+    var byName = function (a, b) { return a.name.localeCompare(b.name, 'th'); };
+    var cmp = {
+      low: function (a, b) { return a.completeness - b.completeness || byName(a, b); },
+      high: function (a, b) { return b.completeness - a.completeness || byName(a, b); },
+      district: function (a, b) { return districtOrder.indexOf(a.district) - districtOrder.indexOf(b.district) || byName(a, b); },
+      recent: function (a, b) { return (b.lastVisit ? b.lastVisit.getTime() : 0) - (a.lastVisit ? a.lastVisit.getTime() : 0); }
+    }[mode] || byName;
+    return list.slice().sort(cmp);
+  }
+
+  function renderHospitals(s, ds) {
+    var q = $('hospSearch').value.trim().toLowerCase();
+    var only = $('onlyIncomplete').checked;
+    var list = s.hospitals.filter(function (h) {
+      return (!q || (h.name + ' ' + (h.code || '')).toLowerCase().indexOf(q) >= 0) && (!only || h.doneCount < h.totalTopics);
+    });
+    list = sortHospitals(list, $('hospSort').value, ds.districts);
+    $('hospCount').textContent = 'แสดง ' + fmt(list.length) + ' จาก ' + fmt(s.hospitals.length) + ' แห่ง';
+    $('topicLegend').innerHTML = ds.topics.map(function (t, i) {
+      return '<li><b>' + (i + 1) + '</b>' + esc(Core.topicLabel(t)) + '</li>';
+    }).join('');
+
+    var head = '<thead><tr><th class="first" scope="col">รพ.สต.</th><th scope="col">ความครบ</th><th class="n" scope="col">ครั้ง</th><th scope="col">ล่าสุด</th>' +
+      ds.topics.map(function (t, i) { return '<th class="t" scope="col" title="' + esc(Core.topicLabel(t)) + '"><abbr title="' + esc(Core.topicLabel(t)) + '">' + (i + 1) + '</abbr></th>'; }).join('') +
+      '</tr></thead>';
+    if (!list.length) {
+      $('hospTable').innerHTML = head + '<tbody><tr><td colspan="' + (4 + ds.topics.length) + '" class="empty-state">ไม่มี รพ.สต. ที่ตรงกับเงื่อนไข</td></tr></tbody>';
+      return;
+    }
+    var body = list.map(function (h) {
+      var missing = h.missing.length
+        ? '<details class="missing"><summary>ยังขาด ' + h.missing.length + ' หัวข้อ</summary>' + h.missing.map(function (t) { return esc(Core.topicLabel(t)); }).join(', ') + '</details>'
+        : '<div class="missing" style="color:var(--good-ink)">✓ ครบทุกหัวข้อ</div>';
+      return '<tr><th class="first" scope="row" style="font-weight:500">' + esc(h.name) +
+        '<div class="small muted">' + (h.code ? esc(h.code) + ' · ' : '') + 'อ.' + esc(h.district) + '</div>' + missing + '</th>' +
+        '<td><div class="mini"><span class="track">' + bar(h.completeness) + '</span><span class="num">' + h.doneCount + '/' + h.totalTopics + '</span></div></td>' +
+        '<td class="n">' + h.visits + '</td>' +
+        '<td class="small" style="white-space:nowrap">' + Core.formatThaiDate(h.lastVisit, false) + '</td>' +
+        ds.topics.map(function (t, i) {
+          var done = !!h.topicSet[t];
+          return '<td class="t"><span class="cell ' + (done ? 'done' : 'todo') + '" title="' + (i + 1) + '. ' + esc(Core.topicLabel(t)) + (done ? ' — แนะนำแล้ว' : ' — ยังไม่ได้แนะนำ') + '">' +
+            (done ? '✓' : '–') + '<span class="sr-only">' + (done ? 'แนะนำแล้ว' : 'ยังไม่ได้แนะนำ') + '</span></span></td>';
+        }).join('') + '</tr>';
+    }).join('');
+    $('hospTable').innerHTML = head + '<tbody>' + body + '</tbody>';
+  }
+
+  function renderCountTable(el, label, rows) {
+    if (!rows.length) { el.innerHTML = '<tbody><tr><td class="empty-state">ไม่มีบันทึกตามตัวกรอง</td></tr></tbody>'; return; }
+    var max = Math.max.apply(null, rows.map(function (r) { return r.records; }));
+    el.innerHTML = '<thead><tr><th scope="col">' + label + '</th><th scope="col">บันทึก</th><th class="n" scope="col">รพ.สต.</th></tr></thead><tbody>' +
+      rows.map(function (r) {
+        return '<tr><th scope="row" style="font-weight:500">' + esc(r.name) + '</th>' +
+          '<td><div class="mini"><span class="track">' + bar(r.records / max) + '</span><span class="num">' + fmt(r.records) + ' ครั้ง</span></div></td>' +
+          '<td class="n">' + fmt(r.hospitals) + ' แห่ง</td></tr>';
+      }).join('') + '</tbody>';
+  }
+
+  function renderRecent(s) {
+    var shown = s.recent.slice(0, state.recentShown);
+    $('recentCount').textContent = 'แสดง ' + fmt(shown.length) + ' จาก ' + fmt(s.recent.length) + ' บันทึก';
+    $('moreBtn').hidden = s.recent.length <= state.recentShown;
+    if (!shown.length) { $('recentList').innerHTML = '<li class="empty-state">ไม่มีบันทึกตามตัวกรอง</li>'; return; }
+    $('recentList').innerHTML = shown.map(function (r) {
+      return '<li><div class="meta"><span>' + Core.formatThaiDate(r.timestamp) + '</span><span>' + esc(r.round) + '</span><span>อ.' + esc(r.district) + '</span><span>แถวที่ ' + r.row + ' ใน Sheet</span></div>' +
+        '<div class="title">' + (r.hospitalKey ? esc((r.hospitalCode ? r.hospitalCode + ' ' : '') + r.hospitalName) : 'ไม่ระบุ รพ.สต.') + '</div>' +
+        '<dl><dt>ผู้รับคำแนะนำ</dt><dd>' + esc(r.recipient) + '</dd>' +
+        '<dt>เจ้าหน้าที่</dt><dd>' + esc(r.staff) + '</dd>' +
+        '<dt>หัวข้อ</dt><dd>' + (r.topics.length ? r.topics.length + ' หัวข้อ: ' + r.topics.map(function (t) { return esc(Core.topicLabel(t)); }).join(', ') : 'ยังไม่มีบันทึก') + '</dd>' +
+        '<dt>คำแนะนำอื่น</dt><dd>' + esc(r.otherAdvice || 'ไม่ระบุ') + '</dd>' +
+        '<dt>ข้อเสนอแนะ</dt><dd>' + esc(r.suggestion || 'ไม่ระบุ') + '</dd></dl></li>';
+    }).join('');
+  }
+
+  // ---------- Theme ----------
+  function applyTheme(t) {
+    if (t) document.documentElement.setAttribute('data-theme', t);
+    var dark = t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    $('themeBtn').textContent = dark ? 'โหมดสว่าง' : 'โหมดมืด';
+  }
+
+  // ---------- Events ----------
+  $('fileInput').addEventListener('change', function (e) { readFile(e.target.files[0]); e.target.value = ''; });
+  var drop = $('drop');
+  ['dragenter', 'dragover'].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add('over'); }); });
+  ['dragleave', 'drop'].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove('over'); }); });
+  drop.addEventListener('drop', function (e) { readFile(e.dataTransfer.files[0]); });
+  window.addEventListener('dragover', function (e) { e.preventDefault(); });
+  window.addEventListener('drop', function (e) { e.preventDefault(); if (e.target !== drop && !drop.contains(e.target)) readFile(e.dataTransfer.files[0]); });
+  $('pasteBox').addEventListener('paste', function (e) {
+    var text = (e.clipboardData || window.clipboardData).getData('text');
+    if (!text) return;
+    e.preventDefault();
+    $('pasteBox').value = '';
+    loadText(text, 'วางจาก Google Sheet');
+  });
+  $('clearBtn').addEventListener('click', function () {
+    storage(function (s) { s.removeItem(STORE_KEY); });
+    state.ds = null;
+    $('errorBox').hidden = true;
+    render();
+  });
+  ['fDistrict', 'fRound', 'fStaff', 'hospSort', 'onlyIncomplete'].forEach(function (id) {
+    $(id).addEventListener('change', function () { state.recentShown = RECENT_PAGE; render(); });
+  });
+  $('hospSearch').addEventListener('input', render);
+  $('resetBtn').addEventListener('click', function () {
+    $('fDistrict').value = ''; $('fRound').value = ''; $('fStaff').value = '';
+    render();
+  });
+  $('distTable').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-district]');
+    if (!b) return;
+    var d = b.getAttribute('data-district');
+    $('fDistrict').value = $('fDistrict').value === d ? '' : d;
+    render();
+  });
+  $('moreBtn').addEventListener('click', function () { state.recentShown += RECENT_PAGE; render(); });
+  $('themeBtn').addEventListener('click', function () {
+    var cur = document.documentElement.getAttribute('data-theme') ||
+      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    var next = cur === 'dark' ? 'light' : 'dark';
+    storage(function (s) { s.setItem(THEME_KEY, next); });
+    applyTheme(next);
+  });
+
+  // ---------- Start ----------
+  applyTheme(storage(function (s) { return s.getItem(THEME_KEY); }));
+  var saved = storage(function (s) { return JSON.parse(s.getItem(STORE_KEY) || 'null'); });
+  if (saved && saved.text) {
+    loadText(saved.text, saved.source || 'ข้อมูลที่บันทึกไว้');
+    if (saved.loadedAt) { state.loadedAt = new Date(saved.loadedAt); render(); }
+  } else {
+    render();
+  }
+})();
+</script>
+</body>
+</html>
