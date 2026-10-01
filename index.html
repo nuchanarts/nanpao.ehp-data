@@ -132,14 +132,12 @@ main { padding: 20px 0 40px; display: grid; gap: 20px; }
 .card-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
 .note { font-size: .82rem; color: var(--text-3); margin: 8px 0 0; }
 
-/* Data input */
-.drop {
-  border: 2px dashed var(--border); border-radius: var(--radius); padding: 18px;
-  display: grid; gap: 12px; text-align: center; transition: border-color .15s, background .15s;
-}
-.drop.over { border-color: var(--accent); background: var(--surface-2); }
-.drop-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
-#pasteBox { width: 100%; min-height: 70px; resize: vertical; font-size: .85rem; }
+/* Data source */
+.drop-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.sheet-link { margin-top: 4px; overflow-wrap: anywhere; }
+.sheet-link a { color: var(--accent-ink); }
+.link-form { display: grid; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); font-size: .9rem; }
+.link-form input { font: inherit; font-size: .9rem; color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; min-height: 38px; width: 100%; }
 .data-bar { display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
 .privacy { font-size: .82rem; color: var(--text-3); }
 .alert { border-radius: 8px; padding: 10px 14px; font-size: .9rem; }
@@ -239,34 +237,37 @@ footer { padding: 0 0 28px; font-size: .8rem; color: var(--text-3); }
 </header>
 
 <main id="main" class="wrap">
-  <!-- Data input (constitution VI: upload, drag-and-drop, paste) -->
+  <!-- Data source: the form's response Google Sheet (link can be changed) -->
   <section class="card no-print" aria-labelledby="dataHead">
-    <div class="card-head">
-      <h2 id="dataHead">นำเข้าข้อมูลจาก Google Sheet</h2>
-      <button type="button" id="clearBtn" hidden>ล้างข้อมูล</button>
-    </div>
-    <div id="drop" class="drop">
-      <div>
-        <strong>ลากไฟล์ CSV มาวางที่นี่</strong>
-        <div class="small muted">หรือเลือกไฟล์ หรือคัดลอกทั้งตาราง (รวมแถวหัวตาราง) จาก Google Sheet แล้ววางในช่องด้านล่าง</div>
+    <div class="data-bar">
+      <div style="min-width:0">
+        <h2 id="dataHead">แหล่งข้อมูล: Google Sheet การตอบกลับของฟอร์ม</h2>
+        <div class="small muted sheet-link"><a id="sheetLink" href="#" target="_blank" rel="noopener noreferrer">เปิด Google Sheet</a> <span id="sheetNote"></span></div>
       </div>
       <div class="drop-actions">
-        <label class="btn btn-primary" for="fileInput">เลือกไฟล์ CSV</label>
-        <input id="fileInput" type="file" accept=".csv,.tsv,.txt,text/csv,text/tab-separated-values" class="sr-only">
+        <button type="button" id="refreshBtn" class="btn-primary">โหลดข้อมูลล่าสุด</button>
+        <button type="button" id="changeLinkBtn" aria-expanded="false" aria-controls="linkForm">เปลี่ยนลิงก์</button>
       </div>
-      <label for="pasteBox" class="sr-only">วางข้อมูลจาก Google Sheet</label>
-      <textarea id="pasteBox" placeholder="วางข้อมูลที่นี่ (Ctrl+V / ⌘V)"></textarea>
-      <div class="small muted">ดาวน์โหลดจาก Google Sheet: ไฟล์ → ดาวน์โหลด → ค่าที่คั่นด้วยจุลภาค (.csv)</div>
     </div>
-    <div id="loading" class="small muted" role="status" hidden>กำลังอ่านข้อมูล…</div>
+    <form id="linkForm" class="link-form" hidden>
+      <label for="linkInput">ลิงก์ Google Sheet (คัดลอกจากแถบที่อยู่ของเบราว์เซอร์ ขณะเปิดแท็บการตอบกลับ)</label>
+      <input id="linkInput" type="url" required placeholder="https://docs.google.com/spreadsheets/d/…/edit#gid=…" autocomplete="off">
+      <div class="drop-actions" style="justify-content:flex-start">
+        <button type="submit" class="btn-primary">บันทึกและโหลด</button>
+        <button type="button" id="cancelLinkBtn">ยกเลิก</button>
+        <button type="button" id="defaultLinkBtn">ใช้ลิงก์เริ่มต้น</button>
+      </div>
+      <div class="small muted">Sheet ต้องแชร์แบบ “ทุกคนที่มีลิงก์ดูได้” หน้านี้จึงอ่านข้อมูลได้ · ลิงก์ที่เปลี่ยนจะจำไว้ในเบราว์เซอร์เครื่องนี้</div>
+    </form>
+    <div id="loading" class="small muted" role="status" hidden style="margin-top:12px">กำลังโหลดข้อมูลจาก Google Sheet…</div>
     <div id="errorBox" class="alert alert-error" role="alert" hidden style="margin-top:12px"></div>
     <div id="warnBox" class="alert alert-warn" hidden style="margin-top:12px"></div>
-    <p class="privacy">ข้อมูลถูกอ่านและเก็บไว้ในเบราว์เซอร์เครื่องนี้เท่านั้น ไม่ถูกส่งไปที่ใด · Dashboard นี้มีชื่อบุคคล ใช้ภายในทีมเท่านั้น</p>
+    <p class="privacy">Dashboard นี้มีชื่อบุคคล ใช้ภายในทีมเท่านั้น</p>
   </section>
 
   <section id="emptyState" class="card empty-state">
-    <h2>ยังไม่มีข้อมูล</h2>
-    <p>นำเข้าไฟล์การตอบกลับของฟอร์ม “Checklist ยืนยันการดำเนินงานดูแลการใช้งานระบบ EHP On Cloud อบจ.น่าน” เพื่อดูสรุปผล</p>
+    <h2 id="emptyTitle">กำลังโหลดข้อมูล…</h2>
+    <p id="emptyText">ดึงข้อมูลการตอบกลับของฟอร์ม “Checklist ยืนยันการดำเนินงานดูแลการใช้งานระบบ EHP On Cloud อบจ.น่าน”</p>
   </section>
 
   <div id="dashboard" hidden style="display:grid;gap:20px">
@@ -353,6 +354,8 @@ var EHPCore = (function () {
   'use strict';
 
   var TOTAL_HOSPITALS = 106;
+  // Response sheet of the form; can be changed from the page ("เปลี่ยนลิงก์").
+  var DEFAULT_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1KnS4ozW6cf5eS70iFk6FxopSt4M737AEnMGvvLnWqc0/edit?gid=1304924102#gid=1304924102';
   var NO_ROUND = 'ไม่ระบุรอบ';
   var UNSPECIFIED = 'ไม่ระบุ';
   var TH_MONTHS = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
@@ -481,9 +484,21 @@ var EHPCore = (function () {
     return h.code || (norm(district) + '|' + h.name);
   }
 
+  // Google Sheet edit link → CSV export link of the same tab.
+  function sheetCsvUrl(link) {
+    var s = String(link || '').trim();
+    var id = s.match(/^https:\/\/docs\.google\.com\/spreadsheets\/d\/([\w-]+)/);
+    if (!id) throw DataError('ลิงก์ไม่ถูกต้อง — ใช้ลิงก์ Google Sheet ที่ขึ้นต้นด้วย https://docs.google.com/spreadsheets/d/…');
+    var gid = s.match(/[#?&]gid=(\d+)/);
+    return 'https://docs.google.com/spreadsheets/d/' + id[1] + '/export?format=csv' + (gid ? '&gid=' + gid[1] : '');
+  }
+
   function cell(row, i) { return i >= 0 ? norm(row[i]) : ''; }
 
   function loadDataset(text) {
+    if (/^\s*<(!doctype|html)/i.test(String(text || ''))) {
+      throw DataError('Google ส่งหน้าเข้าสู่ระบบกลับมาแทนข้อมูล — ตรวจสอบว่า Sheet แชร์แบบ “ทุกคนที่มีลิงก์ดูได้”');
+    }
     var rows = parseTable(text);
     if (!rows.length || rows[0].every(function (c) { return !norm(c); })) {
       throw DataError('ไม่พบข้อมูล — ไฟล์ว่าง หรือยังไม่ได้วางข้อมูล');
@@ -653,6 +668,7 @@ var EHPCore = (function () {
 
   return {
     TOTAL_HOSPITALS: TOTAL_HOSPITALS, NO_ROUND: NO_ROUND, STANDARD_TOPICS: STANDARD_TOPICS,
+    DEFAULT_SHEET_URL: DEFAULT_SHEET_URL, sheetCsvUrl: sheetCsvUrl,
     parseTable: parseTable, parseThaiDate: parseThaiDate, formatThaiDate: formatThaiDate,
     detectColumns: detectColumns, splitTopics: splitTopics, hospitalKey: hospitalKey,
     loadDataset: loadDataset, topicLabel: topicLabel, filterRecords: filterRecords,
@@ -666,10 +682,11 @@ var EHPCore = (function () {
 (function () {
   'use strict';
   var Core = EHPCore;
-  var STORE_KEY = 'ehp-nan-dashboard:data:v1';
+  var OLD_DATA_KEY = 'ehp-nan-dashboard:data:v1'; // earlier version cached response rows; removed on start
+  var LINK_KEY = 'ehp-nan-dashboard:sheet-link';
   var THEME_KEY = 'ehp-nan-dashboard:theme';
   var RECENT_PAGE = 15;
-  var state = { ds: null, source: '', loadedAt: null, recentShown: RECENT_PAGE };
+  var state = { ds: null, loadedAt: null, recentShown: RECENT_PAGE, loading: false };
   var $ = function (id) { return document.getElementById(id); };
 
   function esc(s) {
@@ -684,36 +701,72 @@ var EHPCore = (function () {
   function storage(fn) { try { return fn(window.localStorage); } catch (e) { return null; } }
 
   // ---------- Loading ----------
-  function loadText(text, source) {
-    $('errorBox').hidden = true;
-    try {
-      var ds = Core.loadDataset(text);
-      state.ds = ds;
-      state.source = source;
-      state.loadedAt = new Date();
-      state.recentShown = RECENT_PAGE;
-      storage(function (s) { s.setItem(STORE_KEY, JSON.stringify({ text: text, source: source, loadedAt: state.loadedAt.toISOString() })); });
-      buildFilters();
-      render();
-    } catch (e) {
-      console.error('[EHP dashboard] load failed', e);
-      showError(e.name === 'DataError' ? e.message : 'อ่านข้อมูลไม่สำเร็จ — ตรวจสอบว่าเป็นไฟล์ CSV จาก Google Sheet ของฟอร์มนี้');
-    }
+  function sheetLink() {
+    return storage(function (s) { return s.getItem(LINK_KEY); }) || Core.DEFAULT_SHEET_URL;
   }
 
   function showError(msg) {
     var box = $('errorBox');
     box.textContent = msg;
-    box.hidden = false;
+    box.hidden = !msg;
   }
 
-  function readFile(file) {
-    if (!file) return;
-    $('loading').hidden = false;
-    var reader = new FileReader();
-    reader.onload = function () { $('loading').hidden = true; loadText(String(reader.result), 'ไฟล์ ' + file.name); };
-    reader.onerror = function () { $('loading').hidden = true; showError('เปิดไฟล์ไม่สำเร็จ — ลองดาวน์โหลด CSV จาก Google Sheet ใหม่'); };
-    reader.readAsText(file, 'utf-8');
+  function setLoading(on) {
+    state.loading = on;
+    $('loading').hidden = !on;
+    $('refreshBtn').disabled = on;
+    $('refreshBtn').textContent = on ? 'กำลังโหลด…' : 'โหลดข้อมูลล่าสุด';
+  }
+
+  function renderSource() {
+    var link = sheetLink();
+    $('sheetLink').href = link;
+    $('sheetNote').textContent = link === Core.DEFAULT_SHEET_URL ? '(ลิงก์เริ่มต้น)' : '(ลิงก์ที่เปลี่ยนไว้ในเครื่องนี้)';
+  }
+
+  function loadFromSheet() {
+    if (state.loading) return;
+    var url;
+    try { url = Core.sheetCsvUrl(sheetLink()); } catch (e) { showError(e.message); render(); return; }
+    showError('');
+    setLoading(true);
+    render();
+    fetch(url, { cache: 'no-store', credentials: 'omit' })
+      .then(function (res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.text();
+      })
+      .then(function (text) {
+        var ds = Core.loadDataset(text);
+        state.ds = ds;
+        state.loadedAt = new Date();
+        state.recentShown = RECENT_PAGE;
+        buildFilters();
+      })
+      .catch(function (e) {
+        console.error('[EHP dashboard] load failed', url, e);
+        showError(e.name === 'DataError' ? e.message
+          : 'โหลดข้อมูลจาก Google Sheet ไม่สำเร็จ — ตรวจสอบอินเทอร์เน็ต, ลิงก์ถูกต้อง และ Sheet แชร์แบบ “ทุกคนที่มีลิงก์ดูได้” แล้วกด “โหลดข้อมูลล่าสุด” อีกครั้ง');
+      })
+      .then(function () { setLoading(false); render(); });
+  }
+
+  function toggleLinkForm(open) {
+    $('linkForm').hidden = !open;
+    $('changeLinkBtn').setAttribute('aria-expanded', String(open));
+    if (open) { $('linkInput').value = sheetLink(); $('linkInput').focus(); $('linkInput').select(); }
+  }
+
+  function saveLink(link) {
+    try { Core.sheetCsvUrl(link); } catch (e) { showError(e.message); return; }
+    storage(function (s) {
+      if (link === Core.DEFAULT_SHEET_URL) s.removeItem(LINK_KEY); else s.setItem(LINK_KEY, link);
+    });
+    toggleLinkForm(false);
+    state.ds = null; // never show the previous sheet's numbers under a new link
+    renderSource();
+    $('fDistrict').value = ''; $('fRound').value = ''; $('fStaff').value = '';
+    loadFromSheet();
   }
 
   // ---------- Filters ----------
@@ -740,17 +793,22 @@ var EHPCore = (function () {
     var has = !!ds;
     $('dashboard').hidden = !has;
     $('emptyState').hidden = has;
-    $('clearBtn').hidden = !has;
     renderWarnings(ds);
-    if (!has) { $('dataStatus').textContent = 'ยังไม่มีข้อมูล'; return; }
+    if (!has) {
+      $('dataStatus').textContent = state.loading ? 'กำลังโหลด…' : 'ยังไม่มีข้อมูล';
+      $('emptyTitle').textContent = state.loading ? 'กำลังโหลดข้อมูล…' : 'ยังไม่มีข้อมูล';
+      $('emptyText').textContent = state.loading
+        ? 'ดึงข้อมูลการตอบกลับของฟอร์มจาก Google Sheet'
+        : 'โหลดข้อมูลไม่สำเร็จ ดูรายละเอียดด้านบน หรือกด “เปลี่ยนลิงก์” เพื่อระบุ Google Sheet ที่ถูกต้อง';
+      return;
+    }
 
     var f = currentFilter();
     var records = Core.filterRecords(ds.records, f);
     var districtRecords = Core.filterRecords(ds.records, { round: f.round, staff: f.staff });
     var s = Core.summarize(ds, records, districtRecords);
 
-    $('dataStatus').textContent = fmt(ds.records.length) + ' บันทึก · ' + state.source +
-      (state.loadedAt ? ' · นำเข้า ' + Core.formatThaiDate(state.loadedAt) : '');
+    $('dataStatus').textContent = fmt(ds.records.length) + ' บันทึก · โหลดเมื่อ ' + Core.formatThaiDate(state.loadedAt);
     renderActiveFilter(f, records.length, ds.records.length);
     renderKpis(s, f);
     renderDistricts(s, f);
@@ -908,26 +966,11 @@ var EHPCore = (function () {
   }
 
   // ---------- Events ----------
-  $('fileInput').addEventListener('change', function (e) { readFile(e.target.files[0]); e.target.value = ''; });
-  var drop = $('drop');
-  ['dragenter', 'dragover'].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add('over'); }); });
-  ['dragleave', 'drop'].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove('over'); }); });
-  drop.addEventListener('drop', function (e) { readFile(e.dataTransfer.files[0]); });
-  window.addEventListener('dragover', function (e) { e.preventDefault(); });
-  window.addEventListener('drop', function (e) { e.preventDefault(); if (e.target !== drop && !drop.contains(e.target)) readFile(e.dataTransfer.files[0]); });
-  $('pasteBox').addEventListener('paste', function (e) {
-    var text = (e.clipboardData || window.clipboardData).getData('text');
-    if (!text) return;
-    e.preventDefault();
-    $('pasteBox').value = '';
-    loadText(text, 'วางจาก Google Sheet');
-  });
-  $('clearBtn').addEventListener('click', function () {
-    storage(function (s) { s.removeItem(STORE_KEY); });
-    state.ds = null;
-    $('errorBox').hidden = true;
-    render();
-  });
+  $('refreshBtn').addEventListener('click', loadFromSheet);
+  $('changeLinkBtn').addEventListener('click', function () { toggleLinkForm($('linkForm').hidden); });
+  $('cancelLinkBtn').addEventListener('click', function () { toggleLinkForm(false); });
+  $('defaultLinkBtn').addEventListener('click', function () { saveLink(Core.DEFAULT_SHEET_URL); });
+  $('linkForm').addEventListener('submit', function (e) { e.preventDefault(); saveLink($('linkInput').value.trim()); });
   ['fDistrict', 'fRound', 'fStaff', 'hospSort', 'onlyIncomplete'].forEach(function (id) {
     $(id).addEventListener('change', function () { state.recentShown = RECENT_PAGE; render(); });
   });
@@ -954,13 +997,9 @@ var EHPCore = (function () {
 
   // ---------- Start ----------
   applyTheme(storage(function (s) { return s.getItem(THEME_KEY); }));
-  var saved = storage(function (s) { return JSON.parse(s.getItem(STORE_KEY) || 'null'); });
-  if (saved && saved.text) {
-    loadText(saved.text, saved.source || 'ข้อมูลที่บันทึกไว้');
-    if (saved.loadedAt) { state.loadedAt = new Date(saved.loadedAt); render(); }
-  } else {
-    render();
-  }
+  storage(function (s) { s.removeItem(OLD_DATA_KEY); });
+  renderSource();
+  loadFromSheet();
 })();
 </script>
 </body>

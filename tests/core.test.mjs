@@ -135,3 +135,25 @@ test('filterRecords applies district, round and staff; options from data', () =>
   const opts = Core.filterOptions(ds);
   assert.deepEqual([...opts.rounds], ['รอบที่ 1', 'รอบที่ 2', 'ไม่ระบุรอบ']);
 });
+
+test('sheetCsvUrl converts a Google Sheet edit link to its CSV export link', () => {
+  const id = '1KnS4ozW6cf5eS70iFk6FxopSt4M737AEnMGvvLnWqc0';
+  assert.equal(
+    Core.sheetCsvUrl(`https://docs.google.com/spreadsheets/d/${id}/edit?gid=1304924102#gid=1304924102`),
+    `https://docs.google.com/spreadsheets/d/${id}/export?format=csv&gid=1304924102`
+  );
+  assert.equal(
+    Core.sheetCsvUrl(`https://docs.google.com/spreadsheets/d/${id}/edit`),
+    `https://docs.google.com/spreadsheets/d/${id}/export?format=csv`
+  );
+  assert.equal(Core.DEFAULT_SHEET_URL.includes(id), true);
+});
+
+test('sheetCsvUrl rejects links that are not Google Sheets with a Thai message', () => {
+  assert.throws(() => Core.sheetCsvUrl('https://example.com/data.csv'), /ลิงก์ Google Sheet/);
+  assert.throws(() => Core.sheetCsvUrl(''), /ลิงก์ Google Sheet/);
+});
+
+test('loadDataset explains when Google returns a login page instead of CSV', () => {
+  assert.throws(() => Core.loadDataset('<!DOCTYPE html><html><body>Sign in</body></html>'), /แชร์/);
+});
