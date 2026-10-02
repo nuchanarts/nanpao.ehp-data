@@ -110,10 +110,22 @@ test('summarize: union of topics per hospital, coverage over 106', () => {
   const h1 = s.hospitals.find((h) => h.key === '00001');
   assert.equal(h1.visits, 2);
   assert.equal(h1.doneCount, 3, 'topics 1,2 then 2,3 → union of 3');
-  assert.equal(h1.totalTopics, 16);
+  assert.equal(h1.totalTopics, 15, 'แม่จริม: 15 standard + 1 new topic − Lab Online');
   assert.deepEqual([...h1.staff].sort(), ['เจ้าหน้าที่ ก', 'เจ้าหน้าที่ ข']);
   const topic2 = s.topicCoverage.find((t) => t.text === Core.STANDARD_TOPICS[1].text);
   assert.equal(topic2.hospitals, 1);
+});
+
+test('summarize counts pilot sites as covered and complete', () => {
+  const ds = Core.loadDataset(sample);
+  const s = Core.summarize(ds, ds.records);
+  assert.equal(s.pilotsDone, 10);
+  assert.equal(s.coveredCount, s.hospitalCount + 10);
+  const pua = Core.summarize(ds, ds.records, ds.records, { district: 'ปัว' });
+  assert.equal(pua.pilotsDone, 5);
+  const d = s.byDistrict.find((x) => x.district === 'ปัว');
+  assert.equal(d.pilotsDone, 5);
+  assert.equal(d.covered, d.hospitals + 5);
 });
 
 test('summarize lists every district, including ones without records', () => {
@@ -204,8 +216,99 @@ test('followUp score: success % and work quality', () => {
   const hs = Core.summarize(ds, ds.records).hospitals;
   const done = hs.reduce((n, h) => n + h.doneCount, 0);
   assert.equal(sc.topicsDone, done);
-  assert.equal(sc.topicsPossible, hs.length * ds.topics.length);
-  assert.equal(sc.topicPct, done / (hs.length * ds.topics.length));
+  const possible = hs.reduce((n, h) => n + h.totalTopics, 0);
+  assert.equal(sc.topicsPossible, possible);
+  assert.equal(sc.topicPct, done / possible);
   assert.equal(sc.completeHospitals, fu.complete);
   for (const t of fu.team) assert.ok(t.score.hospitals <= sc.hospitals);
+});
+
+test('Lab Online counts toward % only for รพ.สต. in อ.ปัว', () => {
+  const lab = Core.STANDARD_TOPICS.find((t) => t.label === 'Lab Online').text;
+  assert.equal(Core.topicApplies(lab, 'ปัว'), true);
+  assert.equal(Core.topicApplies(lab, 'แม่จริม'), false);
+  assert.equal(Core.topicApplies(Core.STANDARD_TOPICS[0].text, 'แม่จริม'), true);
+  assert.equal(Core.topicScope(lab), 'เฉพาะ อ.ปัว');
+  const ds = Core.loadDataset(sample);
+  const s = Core.summarize(ds, ds.records);
+  const h1 = s.hospitals.find((h) => h.key === '00001');
+  const h2 = s.hospitals.find((h) => h.key === '00002');
+  assert.ok(!h1.missing.includes(lab), 'แม่จริม is never missing Lab Online');
+  assert.ok(h2.missing.includes(lab), 'ปัว still needs Lab Online');
+  assert.equal(h2.totalTopics, h1.totalTopics + 1);
+  const cov = s.topicCoverage.find((t) => t.text === lab);
+  assert.equal(cov.eligible, 1, 'only the ปัว รพ.สต. is in the Lab Online base');
+  const gap = Core.followUp(ds, ds.records, '', new Date(2030, 0, 1)).topicGaps.find((g) => g.text === lab);
+  assert.equal(gap.hospitals, 1);
+});
+
+test('Drug Catalog MY PCU counts toward % only for รพ.สต. whose legacy system is MyPCU', () => {
+  const dc = Core.STANDARD_TOPICS.find((t) => t.label === 'Drug Catalog MY PCU').text;
+  assert.equal(Core.topicApplies(dc, 'เมืองน่าน', 'MyPCU'), true);
+  assert.equal(Core.topicApplies(dc, 'แม่จริม', 'HOSxP-PCU'), false);
+  assert.equal(Core.topicApplies(dc, 'ปัว', 'HOSxPXE-PCU'), false);
+  assert.equal(Core.topicApplies(dc, 'แม่จริม', null), true, 'unknown system keeps the topic');
+  assert.equal(Core.topicScope(dc), 'เฉพาะระบบเดิม MyPCU');
+  const topics = Core.STANDARD_TOPICS.map((t) => t.text);
+  const rec = (code, district) => ({ row: 2, timestamp: new Date(2026, 9, 2), round: 'รอบที่ 1', district, hospitalKey: code,
+    hospitalCode: code, hospitalName: code, recipient: '-', topics: [], otherAdvice: '', suggestion: '', staff: 'x' });
+  const ds = { topics, newTopics: [], districts: ['แม่จริม', 'เมืองน่าน'], records: [rec('06475', 'แม่จริม'), rec('06448', 'เมืองน่าน')] };
+  const s = Core.summarize(ds, ds.records);
+  const hosxp = s.hospitals.find((h) => h.code === '06475');
+  const mypcu = s.hospitals.find((h) => h.code === '06448');
+  assert.equal(hosxp.totalTopics, 13, 'HOSxP-PCU in แม่จริม: 15 − Lab Online − Drug Catalog MY PCU');
+  assert.equal(mypcu.totalTopics, 14, 'MyPCU in เมืองน่าน: 15 − Lab Online');
+  assert.ok(!hosxp.missing.includes(dc));
+  assert.equal(s.topicCoverage.find((t) => t.text === dc).eligible, 1);
+});
+
+test('master plan: 106 รพ.สต. with round, district, legacy system and go-live date', () => {
+  const plan = Core.MASTER_PLAN;
+  assert.equal(plan.length, Core.TOTAL_HOSPITALS);
+  assert.equal(new Set(plan.map((h) => h.code)).size, 106, 'codes are unique');
+  const inRound = (r) => plan.filter((h) => h.round === r).length;
+  assert.deepEqual([1, 2, 3, 4].map(inRound), [30, 20, 29, 27], 'per round, pilots included');
+  assert.equal(plan.filter((h) => h.pilot).length, 10);
+  assert.equal(plan.filter((h) => h.district === 'ปัว').length, 12);
+  for (const h of plan) {
+    assert.match(h.code, /^\d{5}$/);
+    assert.ok(h.staff && h.system && /^\d{4}-\d{2}-\d{2}$/.test(h.goLive), h.code);
+  }
+  const yod = Core.planFor('06550');
+  assert.deepEqual([yod.district, yod.round, yod.pilot, yod.system], ['สองแคว', 3, true, 'HOSxP-PCU']);
+  assert.equal(Core.planFor('99999'), null);
+});
+
+test('planOverview: progress by round/system and live รพ.สต. without a visit', () => {
+  const topics = Core.STANDARD_TOPICS.map((t) => t.text);
+  const rec = (code, district, ts, staff, done) => ({
+    row: 2, timestamp: new Date(ts), round: 'รอบที่ 1', district, hospitalKey: code, hospitalCode: code, hospitalName: code,
+    recipient: '-', topics: done, otherAdvice: '', suggestion: '', staff
+  });
+  const nonLab = topics.filter((t) => Core.topicApplies(t, 'แม่จริม'));
+  const ds = { topics, records: [
+    rec('06475', 'แม่จริม', '2026-10-02', 'ศศิธร จันทำ (ก้อย)', nonLab), // complete (Lab Online not counted)
+    rec('06448', 'เมืองน่าน', '2026-10-02', 'ภาณุพงศ์ เหล่าสิทธิสุข', topics.slice(0, 3)),
+    rec('99999', 'เมืองน่าน', '2026-10-02', 'ภาณุพงศ์ เหล่าสิทธิสุข', [])
+  ] };
+  const now = new Date(2026, 9, 3); // 3 ต.ค. 2569
+  const o = Core.planOverview(ds, ds.records, { now });
+  assert.equal(o.total, 106);
+  assert.equal(o.visited, 12, '2 with form records + 10 pilot sites (finished)');
+  assert.equal(o.pilots, 10);
+  assert.deepEqual([...o.unplanned], ['99999']);
+  // live by 3 ต.ค.: 10 pilots + round-1 sites with go-live 2 or 3 ต.ค. (all 26)
+  assert.equal(o.live, 36);
+  assert.equal(o.upcoming, 70);
+  assert.equal(o.notVisited.length, 24, 'pilot sites are not followed up');
+  assert.ok(o.notVisited.every((i) => !i.plan.pilot));
+  const r1 = o.byRound.find((g) => g.key === 1);
+  assert.deepEqual([r1.total, r1.visited, r1.complete, r1.pilots], [30, 6, 5, 4], 'pilots count as visited and complete');
+  const order = o.notVisited.map((i) => i.plan.staff + '|' + i.plan.name);
+  assert.deepEqual([...order], [...order].sort((a, b) => a.localeCompare(b, 'th', { numeric: true })), 'sorted by staff, then รพ.สต.');
+  assert.deepEqual([...o.byRound.map((g) => g.total)], [30, 20, 29, 27]);
+  assert.equal(o.bySystem.reduce((n, g) => n + g.total, 0), 106);
+  const mine = Core.planOverview(ds, ds.records, { now, staff: 'ศศิธร จันทำ (ก้อย)' });
+  assert.ok(mine.total > 0 && mine.notVisited.every((i) => i.plan.staff === 'ศศิธร จันทำ'));
+  assert.equal(Core.planOverview(ds, ds.records, { now, district: 'ปัว' }).total, 12);
 });

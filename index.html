@@ -218,6 +218,7 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
 .cell { position: relative; display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 6px; font-weight: 700; font-size: .85rem; }
 .cell.done { background: var(--done-bg); color: var(--done-ink); }
 .cell.todo { background: var(--todo-bg); color: var(--todo-ink); font-weight: 400; }
+.cell.na { background: repeating-linear-gradient(135deg, var(--todo-bg) 0 4px, var(--border) 4px 5px); box-shadow: inset 0 0 0 1px var(--border); }
 .legend { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 4px 16px; margin: 0 0 12px; padding: 0; list-style: none; font-size: .82rem; color: var(--text-2); }
 .legend b { display: inline-block; min-width: 1.8em; color: var(--text); }
 .legend-key { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; font-size: .82rem; color: var(--text-2); margin-bottom: 10px; }
@@ -243,6 +244,9 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space:
 .fu-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .fu-item { border: 1px solid var(--border); border-left: 4px solid var(--k-blue); border-radius: 10px; padding: 12px 14px; }
 .fu-item.stale { border-left-color: var(--k-orange); }
+.miss-staff { font-weight: 600; margin-top: 8px; }
+.who-list { margin: 4px 0 0; padding-left: 18px; }
+.miss-staff:first-child { margin-top: 0; }
 .fu-item .row1 { display: flex; justify-content: space-between; gap: 6px 12px; flex-wrap: wrap; align-items: baseline; }
 .fu-item .title { font-weight: 600; }
 .fu-item .meta { font-size: .82rem; color: var(--text-2); }
@@ -336,6 +340,7 @@ main { padding: 20px 28px 32px; }
       <ul class="menu">
         <li><a href="#overview" data-view="overview"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg><span>ภาพรวม</span></a></li>
         <li><a href="#followup" data-view="followup"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6l1 1 2-2M4 12l1 1 2-2M4 18h2"/></svg><span>ติดตามงาน</span></a></li>
+        <li><a href="#plan" data-view="plan"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg><span>แผนติดตั้ง</span><b id="planBadge" class="menu-badge" hidden></b></a></li>
         <li><a href="#topics" data-view="topics"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h10M4 18h6"/></svg><span>รายหัวข้อ</span></a></li>
         <li><a href="#hospitals" data-view="hospitals"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V9l8-5 8 5v11zM12 10v6M9 13h6"/></svg><span>ราย รพ.สต.</span></a></li>
         <li><a href="#staff" data-view="staff"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4.5-6 8-6s7 2 8 6"/></svg><span>เจ้าหน้าที่ / รอบ</span></a></li>
@@ -392,7 +397,7 @@ main { padding: 20px 28px 32px; }
               <span class="small muted">ไม่กรองตามอำเภอ เพื่อเปรียบเทียบ · แตะชื่ออำเภอเพื่อกรอง</span>
             </div>
             <div class="table-scroll"><table id="distTable"></table></div>
-            <p class="note">แสดงจำนวน รพ.สต. ที่มีบันทึก ยังไม่แสดงร้อยละรายอำเภอ จนกว่าจะมีรายชื่อ รพ.สต. ครบทั้ง 106 แห่ง · ความครบเฉลี่ย = ค่าเฉลี่ยของ (หัวข้อที่แนะนำแล้ว ÷ หัวข้อทั้งหมด) ของ รพ.สต. ในอำเภอ</p>
+            <p class="note">ร้อยละ = รพ.สต. ที่มีบันทึก (รวม รพ.สต.นำร่องที่ทำเสร็จสิ้นแล้ว) ÷ จำนวน รพ.สต. ของอำเภอตาม Master plan · นำร่องนับความครบ 100% · ความครบเฉลี่ย = ค่าเฉลี่ยของ (หัวข้อที่แนะนำแล้ว ÷ หัวข้อทั้งหมด) ของ รพ.สต. ในอำเภอ</p>
           </section>
         </div>
 
@@ -421,6 +426,40 @@ main { padding: 20px 28px 32px; }
             <p class="note" style="margin:0 0 12px">เรียงจากหัวข้อที่ยังขาดมากที่สุด (Cleansing Data, ติดตาม Drug Catalog, Lab Online ไว้ท้ายสุด) แล้วตามวันที่เข้าครั้งล่าสุดนานที่สุด · นับหัวข้อจากทุกครั้งที่มีผู้เข้าแนะนำ (ไม่ว่าใครเข้า) · ขอบสีส้ม = ไม่ได้เข้านาน <span id="fuStaleDays"></span> วันขึ้นไป</p>
             <ol class="fu-list" id="fuList"></ol>
           </section>
+          <section class="card" id="fuMissCard" aria-labelledby="fuMissHead">
+            <div class="card-head">
+              <h2 id="fuMissHead">ยังไม่ได้เข้าแนะนำ (ถึงวันเปิดใช้งานแล้ว)</h2>
+              <span class="small muted" id="fuMissCount"></span>
+            </div>
+            <p class="note" style="margin:0 0 12px">ตามเจ้าหน้าที่รับผิดชอบใน Master plan · ยังไม่มีบันทึกในฟอร์มเลย</p>
+            <ol class="fu-list" id="fuMissList"></ol>
+          </section>
+        </div>
+
+        <div class="stack" data-panel="plan">
+          <section class="kpis" id="planKpis" aria-label="ความคืบหน้าตามแผน"></section>
+          <section class="card" aria-labelledby="planRoundHead">
+            <div class="card-head">
+              <h2 id="planRoundHead">ความคืบหน้ารายรอบ</h2>
+              <span class="small muted">ตาม Master plan อบจ.น่าน · รพ.สต.นำร่องนับรวมในรอบของอำเภอ</span>
+            </div>
+            <div class="table-scroll"><table id="planRoundTable"></table></div>
+          </section>
+          <section class="card" aria-labelledby="planSysHead">
+            <div class="card-head">
+              <h2 id="planSysHead">ความคืบหน้ารายระบบเดิม</h2>
+              <span class="small muted">ระบบเดิมของหน่วยบริการก่อนย้ายมา EHP On Cloud</span>
+            </div>
+            <div class="table-scroll"><table id="planSysTable"></table></div>
+          </section>
+          <section class="card" aria-labelledby="planMissHead">
+            <div class="card-head">
+              <h2 id="planMissHead">ถึงวันเปิดใช้งานแล้ว แต่ยังไม่มีบันทึกการเข้าแนะนำ</h2>
+              <span class="small muted" id="planMissCount"></span>
+            </div>
+            <ol class="fu-list" id="planMissList"></ol>
+            <p class="note" id="planNote"></p>
+          </section>
         </div>
 
         <section class="card" data-panel="topics" aria-labelledby="topicHead">
@@ -439,19 +478,20 @@ main { padding: 20px 28px 32px; }
           <p class="note" style="margin:0 0 12px">นับรวมทุกครั้งที่เข้าแนะนำ · แตะ “ยังขาด” เพื่อดูหัวข้อที่ยังไม่ได้แนะนำ</p>
           <div class="tools no-print">
             <label for="hospSearch" class="sr-only">ค้นหา รพ.สต.</label>
-            <input type="search" id="hospSearch" placeholder="ค้นหาชื่อ/รหัส รพ.สต. หรือชื่อเจ้าหน้าที่">
+            <input type="search" id="hospSearch" placeholder="ค้นหาชื่อ/รหัส รพ.สต. ชื่อเจ้าหน้าที่ หรือระบบเดิม">
             <label class="check"><input type="checkbox" id="onlyIncomplete"> เฉพาะที่ยังไม่ครบ</label>
             <label class="check">เรียง
               <select id="hospSort">
                 <option value="low">ความครบ น้อย → มาก</option>
                 <option value="high">ความครบ มาก → น้อย</option>
                 <option value="district">อำเภอ</option>
+                <option value="round">รอบ / วันเปิดใช้งาน</option>
                 <option value="recent">เข้าแนะนำล่าสุด</option>
               </select>
             </label>
           </div>
           <div class="wide-only">
-            <div class="legend-key"><span><span class="cell done" aria-hidden="true">✓</span> แนะนำแล้ว</span><span><span class="cell todo" aria-hidden="true">–</span> ยังไม่ได้แนะนำ</span></div>
+            <div class="legend-key"><span><span class="cell done" aria-hidden="true">✓</span> แนะนำแล้ว</span><span><span class="cell todo" aria-hidden="true">–</span> ยังไม่ได้แนะนำ</span><span><span class="cell na" aria-hidden="true">&nbsp;</span> ไม่นับ (Lab Online เฉพาะ อ.ปัว · Drug Catalog MY PCU เฉพาะระบบเดิม MyPCU)</span></div>
             <details><summary class="small">หมายเลขหัวข้อ</summary><ol class="legend" id="topicLegend"></ol></details>
           </div>
           <div class="table-scroll" style="margin-top:10px"><table class="matrix" id="hospTable"></table></div>
@@ -529,15 +569,137 @@ var EHPCore = (function () {
     { label: 'ส่งออก 43 แฟ้ม', text: 'มีการแนะนำการส่งออก 43 แฟ้มเรียบร้อยแล้ว' },
     { label: 'ตัดจ่าย + Sub Stock', text: 'มีการแนะนำการตัดจ่ายแบบ Manual และ Realtime รวมถึงการผูก Sub Stock สำหรับการตัดจ่ายได้เรียบร้อย' },
     { label: 'ผูกวิธีใช้ตั้งต้น', text: 'มีการแนะนำการผูกวิธีใช้งานตั้งต้น' },
-    { label: 'Drug Catalog MY PCU', text: 'กรณีที่เป็นระบบ MY PCU เจ้าหน้าที่มีการแนะนำการทำ Drug Catalog ใน MY PCU ให้แล้วเสร็จ' },
+    // systems: counted toward % only for รพ.สต. whose legacy system (Master plan) is one of these.
+    { label: 'Drug Catalog MY PCU', text: 'กรณีที่เป็นระบบ MY PCU เจ้าหน้าที่มีการแนะนำการทำ Drug Catalog ใน MY PCU ให้แล้วเสร็จ', systems: ['MyPCU'] },
     // Followed up after the topics above (later: true) — always listed last.
     { label: 'Cleansing Data', text: 'เปรียบเทียบประวัติการรักษา (Cleansing Data)', later: true },
     { label: 'ติดตาม Drug Catalog', text: 'ติดตามและตรวจสอบเรื่อง Drug Catalog เช่น ราคายา และรายการที่ยังไม่แจ้ง Drug Catalog', later: true },
-    { label: 'Lab Online', text: 'แนะนำการใช้งาน Lab Online', later: true }
+    // districts: counted toward % only for รพ.สต. in these อำเภอ (Lab Online is used only in ปัว).
+    { label: 'Lab Online', text: 'แนะนำการใช้งาน Lab Online', later: true, districts: ['ปัว'] }
   ];
+
+  // Master plan (อบจ.น่าน 106 แห่ง รายละเอียดรอบ Migration, V72608692011).
+  // Pilot (นำร่อง) sites went live first and are also counted in their district's round.
+  var STAFF = { A: 'ภาณุพงศ์ เหล่าสิทธิสุข', B: 'บุญรัตน์ สุขขี', C: 'ปุณยวีร์ ภิรมย์เรืองกิจ', D: 'ชลสิทธิ์ ศรีอัมพร', E: 'ศศิธร จันทำ', F: 'วณิชญา ตรีมงคล' };
+  var SYSTEMS = { M: 'MyPCU', P: 'HOSxP-PCU', X: 'HOSxPXE-PCU' };
+  var PLAN_ROUNDS = [
+    { round: 0, name: 'นำร่อง', migrate: '2026-09-04', goLive: '5-6 ก.ย. 2569', site: 'อบจ.น่าน' },
+    { round: 1, name: 'รอบที่ 1', migrate: '2026-10-01', goLive: '2-4 ต.ค. 2569', site: 'อบจ.น่าน' },
+    { round: 2, name: 'รอบที่ 2', migrate: '2026-10-08', goLive: '9-10 ต.ค. 2569', site: 'รพ.สต.ตาลชุม (5-10 ต.ค.)' },
+    { round: 3, name: 'รอบที่ 3', migrate: '2026-10-15', goLive: '16-17 ต.ค. 2569', site: 'สสอ.ท่าวังผา (12-17 ต.ค.)' },
+    { round: 4, name: 'รอบที่ 4', migrate: '2026-10-22', goLive: '23-24 ต.ค. 2569', site: 'รพ.สต.ปัว (19-30 ต.ค.)' }
+  ];
+  // round → district → 'code|name|staff|system|go-live date (YYYY-MM-DD)|P (pilot)'
+  var PLAN_DATA = {
+    1: {
+      'เมืองน่าน': ['06448|รพ.สต.บ่อ|A|M|2026-10-02', '06452|รพ.สต.เรือง|A|M|2026-10-02', '06453|รพ.สต.นาซาว|A|M|2026-10-03',
+        '06454|รพ.สต.ดู่ใต้|A|M|2026-10-03', '06455|รพ.สต.ดอนมูล|B|M|2026-10-02', '06457|รพ.สต.กองควาย|F|P|2026-10-02',
+        '06466|รพ.สต.สวก|B|M|2026-10-02', '06467|รพ.สต.สะเนียน|B|M|2026-10-03', '06469|รพ.สต.บ้านละเบ้ายา|B|M|2026-10-03',
+        '14360|รพ.สต.บ้านปางค่า|D|M|2026-10-02',
+        '06449|รพ.สต.ผาสิงห์|B|M|2026-09-05|P', '06450|รพ.สต.ไชยสถาน|A|M|2026-09-05|P', '10373|สสช.บ้านห้วยมอญ|C|M|2026-09-05|P'],
+      'ภูเพียง': ['06461|รพ.สต.ท่าน้าว|D|M|2026-10-02', '06459|รพ.สต.บ้านบุปผาราม|D|X|2026-10-03', '06458|รพ.สต.ฝายแก้ว|D|X|2026-10-03',
+        '10374|รพ.สต.บ้านดงป่าสัก|F|X|2026-10-02', '06463|รพ.สต.เมืองจัง|F|P|2026-09-05|P'],
+      'แม่จริม': ['06471|รพ.สต.แม่จริม|F|P|2026-10-02', '06472|รพ.สต.บ้านตอง|F|P|2026-10-03', '06473|รพ.สต.หมอเมือง|F|P|2026-10-03',
+        '06474|รพ.สต.น้ำพาง|E|P|2026-10-02', '06475|รพ.สต.น้ำตวง|E|P|2026-10-02', '06476|รพ.สต.น้ำปาย|E|P|2026-10-02',
+        '10375|สสช.น้ำปูน|E|P|2026-10-03', '10376|รพ.สต.บ้านร่มเกล้า|E|P|2026-10-03'],
+      'สันติสุข': ['06544|รพ.สต.ป่าแลวหลวง|C|M|2026-10-02', '06545|รพ.สต.พงษ์|C|M|2026-10-02', '10395|รพ.สต.บ้านราษฎร์พัฒนา|C|M|2026-10-03',
+        '10396|สสช.ปางช้าง|C|M|2026-10-03']
+    },
+    2: {
+      'เวียงสา': ['06510|รพ.สต.ขึ่ง|A|M|2026-10-09', '06511|รพ.สต.ไหล่น่าน|A|M|2026-10-09', '06512|รพ.สต.ตาลชุม|A|M|2026-10-10',
+        '06513|รพ.สต.นาเหลือง|A|M|2026-10-10', '06515|รพ.สต.บ้านสันรุ่งเรือง|F|P|2026-10-09', '06517|รพ.สต.น้ำปั้ว|B|M|2026-10-09',
+        '06520|รพ.สต.อ่ายนาไลย|B|M|2026-10-09', '06522|รพ.สต.ส้านนาหนองใหม่|B|M|2026-10-10', '06523|รพ.สต.บ้านยาบนาเลิม|B|M|2026-10-10',
+        '06524|รพ.สต.บ้านป่าแพะ|D|M|2026-10-09', '10384|สสช.สาลี่|F|P|2026-10-09', '10388|รพ.สต.ห้วยหยวก|D|M|2026-10-10',
+        '14013|รพ.สต.บ้านทรายทอง|D|M|2026-10-10', '14014|รพ.สต.ศรีนาชื่น|C|M|2026-10-09', '14361|รพ.สต.ห้วยไฟ|C|M|2026-10-09'],
+      'นาน้อย': ['06484|สอน.เฉลิมพระเกียรติฯ|C|M|2026-10-10'],
+      'นาหมื่น': ['06543|รพ.สต.ปิงหลวง|F|P|2026-10-09'],
+      'บ้านหลวง': ['06478|รพ.สต.บ้านฟ้า|F|P|2026-10-10', '06480|รพ.สต.สวด|E|P|2026-10-09', '06481|รพ.สต.บ้านพี้ใต้|E|P|2026-10-09']
+    },
+    3: {
+      'ท่าวังผา': ['06498|รพ.สต.ริม|A|X|2026-10-16', '06499|รพ.สต.ป่าคา|A|X|2026-10-16', '06500|รพ.สต.ผาตอ|A|M|2026-10-16',
+        '06501|รพ.สต.น้ำโมง|A|X|2026-10-16', '06502|รพ.สต.ยม|B|X|2026-10-16', '06503|รพ.สต.บ้านพร้าว|B|X|2026-10-16',
+        '06504|รพ.สต.ตาลชุม|B|X|2026-10-16', '06505|รพ.สต.บ้านดอนตัน|B|X|2026-10-16', '06506|รพ.สต.บ้านคั๊วะ|B|X|2026-10-16',
+        '06507|รพ.สต.จอมพระ|D|X|2026-10-16', '06508|รพ.สต.แสนทอง|D|X|2026-10-16', '10381|รพ.สต.สบขุ่น|D|X|2026-10-16',
+        '10383|สสช.บ้านดอยติ้ว|D|X|2026-10-16', '14123|รพ.สต.บ้านน้ำกิ|D|X|2026-10-16', '14308|รพ.สต.สบสาย|F|X|2026-10-16',
+        '14998|รพ.สต.บ้านแหน|F|X|2026-10-16'],
+      'สองแคว': ['06548|รพ.สต.บ้านถ้ำเวียงแก|A|P|2026-10-17', '06549|รพ.สต.ชนแดน|A|P|2026-10-17', '06550|รพ.สต.ยอด|F|P|2026-09-05|P',
+        '10402|สสช.ขุนน้ำพริก|A|P|2026-10-17', '10403|สสช.ใหม่ชายแดน|A|P|2026-10-17', '10404|สสช.สะเกิน|B|P|2026-10-17'],
+      'ทุ่งช้าง': ['06529|รพ.สต.ปอน|B|P|2026-10-17', '06530|รพ.สต.งอบ|B|P|2026-10-17', '06531|รพ.สต.และ|B|P|2026-10-17',
+        '10389|สสช.ห้วยสะแตง|D|P|2026-10-17', '10390|สสช.มณีพฤกษ์|D|P|2026-10-17', '10391|สสช.น้ำสอด|D|P|2026-10-17',
+        '10392|รพ.สต.บ้านปางแก|D|P|2026-10-17']
+    },
+    4: {
+      'ปัว': ['06488|รพ.สต.แงง|D|X|2026-09-05|P', '06490|รพ.สต.ศิลาแลง|C|X|2026-10-23', '06492|รพ.สต.ศิลาเพชร|C|X|2026-10-23',
+        '06493|รพ.สต.อวน|D|X|2026-09-05|P', '06494|รพ.สต.ไชยวัฒนา|E|X|2026-09-05|P', '06495|รพ.สต.เจดีย์ชัย|E|X|2026-09-05|P',
+        '06496|รพ.สต.ภูคา|C|X|2026-10-23', '06497|รพ.สต.สกาด|C|X|2026-10-23', '10379|สสช.ผาเวียง|F|X|2026-10-23',
+        '10380|สสช.กอก|F|X|2026-10-23', '14012|รพ.สต.ปัว|D|X|2026-09-05|P', '14377|รพ.สต.ป่ากลาง|F|X|2026-10-23'],
+      'เชียงกลาง': ['06532|รพ.สต.บ้านชี|A|X|2026-10-23', '06533|รพ.สต.บ้านงิ้ว|A|X|2026-10-23', '06534|รพ.สต.บ้านส้อ|A|X|2026-10-23',
+        '06535|รพ.สต.เปือ|A|X|2026-10-23', '06536|รพ.สต.เชียงคาน|B|X|2026-10-23', '06537|รพ.สต.พระธาตุ|B|X|2026-10-23',
+        '06538|รพ.สต.พญาแก้ว|B|X|2026-10-23', '06539|รพ.สต.พระพุทธบาท|D|X|2026-10-23', '10393|สสช.ผาน้ำย้อย|D|X|2026-10-23'],
+      'เฉลิมพระเกียรติ': ['06551|รพ.สต.ห้วยโก๋น|D|P|2026-10-23', '06552|รพ.สต.บ้านด่าน|C|P|2026-10-23', '06553|รพ.สต.บ้านน้ำรีพัฒนา|C|P|2026-10-23',
+        '10405|สสช.สบปืน|C|P|2026-10-23', '10407|สสช.กิ่วจันทร์|F|P|2026-10-23', '14016|รพ.สต.บ้านสะจุก|E|P|2026-10-23']
+    }
+  };
+  // Flat list: { code, name, district, round, pilot, staff, system, goLive }.
+  var MASTER_PLAN = [];
+  Object.keys(PLAN_DATA).forEach(function (round) {
+    Object.keys(PLAN_DATA[round]).forEach(function (district) {
+      PLAN_DATA[round][district].forEach(function (line) {
+        var f = line.split('|');
+        MASTER_PLAN.push({ code: f[0], name: f[1], district: district, round: +round, pilot: f[5] === 'P',
+          staff: STAFF[f[2]], system: SYSTEMS[f[3]], goLive: f[4] });
+      });
+    });
+  });
+  function planFor(code) {
+    for (var i = 0; i < MASTER_PLAN.length; i++) if (MASTER_PLAN[i].code === code) return MASTER_PLAN[i];
+    return null;
+  }
+  function planRound(round) {
+    for (var i = 0; i < PLAN_ROUNDS.length; i++) if (PLAN_ROUNDS[i].round === round) return PLAN_ROUNDS[i];
+    return null;
+  }
+  function plannedIn(district) { return MASTER_PLAN.filter(function (p) { return p.district === district; }).length; }
+  // Form staff names may carry a nickname, e.g. "ศศิธร จันทำ (ก้อย)"; match on the first name.
+  function sameStaff(planStaff, formStaff) {
+    return !!planStaff && !!formStaff && norm(planStaff).split(' ')[0] === norm(formStaff).split(' ')[0];
+  }
+  // Pilot (นำร่อง) sites finished the whole process before this form was used: count them as covered and complete.
+  function pilotSites(opts) {
+    opts = opts || {};
+    return MASTER_PLAN.filter(function (p) {
+      return p.pilot && (!opts.district || p.district === opts.district) && (!opts.staff || sameStaff(p.staff, opts.staff));
+    });
+  }
+  function isoDay(d) { return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()); }
+  function isoToDate(s) { var p = s.split('-'); return new Date(+p[0], p[1] - 1, +p[2]); }
 
   var LATER_TOPICS = STANDARD_TOPICS.filter(function (t) { return t.later; }).map(function (t) { return t.text; });
   function isLaterTopic(text) { return LATER_TOPICS.indexOf(text) >= 0; }
+
+  function standardTopic(text) {
+    for (var i = 0; i < STANDARD_TOPICS.length; i++) if (STANDARD_TOPICS[i].text === text) return STANDARD_TOPICS[i];
+    return null;
+  }
+
+  // Whether a topic counts for a รพ.สต. in this อำเภอ with this legacy system.
+  // An unknown system (รพ.สต. not in the Master plan) keeps every topic.
+  function topicApplies(text, district, system) {
+    var t = standardTopic(text);
+    if (!t) return true;
+    if (t.districts && t.districts.indexOf(district) < 0) return false;
+    if (t.systems && system && t.systems.indexOf(system) < 0) return false;
+    return true;
+  }
+
+  // Where a limited topic applies, e.g. "เฉพาะ อ.ปัว" / "เฉพาะระบบเดิม MyPCU"; '' when it applies everywhere.
+  function topicScope(text) {
+    var t = standardTopic(text);
+    if (!t) return '';
+    if (t.districts) return 'เฉพาะ อ.' + t.districts.join(', อ.');
+    if (t.systems) return 'เฉพาะระบบเดิม ' + t.systems.join(', ');
+    return '';
+  }
 
   function norm(s) { return String(s == null ? '' : s).replace(/\s+/g, ' ').trim(); }
 
@@ -763,12 +925,15 @@ var EHPCore = (function () {
       var note = [r.suggestion, r.otherAdvice].filter(Boolean).join(' · ');
       if (note && (!h.lastNote || (r.timestamp && (!h.lastNoteAt || r.timestamp >= h.lastNoteAt)))) { h.lastNote = note; h.lastNoteAt = r.timestamp; }
     });
-    var total = ds.topics.length;
     list.forEach(function (h) {
-      h.done = ds.topics.filter(function (t) { return h.topicSet[t]; });
-      h.missing = ds.topics.filter(function (t) { return !h.topicSet[t]; });
+      h.plan = h.code ? planFor(h.code) : null;
+      var system = h.plan ? h.plan.system : null;
+      var applicable = ds.topics.filter(function (t) { return topicApplies(t, h.district, system); });
+      h.done = applicable.filter(function (t) { return h.topicSet[t]; });
+      h.missing = applicable.filter(function (t) { return !h.topicSet[t]; });
       h.doneCount = h.done.length;
-      h.totalTopics = total;
+      h.totalTopics = applicable.length;
+      var total = applicable.length;
       h.completeness = total ? h.doneCount / total : 0;
     });
     return list;
@@ -791,21 +956,38 @@ var EHPCore = (function () {
   }
 
   // districtRecords: records for the district overview, which ignores the district filter.
-  function summarize(ds, records, districtRecords) {
+  // opts: { district, staff } of the current filter, used to add the pilot sites that apply.
+  function summarize(ds, records, districtRecords, opts) {
+    opts = opts || {};
     var hospitals = buildHospitals(ds, records);
     var districtHospitals = buildHospitals(ds, districtRecords || records);
+    // Pilot sites without a form record, each counted as complete (100%).
+    var pilotsOutside = function (hs, o) {
+      var codes = {};
+      hs.forEach(function (h) { if (h.code) codes[h.code] = true; });
+      return pilotSites(o).filter(function (p) { return !codes[p.code]; });
+    };
+    var pilots = pilotsOutside(hospitals, opts);
+    var districtPilots = pilotsOutside(districtHospitals, { staff: opts.staff });
+    var withPilots = function (hs, n) { return hs.map(function (h) { return h.completeness; }).concat(n.map(function () { return 1; })); };
     var byDistrict = ds.districts.map(function (d) {
       var hs = districtHospitals.filter(function (h) { return h.district === d; });
+      var ps = districtPilots.filter(function (p) { return p.district === d; });
       return {
         district: d,
         records: (districtRecords || records).filter(function (r) { return r.district === d; }).length,
         hospitals: hs.length,
-        avgCompleteness: average(hs.map(function (h) { return h.completeness; }))
+        pilotsDone: ps.length,
+        covered: hs.length + ps.length,
+        planned: plannedIn(d),
+        avgCompleteness: average(withPilots(hs, ps))
       };
     });
     var topicCoverage = ds.topics.map(function (t) {
+      var eligible = hospitals.filter(function (h) { return topicApplies(t, h.district, h.plan ? h.plan.system : null); });
       return { text: t, label: topicLabel(t), isNew: ds.newTopics.indexOf(t) >= 0, later: isLaterTopic(t),
-        hospitals: hospitals.filter(function (h) { return h.topicSet[t]; }).length };
+        scope: topicScope(t), eligible: eligible.length,
+        hospitals: eligible.filter(function (h) { return h.topicSet[t]; }).length };
     });
     var staffStats = countBy(records, 'staff').sort(function (a, b) { return b.records - a.records || thSort(a.name, b.name); });
     var roundStats = countBy(records, 'round').sort(function (a, b) { return (a.name === NO_ROUND) - (b.name === NO_ROUND) || thSort(a.name, b.name); });
@@ -815,10 +997,12 @@ var EHPCore = (function () {
     return {
       totalRecords: records.length,
       hospitalCount: hospitals.length,
+      pilotsDone: pilots.length,
+      coveredCount: hospitals.length + pilots.length,
       totalHospitals: TOTAL_HOSPITALS,
-      coverage: hospitals.length / TOTAL_HOSPITALS,
-      avgCompleteness: average(hospitals.map(function (h) { return h.completeness; })),
-      completeHospitals: hospitals.filter(function (h) { return h.doneCount === h.totalTopics; }).length,
+      coverage: (hospitals.length + pilots.length) / TOTAL_HOSPITALS,
+      avgCompleteness: average(withPilots(hospitals, pilots)),
+      completeHospitals: hospitals.filter(function (h) { return h.doneCount === h.totalTopics; }).length + pilots.length,
       hospitals: hospitals,
       byDistrict: byDistrict,
       topicCoverage: topicCoverage,
@@ -869,7 +1053,7 @@ var EHPCore = (function () {
     });
     // Main topics by how many รพ.สต. lack them; follow-up-later topics keep their fixed order (Cleansing Data first).
     var topicGaps = ds.topics.map(function (t) {
-      return { text: t, label: topicLabel(t), later: isLaterTopic(t), hospitals: items.filter(function (i) { return !i.hospital.topicSet[t]; }).length };
+      return { text: t, label: topicLabel(t), later: isLaterTopic(t), hospitals: items.filter(function (i) { return i.hospital.missing.indexOf(t) >= 0; }).length };
     }).filter(function (g) { return g.hospitals; }).sort(function (a, b) {
       return a.later - b.later || (a.later ? LATER_TOPICS.indexOf(a.text) - LATER_TOPICS.indexOf(b.text) : b.hospitals - a.hospitals);
     });
@@ -893,8 +1077,61 @@ var EHPCore = (function () {
     };
   }
 
+  // Master plan vs. visits: progress by round and by legacy system, and รพ.สต. that went live with no visit yet.
+  // records: already filtered; opts.district / opts.staff narrow the plan to that อำเภอ / installer.
+  function planOverview(ds, records, opts) {
+    opts = opts || {};
+    var today = isoDay(opts.now || new Date());
+    var visited = {};
+    buildHospitals(ds, records).forEach(function (h) { if (h.code) visited[h.code] = h; });
+    var plan = MASTER_PLAN.filter(function (p) {
+      return (!opts.district || p.district === opts.district) && (!opts.staff || sameStaff(p.staff, opts.staff));
+    });
+    var rows = plan.map(function (p) {
+      var h = visited[p.code] || null;
+      // Pilot sites are finished: covered and complete even without a form record.
+      return { plan: p, hospital: h, live: p.goLive <= today, done: !!h || p.pilot,
+        completeness: p.pilot ? 1 : h ? h.completeness : 0 };
+    });
+    function group(keyOf, keys) {
+      return keys.map(function (k) {
+        var rs = rows.filter(function (r) { return keyOf(r.plan) === k; });
+        var seen = rs.filter(function (r) { return r.done; });
+        var districts = [];
+        rs.forEach(function (r) { if (districts.indexOf(r.plan.district) < 0) districts.push(r.plan.district); });
+        return { key: k, total: rs.length, live: rs.filter(function (r) { return r.live; }).length,
+          pilots: rs.filter(function (r) { return r.plan.pilot; }).length, districts: districts,
+          visited: seen.length, complete: seen.filter(function (r) { return r.completeness === 1; }).length,
+          avgCompleteness: average(seen.map(function (r) { return r.completeness; })) };
+      }).filter(function (g) { return g.total; });
+    }
+    var byRound = group(function (p) { return p.round; }, [1, 2, 3, 4]).map(function (g) {
+      var r = planRound(g.key);
+      g.name = r.name; g.goLive = r.goLive; g.site = r.site;
+      return g;
+    });
+    var bySystem = group(function (p) { return p.system; }, ['MyPCU', 'HOSxP-PCU', 'HOSxPXE-PCU']);
+    var now = isoToDate(today);
+    var notVisited = rows.filter(function (r) {
+      return r.live && !r.done;
+    }).map(function (r) {
+      return { plan: r.plan, daysSinceLive: daysBetween(isoToDate(r.plan.goLive), now) };
+    }).sort(function (a, b) {
+      // By responsible staff, then รพ.สต. name.
+      return thSort(a.plan.staff, b.plan.staff) || thSort(a.plan.name, b.plan.name) || a.plan.code.localeCompare(b.plan.code);
+    });
+    var unplanned = Object.keys(visited).filter(function (c) { return !planFor(c); });
+    return {
+      total: rows.length, live: rows.filter(function (r) { return r.live; }).length,
+      visited: rows.filter(function (r) { return r.done; }).length,
+      pilots: rows.filter(function (r) { return r.plan.pilot; }).length,
+      upcoming: rows.filter(function (r) { return !r.live; }).length,
+      byRound: byRound, bySystem: bySystem, notVisited: notVisited, unplanned: unplanned
+    };
+  }
+
   return {
-    TOTAL_HOSPITALS: TOTAL_HOSPITALS, followUp: followUp, isLaterTopic: isLaterTopic, NO_ROUND: NO_ROUND, STANDARD_TOPICS: STANDARD_TOPICS,
+    TOTAL_HOSPITALS: TOTAL_HOSPITALS, planOverview: planOverview, planRound: planRound, sameStaff: sameStaff, MASTER_PLAN: MASTER_PLAN, PLAN_ROUNDS: PLAN_ROUNDS, planFor: planFor, followUp: followUp, isLaterTopic: isLaterTopic, topicApplies: topicApplies, topicScope: topicScope, NO_ROUND: NO_ROUND, STANDARD_TOPICS: STANDARD_TOPICS,
     DEFAULT_SHEET_URL: DEFAULT_SHEET_URL, sheetCsvUrl: sheetCsvUrl,
     parseTable: parseTable, parseThaiDate: parseThaiDate, formatThaiDate: formatThaiDate,
     detectColumns: detectColumns, splitTopics: splitTopics, hospitalKey: hospitalKey,
@@ -916,7 +1153,7 @@ var EHPCore = (function () {
   var RECENT_PAGE = 15;
   var AUTO_REFRESH_MS = 60 * 1000;
   var state = { ds: null, loadedAt: null, recentShown: RECENT_PAGE, loading: false, timer: null, view: 'overview' };
-  var VIEWS = { overview: 'ภาพรวม', followup: 'ติดตามงาน', topics: 'รายหัวข้อ', hospitals: 'ราย รพ.สต.', staff: 'เจ้าหน้าที่ / รอบ', recent: 'บันทึกล่าสุด', source: 'แหล่งข้อมูล' };
+  var VIEWS = { overview: 'ภาพรวม', followup: 'ติดตามงาน', plan: 'แผนติดตั้ง', topics: 'รายหัวข้อ', hospitals: 'ราย รพ.สต.', staff: 'เจ้าหน้าที่ / รอบ', recent: 'บันทึกล่าสุด', source: 'แหล่งข้อมูล' };
   var $ = function (id) { return document.getElementById(id); };
 
   function esc(s) {
@@ -1054,7 +1291,7 @@ var EHPCore = (function () {
     var f = currentFilter();
     var records = Core.filterRecords(ds.records, f);
     var districtRecords = Core.filterRecords(ds.records, { round: f.round, staff: f.staff });
-    var s = Core.summarize(ds, records, districtRecords);
+    var s = Core.summarize(ds, records, districtRecords, { district: f.district, staff: f.staff });
 
     $('dataStatus').textContent = fmt(ds.records.length) + ' บันทึก · โหลดเมื่อ ' + Core.formatThaiDate(state.loadedAt);
     renderActiveFilter(f, records.length, ds.records.length);
@@ -1065,13 +1302,74 @@ var EHPCore = (function () {
     renderCountTable($('staffTable'), 'เจ้าหน้าที่', s.staffStats);
     renderCountTable($('roundTable'), 'รอบ', s.roundStats);
     renderRecent(s);
+    renderPlan(ds, f);
     if (state.view === 'followup') renderFollowUp(ds, f);
+  }
+
+  function goLiveText(p) { return Core.formatThaiDate(new Date(p.goLive.replace(/-/g, '/')), false); }
+
+  // Plan details under a รพ.สต. name: legacy system, round and go-live date.
+  function planLine(p) {
+    return '<b>' + esc(p.system) + '</b> · ' + esc(Core.planRound(p.round).name) + (p.pilot ? ' (นำร่อง)' : '') +
+      ' · เปิดใช้ ' + goLiveText(p);
+  }
+
+  function renderMissList(el, items, showStaff) {
+    el.innerHTML = items.length ? items.map(function (i, n) {
+      var p = i.plan;
+      var count = items.filter(function (x) { return x.plan.staff === p.staff; }).length;
+      var heading = showStaff && (!n || items[n - 1].plan.staff !== p.staff)
+        ? '<li class="miss-staff">' + esc(p.staff) + ' <span class="small muted">' + fmt(count) + ' แห่ง</span></li>' : '';
+      return heading + '<li class="fu-item stale"><div class="row1"><span class="title">' + esc(p.name) + '</span>' +
+        '<span class="meta">' + (i.daysSinceLive ? 'เปิดใช้มาแล้ว ' + fmt(i.daysSinceLive) + ' วัน' : 'เปิดใช้วันนี้') + '</span></div>' +
+        '<div class="meta">' + esc(p.code) + ' · อ.' + esc(p.district) + ' · ' + planLine(p) +
+        (showStaff ? ' · รับผิดชอบ: ' + esc(p.staff) : '') + '</div></li>';
+    }).join('') : '<li class="empty-state">✓ ทุกแห่งที่ถึงวันเปิดใช้งานแล้ว มีบันทึกการเข้าแนะนำแล้ว</li>';
+  }
+
+  function renderPlan(ds, f) {
+    // Visits from any round/staff count, so a รพ.สต. is "visited" as soon as anyone recorded it.
+    var all = Core.planOverview(ds, ds.records);
+    $('planBadge').hidden = !all.notVisited.length;
+    $('planBadge').textContent = all.notVisited.length;
+    if (state.view !== 'plan') return;
+    var o = Core.planOverview(ds, Core.filterRecords(ds.records, { district: f.district }), { district: f.district, staff: f.staff });
+    var scope = (f.district ? 'อ.' + f.district : 'ทั้งจังหวัด') + (f.staff ? ' · ที่ ' + f.staff + ' รับผิดชอบ' : '');
+    $('planKpis').innerHTML = [
+      kpi('ถึงวันเปิดใช้งานแล้ว', fmt(o.live) + '<small>/' + fmt(o.total) + ' แห่ง</small>', esc(scope) + ' · รอเปิดใช้อีก ' + fmt(o.upcoming) + ' แห่ง', o.total ? o.live / o.total : null, 'violet'),
+      kpi('ได้รับการดูแลแล้ว', fmt(o.visited) + '<small>/' + fmt(o.total) + ' แห่ง</small>', pct(o.total ? o.visited / o.total : null) + ' ของ รพ.สต. ตามแผน' + (o.pilots ? ' · รวมนำร่องที่เสร็จแล้ว ' + fmt(o.pilots) + ' แห่ง' : ''), o.total ? o.visited / o.total : null, 'blue'),
+      kpi('เปิดใช้แล้วแต่ยังไม่ได้เข้า', fmt(o.notVisited.length) + ' <small>แห่ง</small>', o.notVisited.length ? 'ดูรายชื่อด้านล่าง' : 'ไม่มีค้าง', null, 'orange')
+    ].join('');
+
+    var head = function (first) {
+      return '<thead><tr><th scope="col">' + first + '</th><th scope="col">ได้รับการดูแล</th><th class="n" scope="col">ครบทุกหัวข้อ</th><th class="n" scope="col">ความครบเฉลี่ย</th></tr></thead>';
+    };
+    var cells = function (g) {
+      var r = g.total ? g.visited / g.total : null;
+      return '<td><div class="mini"><span class="track">' + bar(r || 0) + '</span><span class="num">' + fmt(g.visited) + '/' + fmt(g.total) + ' (' + pct(r) + ')</span></div></td>' +
+        '<td class="n">' + fmt(g.complete) + ' แห่ง</td><td class="n">' + pct(g.avgCompleteness) + '</td>';
+    };
+    var empty = '<tbody><tr><td class="empty-state">ไม่มี รพ.สต. ตามตัวกรอง</td></tr></tbody>';
+    $('planRoundTable').innerHTML = o.byRound.length ? head('รอบ') + '<tbody>' + o.byRound.map(function (g) {
+      return '<tr><th scope="row" style="font-weight:500">' + esc(g.name) + ' <span class="badge">' + esc(g.goLive) + '</span>' +
+        '<div class="small muted">' + esc(g.districts.join(' · ')) + (g.pilots ? ' · นำร่อง ' + g.pilots + ' แห่ง' : '') + '</div></th>' + cells(g) + '</tr>';
+    }).join('') + '</tbody>' : empty;
+    $('planSysTable').innerHTML = o.bySystem.length ? head('ระบบเดิม') + '<tbody>' + o.bySystem.map(function (g) {
+      return '<tr><th scope="row" style="font-weight:500">' + esc(g.key) + '<div class="small muted">' + fmt(g.total) + ' แห่ง · ' + esc(g.districts.join(' · ')) + '</div></th>' + cells(g) + '</tr>';
+    }).join('') + '</tbody>' : empty;
+
+    $('planMissCount').textContent = fmt(o.notVisited.length) + ' แห่ง';
+    renderMissList($('planMissList'), o.notVisited, !f.staff);
+    $('planNote').textContent = 'นับว่า “ได้รับการดูแล” เมื่อมีการตอบฟอร์มของ รพ.สต. นั้นอย่างน้อย 1 ครั้ง ไม่ว่ารอบใดหรือใครเข้า · รพ.สต.นำร่องทำเสร็จสิ้นแล้วตามกระบวนการทั้งหมด จึงนับว่าได้รับการดูแลและครบทุกหัวข้อ · ' +
+      'ใช้ Master plan (อบจ.น่าน 106 แห่ง) — กำหนดการอาจเปลี่ยนตามการย้ายฐานข้อมูลของแต่ละหน่วยบริการ' +
+      (o.unplanned.length ? ' · มีรหัส รพ.สต. ในฟอร์มที่ไม่อยู่ในแผน: ' + o.unplanned.join(', ') : '');
   }
 
   // Per-installer follow-up: which รพ.สต. still need work and which topics to bring next visit.
   function renderFollowUp(ds, f) {
     var fu = Core.followUp(ds, Core.filterRecords(ds.records, { district: f.district, round: f.round }), f.staff);
     var who = f.staff ? 'คุณ' + f.staff : 'ทั้งทีม';
+    var miss = Core.planOverview(ds, Core.filterRecords(ds.records, { district: f.district }), { district: f.district, staff: f.staff }).notVisited;
     var tips = [];
     if (!fu.hospitals) {
       tips.push('ยังไม่มีบันทึกการเข้าแนะนำของ' + esc(who) + 'ตามตัวกรองนี้');
@@ -1082,12 +1380,38 @@ var EHPCore = (function () {
       if (fu.stale) tips.push('มี <b>' + fmt(fu.stale) + ' แห่ง</b> ที่ยังไม่ครบและไม่ได้เข้านาน ' + fu.staleDays + ' วันขึ้นไป — ควรนัดเข้าก่อน');
       var top = fu.items[0];
       tips.push('เริ่มที่ <b>' + esc(top.hospital.name) + '</b> (อ.' + esc(top.hospital.district) + ') ยังขาด ' +
-        (top.mainMissing.length ? top.mainMissing.length + ' หัวข้อ' : top.laterMissing.map(function (t) { return esc(Core.topicLabel(t)); }).join(', ')));
+        (top.mainMissing.length ? top.mainMissing.length + ' หัวข้อ' : top.laterMissing.map(function (t) { return esc(Core.topicLabel(t)); }).join(', ')) +
+        (f.staff ? '' : ' · ดูแลโดย ' + esc(top.hospital.staff.join(', '))));
       var gapText = function (g) { return '<b>' + esc(g.label) + '</b> (' + fmt(g.hospitals) + ' แห่ง)'; };
       var mainGaps = fu.topicGaps.filter(function (g) { return !g.later; });
       var laterGaps = fu.topicGaps.filter(function (g) { return g.later; });
       if (mainGaps.length) tips.push('หัวข้อที่ควรเตรียมไปแนะนำ: ' + mainGaps.slice(0, 3).map(gapText).join(', '));
       if (laterGaps.length) tips.push('จากนั้น: ' + laterGaps.map(gapText).join(', '));
+    }
+    if (miss.length) {
+      tips.push('ถึงวันเปิดใช้งานแล้วแต่ยังไม่ได้เข้า <b>' + fmt(miss.length) + ' แห่ง</b>' +
+        (f.staff ? ': ' + miss.map(function (i) { return esc(i.plan.name); }).join(', ') : ' — ดูรายชื่อแยกตามเจ้าหน้าที่ด้านล่าง'));
+    }
+    if (!f.staff) {
+      // Per installer: form names (with nickname) for staff who have records, Master plan names otherwise.
+      var people = fu.team.map(function (t) { return { name: t.name, filter: true, incomplete: t.incomplete, notVisited: 0 }; });
+      miss.forEach(function (i) {
+        var p = people.filter(function (x) { return Core.sameStaff(i.plan.staff, x.name); })[0];
+        if (!p) { p = { name: i.plan.staff, filter: false, incomplete: 0, notVisited: 0 }; people.push(p); }
+        p.notVisited++;
+      });
+      people = people.filter(function (p) { return p.incomplete || p.notVisited; }).sort(function (a, b) {
+        return (b.incomplete + b.notVisited) - (a.incomplete + a.notVisited) || a.name.localeCompare(b.name, 'th');
+      });
+      if (people.length) {
+        tips.push('งานรายคน:<ul class="who-list">' + people.map(function (p) {
+          var name = p.filter ? '<button type="button" class="link" data-staff="' + esc(p.name) + '">' + esc(p.name) + '</button>' : '<b>' + esc(p.name) + '</b>';
+          var parts = [];
+          if (p.incomplete) parts.push('ยังไม่ครบ ' + fmt(p.incomplete) + ' แห่ง');
+          if (p.notVisited) parts.push('ยังไม่ได้เข้า ' + fmt(p.notVisited) + ' แห่ง');
+          return '<li>' + name + ' — ' + parts.join(' · ') + '</li>';
+        }).join('') + '</ul>');
+      }
     }
     $('fuInsight').innerHTML = '<h2>คำแนะนำสำหรับ' + esc(who) + '</h2>' +
       (f.staff ? '' : '<p class="small muted" style="margin:0">เลือกชื่อของคุณที่ตัวกรอง “เจ้าหน้าที่” ด้านบน หรือแตะชื่อในตาราง เพื่อดูเฉพาะงานของตัวเอง</p>') +
@@ -1095,11 +1419,11 @@ var EHPCore = (function () {
 
     var sc = fu.score;
     $('fuSuccess').innerHTML = [
-      kpi('หัวข้อที่แนะนำแล้ว', pct(sc.topicPct), fmt(sc.topicsDone) + ' จาก ' + fmt(sc.topicsPossible) + ' หัวข้อ (' + fmt(sc.hospitals) + ' แห่ง × ' + ds.topics.length + ' หัวข้อ)', sc.topicPct, 'blue'),
-      kpi('รพ.สต. ครบทุกหัวข้อ', pct(sc.completePct), fmt(sc.completeHospitals) + ' จาก ' + fmt(sc.hospitals) + ' แห่ง ครบ ' + ds.topics.length + ' หัวข้อ', sc.completePct, 'green')
+      kpi('หัวข้อที่แนะนำแล้ว', pct(sc.topicPct), fmt(sc.topicsDone) + ' จาก ' + fmt(sc.topicsPossible) + ' หัวข้อ (' + fmt(sc.hospitals) + ' แห่ง × ' + 'หัวข้อที่ใช้กับแต่ละแห่ง · Lab Online นับเฉพาะ อ.ปัว)', sc.topicPct, 'blue'),
+      kpi('รพ.สต. ครบทุกหัวข้อ', pct(sc.completePct), fmt(sc.completeHospitals) + ' จาก ' + fmt(sc.hospitals) + ' แห่ง ครบทุกหัวข้อ', sc.completePct, 'green')
     ].join('');
     $('fuQuality').innerHTML = [
-      kpi('ครบทุกหัวข้อ', pct(sc.completePct), fmt(sc.completeHospitals) + ' จาก ' + fmt(sc.hospitals) + ' แห่ง ครบ ' + ds.topics.length + ' หัวข้อ', sc.completePct, 'violet'),
+      kpi('ครบทุกหัวข้อ', pct(sc.completePct), fmt(sc.completeHospitals) + ' จาก ' + fmt(sc.hospitals) + ' แห่ง ครบทุกหัวข้อ', sc.completePct, 'violet'),
       kpi('เฉลี่ยครั้งจนครบ', sc.avgVisitsToComplete == null ? '–' : (Math.round(sc.avgVisitsToComplete * 10) / 10).toLocaleString('th-TH') + ' <small>ครั้ง</small>',
         sc.completeHospitals ? 'จาก ' + fmt(sc.completeHospitals) + ' แห่งที่ครบแล้ว · ยิ่งน้อยยิ่งดี' : 'ยังไม่มีแห่งที่ครบทุกหัวข้อ', null, 'blue')
     ].join('');
@@ -1117,6 +1441,9 @@ var EHPCore = (function () {
         : '<tbody><tr><td class="empty-state">ไม่มีบันทึกตามตัวกรอง</td></tr></tbody>';
     }
 
+    $('fuMissCount').textContent = fmt(miss.length) + ' แห่ง';
+    renderMissList($('fuMissList'), miss, !f.staff);
+
     $('fuStaleDays').textContent = fu.staleDays;
     $('fuCount').textContent = fmt(fu.items.length) + ' แห่ง';
     $('fuList').innerHTML = fu.items.length ? fu.items.map(function (i) {
@@ -1129,7 +1456,7 @@ var EHPCore = (function () {
         (f.staff ? '' : ' · โดย ' + esc(h.staff.join(', '))) + '</div>' +
         '<ul class="chips" aria-label="หัวข้อที่ยังขาด">' + i.mainMissing.map(function (t) { return '<li class="chip">' + esc(Core.topicLabel(t)) + '</li>'; }).join('') +
         (i.laterMissing.length ? i.laterMissing.map(function (t) { return '<li class="chip later">' + esc(Core.topicLabel(t)) + '</li>'; }).join('') : '') + '</ul>' +
-        (h.lastNote ? '<div class="fu-note">ข้อเสนอแนะล่าสุด: ' + esc(h.lastNote) + '</div>' : '') + '</li>';
+        (h.lastNote ? '<div class="fu-note">มีการแนะนำอื่นๆ: ' + esc(h.lastNote) + '</div>' : '') + '</li>';
     }).join('') : '<li class="empty-state">ไม่มี รพ.สต. ที่ต้องติดตาม</li>';
   }
 
@@ -1166,29 +1493,37 @@ var EHPCore = (function () {
       '<div class="sub">' + sub + '</div></div>';
   }
 
+  function pilotNote(s) { return s.pilotsDone ? ' · รวมนำร่องที่เสร็จแล้ว ' + fmt(s.pilotsDone) + ' แห่ง' : ''; }
+
   function renderKpis(s, f) {
-    // Coverage over 106 is province-wide only; a district has no honest denominator yet (constitution III).
+    // District denominator comes from the Master plan (106 รพ.สต. by อำเภอ).
+    var planned = 0;
+    s.byDistrict.forEach(function (d) { if (d.district === f.district) planned = d.planned; });
     var cover = f.district
-      ? kpi('รพ.สต. ที่ได้รับการดูแล', fmt(s.hospitalCount) + ' <small>แห่ง</small>', 'ในอำเภอ' + esc(f.district) + ' · ยังไม่มีจำนวน รพ.สต. รายอำเภอ จึงไม่แสดงร้อยละ', null, 'blue')
-      : kpi('รพ.สต. ที่ได้รับการดูแล', fmt(s.hospitalCount) + '<small>/' + s.totalHospitals + ' แห่ง</small>', pct(s.coverage) + ' ของ รพ.สต. ที่ถ่ายโอนทั้งหมด · คงเหลือ ' + fmt(s.totalHospitals - s.hospitalCount) + ' แห่ง', s.coverage, 'blue');
+      ? (planned
+        ? kpi('รพ.สต. ที่ได้รับการดูแล', fmt(s.coveredCount) + '<small>/' + planned + ' แห่ง</small>', pct(s.coveredCount / planned) + ' ของ รพ.สต. ในอำเภอ' + esc(f.district) + pilotNote(s) + ' · คงเหลือ ' + fmt(Math.max(0, planned - s.coveredCount)) + ' แห่ง', s.coveredCount / planned, 'blue')
+        : kpi('รพ.สต. ที่ได้รับการดูแล', fmt(s.coveredCount) + ' <small>แห่ง</small>', 'ในอำเภอ' + esc(f.district) + ' · ไม่มีอำเภอนี้ใน Master plan จึงไม่แสดงร้อยละ', null, 'blue'))
+      : kpi('รพ.สต. ที่ได้รับการดูแล', fmt(s.coveredCount) + '<small>/' + s.totalHospitals + ' แห่ง</small>', pct(s.coverage) + ' ของ รพ.สต. ที่ถ่ายโอนทั้งหมด' + pilotNote(s) + ' · คงเหลือ ' + fmt(s.totalHospitals - s.coveredCount) + ' แห่ง', s.coverage, 'blue');
     $('kpis').innerHTML = [
       cover,
-      kpi('ความครบของหัวข้อ (เฉลี่ย)', pct(s.avgCompleteness), 'เฉลี่ยจาก ' + fmt(s.hospitalCount) + ' แห่ง · ครบทุกหัวข้อ ' + fmt(s.completeHospitals) + ' แห่ง', s.avgCompleteness, 'green'),
+      kpi('ความครบของหัวข้อ (เฉลี่ย)', pct(s.avgCompleteness), 'เฉลี่ยจาก ' + fmt(s.coveredCount) + ' แห่ง' + (s.pilotsDone ? ' (นำร่องนับ 100%)' : '') + ' · ครบทุกหัวข้อ ' + fmt(s.completeHospitals) + ' แห่ง', s.avgCompleteness, 'green'),
       kpi('บันทึกการเข้าแนะนำ', fmt(s.totalRecords) + ' <small>ครั้ง</small>', s.lastRecord ? 'ล่าสุด ' + Core.formatThaiDate(s.lastRecord) : 'ยังไม่มีบันทึก', null, 'orange'),
       kpi('หัวข้อ Checklist', fmt(state.ds.topics.length) + ' <small>หัวข้อ</small>', state.ds.newTopics.length ? 'มาตรฐาน 15 + หัวข้อใหม่จากฟอร์ม ' + state.ds.newTopics.length : 'ตามมาตรฐาน 15 หัวข้อ', null, 'violet')
     ].join('');
   }
 
   function renderDistricts(s, f) {
-    var max = Math.max.apply(null, s.byDistrict.map(function (d) { return d.hospitals; }).concat([1]));
-    $('distTable').innerHTML = '<thead><tr><th scope="col">อำเภอ</th><th scope="col">รพ.สต. ที่มีบันทึก</th><th class="n" scope="col">บันทึก</th><th class="n" scope="col">ความครบเฉลี่ย</th></tr></thead><tbody>' +
+    $('distTable').innerHTML = '<thead><tr><th scope="col">อำเภอ</th><th scope="col">รพ.สต. ที่ได้รับการดูแล / ทั้งหมด</th><th class="n" scope="col">บันทึก</th><th class="n" scope="col">ความครบเฉลี่ย</th></tr></thead><tbody>' +
       s.byDistrict.map(function (d) {
         var selected = f.district === d.district;
         return '<tr' + (selected ? ' aria-current="true" style="background:var(--surface-2)"' : '') + '>' +
           '<th scope="row" style="font-weight:500"><button type="button" class="link" data-district="' + esc(d.district) + '" title="กรองเฉพาะอำเภอนี้">' + esc(d.district) + '</button></th>' +
-          '<td>' + (d.records
-            ? '<div class="mini"><span class="track">' + bar(d.hospitals / max) + '</span><span class="num">' + fmt(d.hospitals) + ' แห่ง</span></div>'
-            : '<span class="badge">ยังไม่มีบันทึก</span>') + '</td>' +
+          '<td>' + (d.covered
+            ? (d.planned
+              ? '<div class="mini"><span class="track">' + bar(d.covered / d.planned) + '</span><span class="num">' + fmt(d.covered) + '/' + fmt(d.planned) + ' แห่ง (' + pct(d.covered / d.planned) + ')' +
+                (d.pilotsDone ? ' <span class="small muted">· รวมนำร่อง ' + fmt(d.pilotsDone) + ' แห่ง</span>' : '') + '</span></div>'
+              : '<span class="num">' + fmt(d.covered) + ' แห่ง</span>')
+            : '<span class="badge">ยังไม่มีบันทึก' + (d.planned ? ' · 0/' + fmt(d.planned) + ' แห่ง' : '') + '</span>') + '</td>' +
           '<td class="n">' + fmt(d.records) + '</td>' +
           '<td class="n">' + pct(d.avgCompleteness) + '</td></tr>';
       }).join('') + '</tbody>';
@@ -1198,11 +1533,12 @@ var EHPCore = (function () {
     var base = s.hospitalCount;
     $('topicBase').textContent = 'จาก รพ.สต. ที่มีบันทึก ' + fmt(base) + ' แห่ง';
     $('topicBars').innerHTML = s.topicCoverage.map(function (t, i) {
-      var ratio = base ? t.hospitals / base : 0;
+      var n = t.eligible, ratio = n ? t.hospitals / n : 0;
       return '<li class="bar-row" title="' + esc(t.text) + '"><span class="name">' + (i + 1) + '. ' + esc(t.label) +
+        (t.scope ? ' <small class="muted">(' + esc(t.scope) + ')</small>' : '') +
         (t.isNew ? '<span class="new-tag">ใหม่</span>' : '') + '</span>' +
         '<span class="track" aria-hidden="true">' + bar(ratio) + '</span>' +
-        '<span class="val">' + fmt(t.hospitals) + '/' + fmt(base) + ' แห่ง (' + pct(base ? ratio : null) + ')</span></li>';
+        '<span class="val">' + fmt(t.hospitals) + '/' + fmt(n) + ' แห่ง (' + pct(n ? ratio : null) + ')</span></li>';
     }).join('');
   }
 
@@ -1212,6 +1548,10 @@ var EHPCore = (function () {
       low: function (a, b) { return a.completeness - b.completeness || byName(a, b); },
       high: function (a, b) { return b.completeness - a.completeness || byName(a, b); },
       district: function (a, b) { return districtOrder.indexOf(a.district) - districtOrder.indexOf(b.district) || byName(a, b); },
+      round: function (a, b) {
+        var pa = a.plan ? a.plan.round + a.plan.goLive : '9', pb = b.plan ? b.plan.round + b.plan.goLive : '9';
+        return pa < pb ? -1 : pa > pb ? 1 : byName(a, b);
+      },
       recent: function (a, b) { return (b.lastVisit ? b.lastVisit.getTime() : 0) - (a.lastVisit ? a.lastVisit.getTime() : 0); }
     }[mode] || byName;
     return list.slice().sort(cmp);
@@ -1221,12 +1561,13 @@ var EHPCore = (function () {
     var q = $('hospSearch').value.trim().toLowerCase();
     var only = $('onlyIncomplete').checked;
     var list = s.hospitals.filter(function (h) {
-      return (!q || (h.name + ' ' + (h.code || '') + ' ' + h.staff.join(' ')).toLowerCase().indexOf(q) >= 0) && (!only || h.doneCount < h.totalTopics);
+      return (!q || (h.name + ' ' + (h.code || '') + ' ' + h.staff.join(' ') + ' ' + (h.plan ? h.plan.system : '')).toLowerCase().indexOf(q) >= 0) && (!only || h.doneCount < h.totalTopics);
     });
     list = sortHospitals(list, $('hospSort').value, ds.districts);
     $('hospCount').textContent = 'แสดง ' + fmt(list.length) + ' จาก ' + fmt(s.hospitals.length) + ' แห่ง';
     $('topicLegend').innerHTML = ds.topics.map(function (t, i) {
-      return '<li><b>' + (i + 1) + '</b>' + esc(Core.topicLabel(t)) + '</li>';
+      var scope = Core.topicScope(t);
+      return '<li><b>' + (i + 1) + '</b>' + esc(Core.topicLabel(t)) + (scope ? ' (' + esc(scope) + ')' : '') + '</li>';
     }).join('');
 
     var head = '<thead><tr><th class="first" scope="col">รพ.สต.</th><th scope="col">ความครบ</th><th class="n" scope="col">ครั้ง</th><th class="last" scope="col">ล่าสุด</th>' +
@@ -1242,11 +1583,16 @@ var EHPCore = (function () {
         : '<div class="missing" style="color:var(--good-ink)">✓ ครบทุกหัวข้อ</div>';
       return '<tr><th class="first" scope="row" style="font-weight:500">' + esc(h.name) +
         '<div class="small muted">' + (h.code ? esc(h.code) + ' · ' : '') + 'อ.' + esc(h.district) + '</div>' +
+        (h.plan ? '<div class="small muted">' + planLine(h.plan) + '</div>' : '<div class="small muted">ไม่อยู่ใน Master plan</div>') +
         '<div class="small muted">เจ้าหน้าที่: ' + esc(h.staff.join(', ')) + '</div>' + missing + '</th>' +
         '<td><div class="mini"><span class="track">' + bar(h.completeness) + '</span><span class="num">' + h.doneCount + '/' + h.totalTopics + '</span></div></td>' +
         '<td class="n">' + h.visits + '</td>' +
         '<td class="small last" style="white-space:nowrap">' + Core.formatThaiDate(h.lastVisit, false) + '</td>' +
         ds.topics.map(function (t, i) {
+          if (!Core.topicApplies(t, h.district, h.plan ? h.plan.system : null)) {
+            return '<td class="t"><span class="cell na" title="' + (i + 1) + '. ' + esc(Core.topicLabel(t)) + ' — ไม่นับ (' + esc(Core.topicScope(t)) + ')">' +
+              '<span class="sr-only">ไม่นับ</span></span></td>';
+          }
           var done = !!h.topicSet[t];
           return '<td class="t"><span class="cell ' + (done ? 'done' : 'todo') + '" title="' + (i + 1) + '. ' + esc(Core.topicLabel(t)) + (done ? ' — แนะนำแล้ว' : ' — ยังไม่ได้แนะนำ') + '">' +
             (done ? '✓' : '–') + '<span class="sr-only">' + (done ? 'แนะนำแล้ว' : 'ยังไม่ได้แนะนำ') + '</span></span></td>';
@@ -1350,12 +1696,14 @@ var EHPCore = (function () {
     $('fDistrict').value = $('fDistrict').value === d ? '' : d;
     render();
   });
-  $('fuTeam').addEventListener('click', function (e) {
-    var b = e.target.closest('button[data-staff]');
-    if (!b) return;
-    $('fStaff').value = b.getAttribute('data-staff');
-    render();
-    window.scrollTo(0, 0);
+  ['fuTeam', 'fuInsight'].forEach(function (id) {
+    $(id).addEventListener('click', function (e) {
+      var b = e.target.closest('button[data-staff]');
+      if (!b) return;
+      $('fStaff').value = b.getAttribute('data-staff');
+      render();
+      window.scrollTo(0, 0);
+    });
   });
   $('moreBtn').addEventListener('click', function () { state.recentShown += RECENT_PAGE; render(); });
   $('themeBtn').addEventListener('click', function () {
