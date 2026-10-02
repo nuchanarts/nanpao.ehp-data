@@ -1391,7 +1391,7 @@ var EHPCore = (function () {
     var empty = '<tbody><tr><td class="empty-state">ไม่มี รพ.สต. ตามตัวกรอง</td></tr></tbody>';
     $('planRoundTable').innerHTML = o.byRound.length ? head('รอบ') + '<tbody>' + o.byRound.map(function (g) {
       return '<tr><th scope="row" style="font-weight:500">' + esc(g.name) + ' <span class="badge">' + esc(g.goLive) + '</span>' +
-        (g.pilots ? '<div class="small muted">นำร่อง ' + g.pilots + ' แห่ง</div>' : '') + '</th>' + cells(g) + '</tr>';
+        (g.pilots ? ' <span class="small muted">· นำร่อง ' + g.pilots + ' แห่ง</span>' : '') + '</th>' + cells(g) + '</tr>';
     }).join('') + '</tbody>' : empty;
     $('planSysTable').innerHTML = o.bySystem.length ? head('ระบบเดิม') + '<tbody>' + o.bySystem.map(function (g) {
       return '<tr><th scope="row" style="font-weight:500">' + esc(g.key) + '<div class="small muted">' + fmt(g.total) + ' แห่ง · ' + esc(g.districts.join(' · ')) + '</div></th>' + cells(g) + '</tr>';
