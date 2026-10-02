@@ -262,6 +262,15 @@ test('Drug Catalog MY PCU counts toward % only for รพ.สต. whose legacy s
   assert.equal(s.topicCoverage.find((t) => t.text === dc).eligible, 1);
 });
 
+test('decodeJwt reads a Google ID token payload, including Thai names', () => {
+  const payload = { aud: 'client-1', email: 'a@example.com', name: 'วณิชญา ตรีมงคล', exp: 1790000000 };
+  const b64url = (o) => Buffer.from(JSON.stringify(o)).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const token = b64url({ alg: 'RS256' }) + '.' + b64url(payload) + '.sig';
+  assert.deepEqual({ ...Core.decodeJwt(token) }, payload);
+  assert.equal(Core.decodeJwt('not-a-token'), null);
+  assert.equal(Core.decodeJwt(''), null);
+});
+
 test('master plan: 106 รพ.สต. with round, district, legacy system and go-live date', () => {
   const plan = Core.MASTER_PLAN;
   assert.equal(plan.length, Core.TOTAL_HOSPITALS);

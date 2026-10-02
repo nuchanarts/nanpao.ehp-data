@@ -103,8 +103,103 @@
   --err-bg: #3d1a1a;
   --err-ink: #f4b4b4;
   --focus: #86b6ef;
+  --side-1: #0f1f4a;
+  --side-2: #1b3f91;
+  --brand-grad: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  --k-blue: #6da7ec;   --k-blue-bg: #17305a;
+  --k-green: #3ccf91;  --k-green-bg: #12382a;
+  --k-orange: #f08a5d; --k-orange-bg: #3d2216;
+  --k-violet: #a99af0; --k-violet-bg: #2a2350;
   --shadow: none;
 }
+
+/* Skins (constitution VII): colour sets on top of light/dark; default = blue above. */
+:root[data-skin="green"] {
+  --accent: #0f8a6a; --accent-ink: #0b6b52; --bar: #10a37f; --focus: #0b6b52;
+  --done-bg: #c9f0e2; --done-ink: #0b5a44;
+  --side-1: #064e3b; --side-2: #0f766e; --brand-grad: linear-gradient(135deg, #059669 0%, #0d9488 100%);
+}
+:root[data-skin="violet"] {
+  --accent: #6d4fd8; --accent-ink: #5236b8; --bar: #7c5ce6; --focus: #5236b8;
+  --done-bg: #e2dafc; --done-ink: #3d2793;
+  --side-1: #3b1d8f; --side-2: #6d28d9; --brand-grad: linear-gradient(135deg, #7c3aed 0%, #c026d3 100%);
+}
+:root[data-skin="orange"] {
+  --accent: #c2410c; --accent-ink: #9a3412; --bar: #ea580c; --focus: #9a3412;
+  --done-bg: #fde3d3; --done-ink: #7c2d12;
+  --side-1: #7c2d12; --side-2: #c2410c; --brand-grad: linear-gradient(135deg, #ea580c 0%, #e11d48 100%);
+}
+:root[data-skin="pink"] {
+  --accent: #c0267a; --accent-ink: #9d174d; --bar: #db2777; --focus: #9d174d;
+  --done-bg: #fbd7e8; --done-ink: #831843;
+  --side-1: #831843; --side-2: #be185d; --brand-grad: linear-gradient(135deg, #db2777 0%, #9333ea 100%);
+}
+:root[data-skin="slate"] {
+  --accent: #475569; --accent-ink: #334155; --bar: #64748b; --focus: #334155;
+  --done-bg: #e2e8f0; --done-ink: #1e293b;
+  --side-1: #1e293b; --side-2: #334155; --brand-grad: linear-gradient(135deg, #334155 0%, #64748b 100%);
+}
+:root[data-skin="green"][data-theme="dark"] {
+  --accent: #34c79c; --accent-ink: #7ee0c0; --bar: #2fb98f; --focus: #7ee0c0;
+  --done-bg: #11523f; --done-ink: #e3faf2;
+  --side-1: #052e25; --side-2: #0b5a50; --brand-grad: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
+}
+:root[data-skin="violet"][data-theme="dark"] {
+  --accent: #a58cf5; --accent-ink: #c9b8ff; --bar: #8f74ee; --focus: #c9b8ff;
+  --done-bg: #3b2a7a; --done-ink: #efe9ff;
+  --side-1: #24124f; --side-2: #4c1d95; --brand-grad: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
+}
+:root[data-skin="orange"][data-theme="dark"] {
+  --accent: #fb8a4e; --accent-ink: #fdba8c; --bar: #f97316; --focus: #fdba8c;
+  --done-bg: #6a2b0e; --done-ink: #fff1e8;
+  --side-1: #431407; --side-2: #7c2d12; --brand-grad: linear-gradient(135deg, #f97316 0%, #f43f5e 100%);
+}
+:root[data-skin="pink"][data-theme="dark"] {
+  --accent: #f472b6; --accent-ink: #f9a8d4; --bar: #ec4899; --focus: #f9a8d4;
+  --done-bg: #6b1d43; --done-ink: #fde7f3;
+  --side-1: #500724; --side-2: #831843; --brand-grad: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+}
+:root[data-skin="slate"][data-theme="dark"] {
+  --accent: #94a3b8; --accent-ink: #cbd5e1; --bar: #94a3b8; --focus: #cbd5e1;
+  --done-bg: #334155; --done-ink: #f1f5f9;
+  --side-1: #0f172a; --side-2: #1e293b; --brand-grad: linear-gradient(135deg, #475569 0%, #94a3b8 100%);
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-skin="green"]:not([data-theme="light"]) {
+    --accent: #34c79c; --accent-ink: #7ee0c0; --bar: #2fb98f; --focus: #7ee0c0;
+    --done-bg: #11523f; --done-ink: #e3faf2;
+    --side-1: #052e25; --side-2: #0b5a50; --brand-grad: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
+  }
+  :root[data-skin="violet"]:not([data-theme="light"]) {
+    --accent: #a58cf5; --accent-ink: #c9b8ff; --bar: #8f74ee; --focus: #c9b8ff;
+    --done-bg: #3b2a7a; --done-ink: #efe9ff;
+    --side-1: #24124f; --side-2: #4c1d95; --brand-grad: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
+  }
+  :root[data-skin="orange"]:not([data-theme="light"]) {
+    --accent: #fb8a4e; --accent-ink: #fdba8c; --bar: #f97316; --focus: #fdba8c;
+    --done-bg: #6a2b0e; --done-ink: #fff1e8;
+    --side-1: #431407; --side-2: #7c2d12; --brand-grad: linear-gradient(135deg, #f97316 0%, #f43f5e 100%);
+  }
+  :root[data-skin="pink"]:not([data-theme="light"]) {
+    --accent: #f472b6; --accent-ink: #f9a8d4; --bar: #ec4899; --focus: #f9a8d4;
+    --done-bg: #6b1d43; --done-ink: #fde7f3;
+    --side-1: #500724; --side-2: #831843; --brand-grad: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+  }
+  :root[data-skin="slate"]:not([data-theme="light"]) {
+    --accent: #94a3b8; --accent-ink: #cbd5e1; --bar: #94a3b8; --focus: #cbd5e1;
+    --done-bg: #334155; --done-ink: #f1f5f9;
+    --side-1: #0f172a; --side-2: #1e293b; --brand-grad: linear-gradient(135deg, #475569 0%, #94a3b8 100%);
+  }
+}
+.skin-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.skin-row .lbl-s { font-size: .76rem; color: rgb(255 255 255 / .8); width: 100%; }
+.skin-swatch { width: 26px; height: 26px; min-height: 0; padding: 0; border-radius: 50%; border: 2px solid rgb(255 255 255 / .6); }
+.skin-swatch[aria-pressed="true"] { outline: 3px solid #fff; outline-offset: 1px; }
+.lang-btn { flex: 1; min-height: 32px; padding: 2px 10px; font-size: .82rem; background: transparent; color: #fff; border-color: rgb(255 255 255 / .4); }
+.lang-btn[aria-pressed="true"] { background: #fff; color: var(--side-1); font-weight: 600; }
+.gate-lang { display: flex; gap: 6px; justify-content: flex-end; }
+.gate-lang .lang-btn { flex: none; color: var(--text-2); border-color: var(--border); }
+.gate-lang .lang-btn[aria-pressed="true"] { background: var(--accent); color: #fff; }
 
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
@@ -342,12 +437,41 @@ main { padding: 20px 28px 32px; }
 @media (max-width: 380px) { .kpis { grid-template-columns: 1fr; } }
 @media print { .app { display: block; } .side, .scrim { display: none; } }
 [hidden] { display: none !important; }
+.auth-gate { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 16px; background: var(--bg); overflow-y: auto; }
+.auth-card { width: min(460px, 100%); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px 24px; display: grid; gap: 14px; text-align: center; }
+.auth-card .brand-mark { margin: 0 auto; background: var(--brand-grad); }
+.auth-card ul { text-align: left; margin: 0; padding-left: 20px; font-size: .88rem; color: var(--text-2); }
+#gsiButton { display: flex; justify-content: center; min-height: 44px; }
+.user-box { display: grid; gap: 6px; padding: 10px 12px; border-radius: 10px; background: rgb(255 255 255 / .12); color: #fff; font-size: .85rem; }
+.user-box b { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.user-box button { min-height: 32px; padding: 2px 10px; font-size: .82rem; background: transparent; color: #fff; border-color: rgb(255 255 255 / .4); }
+.online-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.online-list li { display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; }
+.online-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--good); margin-right: 6px; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 @media print { .no-print { display: none !important; } body { background: #fff; } }
 </style>
 </head>
 <body>
 <a class="sr-only" href="#main">ข้ามไปยังเนื้อหา</a>
+<div class="auth-gate" id="authGate" hidden>
+  <section class="auth-card" aria-labelledby="authTitle">
+    <div class="gate-lang" role="group" aria-label="ภาษา">
+      <button type="button" class="lang-btn" data-lang="th" lang="th">ไทย</button>
+      <button type="button" class="lang-btn" data-lang="en" lang="en">English</button>
+    </div>
+    <span class="brand-mark" aria-hidden="true">E</span>
+    <h1 id="authTitle">EHP On Cloud อบจ.น่าน</h1>
+    <p class="muted" style="margin:0">ลงชื่อเข้าใช้ด้วยบัญชี Google เพื่อดู Dashboard</p>
+    <div id="gsiButton"></div>
+    <p class="small" id="authError" role="alert" style="margin:0;color:var(--err-ink)" hidden></p>
+    <ul>
+      <li>ระบบบันทึก ชื่อ อีเมล เวลา เมนูที่เปิด ตัวกรอง การส่งออก และชนิดอุปกรณ์ ทุกครั้งที่ใช้งาน</li>
+      <li>เก็บไว้ใน Google Sheet ของทีม เพื่อดูการใช้งาน Dashboard เท่านั้น</li>
+      <li>ผู้ที่ลงชื่อแล้วจะเห็นชื่อ (ไม่เห็นอีเมล) ของผู้ที่กำลังดูและประวัติการเข้าชมในเมนู “ผู้เข้าชม”</li>
+    </ul>
+  </section>
+</div>
 <div class="app">
   <aside class="side no-print" id="sideMenu" aria-label="เมนูหลัก">
     <div class="brand">
@@ -363,12 +487,32 @@ main { padding: 20px 28px 32px; }
         <li><a href="#hospitals" data-view="hospitals"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V9l8-5 8 5v11zM12 10v6M9 13h6"/></svg><span>ราย รพ.สต.</span></a></li>
         <li><a href="#staff" data-view="staff"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4.5-6 8-6s7 2 8 6"/></svg><span>เจ้าหน้าที่ / รอบ</span></a></li>
         <li><a href="#recent" data-view="recent"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg><span>บันทึกล่าสุด</span></a></li>
+        <li id="viewersItem" hidden><a href="#viewers" data-view="viewers"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M16 4.5a3.5 3.5 0 0 1 0 7M18 14.8c1.9.7 3.1 2.4 3.5 5.2"/></svg><span>ผู้เข้าชม</span><b id="onlineBadge" class="menu-badge" hidden></b></a></li>
         <li><a href="#source" data-view="source"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v14H5zM5 10h14M10 10v9"/></svg><span>แหล่งข้อมูล</span><b id="warnBadge" class="menu-badge" hidden></b></a></li>
       </ul>
     </nav>
     <div class="side-foot">
+      <div class="user-box" id="userBox" hidden>
+        <span class="small">ลงชื่อเป็น</span>
+        <b id="userName"></b>
+        <button type="button" id="signOutBtn">ออกจากระบบ</button>
+      </div>
+      <div class="skin-row" role="group" aria-label="ชุดสี">
+        <span class="lbl-s">ชุดสี</span>
+        <button type="button" class="skin-swatch" data-skin="" aria-label="ฟ้า" title="ฟ้า" style="background:linear-gradient(135deg,#2563eb,#7c3aed)"></button>
+        <button type="button" class="skin-swatch" data-skin="green" aria-label="เขียว" title="เขียว" style="background:linear-gradient(135deg,#059669,#0d9488)"></button>
+        <button type="button" class="skin-swatch" data-skin="violet" aria-label="ม่วง" title="ม่วง" style="background:linear-gradient(135deg,#7c3aed,#c026d3)"></button>
+        <button type="button" class="skin-swatch" data-skin="orange" aria-label="ส้ม" title="ส้ม" style="background:linear-gradient(135deg,#ea580c,#e11d48)"></button>
+        <button type="button" class="skin-swatch" data-skin="pink" aria-label="ชมพู" title="ชมพู" style="background:linear-gradient(135deg,#db2777,#9333ea)"></button>
+        <button type="button" class="skin-swatch" data-skin="slate" aria-label="เทา" title="เทา" style="background:linear-gradient(135deg,#334155,#64748b)"></button>
+      </div>
+      <div class="skin-row" role="group" aria-label="ภาษา">
+        <span class="lbl-s">ภาษา</span>
+        <button type="button" class="lang-btn" data-lang="th" lang="th">ไทย</button>
+        <button type="button" class="lang-btn" data-lang="en" lang="en">English</button>
+      </div>
       <button type="button" id="themeBtn" aria-label="สลับโหมดสว่าง/มืด">โหมดมืด</button>
-      <p class="side-note">ใช้ภายในทีมเท่านั้น · มีชื่อบุคคล</p>
+      <p class="side-note">มีชื่อบุคคล โปรดใช้อย่างระมัดระวัง</p>
     </div>
   </aside>
   <div class="scrim no-print" id="scrim"></div>
@@ -544,6 +688,24 @@ main { padding: 20px 28px 32px; }
           </section>
         </div>
 
+        <div class="stack" data-panel="viewers">
+          <section class="card" aria-labelledby="onlineHead">
+            <div class="card-head">
+              <h2 id="onlineHead">กำลังดูอยู่ตอนนี้</h2>
+              <span class="small muted" id="onlineCount"></span>
+            </div>
+            <ul class="online-list" id="onlineList"></ul>
+          </section>
+          <section class="card" aria-labelledby="visitHead">
+            <div class="card-head">
+              <h2 id="visitHead">ประวัติการเข้าชมล่าสุด</h2>
+              <span class="small muted" id="visitCount"></span>
+            </div>
+            <div class="table-scroll"><table id="visitTable"></table></div>
+            <p class="note">แสดงชื่อเท่านั้น · บันทึกฉบับเต็ม (รวมอีเมล) อยู่ใน Google Sheet บันทึกการเข้าชมของทีม · อัปเดตทุก 1 นาที</p>
+          </section>
+        </div>
+
         <section class="card" data-panel="recent" aria-labelledby="recentHead">
           <div class="card-head">
             <h2 id="recentHead">บันทึกล่าสุด</h2>
@@ -575,7 +737,7 @@ main { padding: 20px 28px 32px; }
         <div id="warnBox" class="alert alert-warn" hidden style="margin-top:14px"></div>
       </section>
     </main>
-    <footer>เครื่องมือของทีม — มีชื่อบุคคล โปรดแชร์ลิงก์เฉพาะในทีม · ตัวเลขทั้งหมดคำนวณจากการตอบกลับของฟอร์มเท่านั้น</footer>
+    <footer>มีชื่อบุคคล โปรดใช้อย่างระมัดระวัง · ตัวเลขคำนวณจากการตอบกลับของฟอร์มและ Master plan อบจ.น่าน</footer>
   </div>
 </div>
 
@@ -840,6 +1002,24 @@ var EHPCore = (function () {
   function hospitalKey(district, value) {
     var h = splitHospital(value);
     return h.code || (norm(district) + '|' + h.name);
+  }
+
+  // Payload of a Google ID token (JWT), for showing who signed in. The token itself is verified by
+  // the team's Apps Script before anything is logged (constitution V); this does not verify it.
+  var B64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+  function decodeJwt(token) {
+    var part = String(token || '').split('.')[1];
+    if (!part) return null;
+    var s = part.replace(/-/g, '+').replace(/_/g, '/'), bytes = [], buf = 0, bits = 0;
+    for (var i = 0; i < s.length; i++) {
+      var v = B64.indexOf(s[i]);
+      if (v < 0) continue;
+      buf = (buf << 6) | v; bits += 6;
+      if (bits >= 8) { bits -= 8; bytes.push((buf >> bits) & 255); }
+    }
+    try {
+      return JSON.parse(decodeURIComponent(bytes.map(function (b) { return '%' + (b < 16 ? '0' : '') + b.toString(16); }).join('')));
+    } catch (e) { return null; }
   }
 
   // Google Sheet edit link → CSV export link of the same tab.
@@ -1168,7 +1348,7 @@ var EHPCore = (function () {
 
   return {
     TOTAL_HOSPITALS: TOTAL_HOSPITALS, planOverview: planOverview, planRound: planRound, sameStaff: sameStaff, MASTER_PLAN: MASTER_PLAN, PLAN_ROUNDS: PLAN_ROUNDS, planFor: planFor, followUp: followUp, isLaterTopic: isLaterTopic, topicApplies: topicApplies, topicScope: topicScope, NO_ROUND: NO_ROUND, STANDARD_TOPICS: STANDARD_TOPICS,
-    DEFAULT_SHEET_URL: DEFAULT_SHEET_URL, sheetCsvUrl: sheetCsvUrl,
+    DEFAULT_SHEET_URL: DEFAULT_SHEET_URL, sheetCsvUrl: sheetCsvUrl, decodeJwt: decodeJwt,
     parseTable: parseTable, parseThaiDate: parseThaiDate, formatThaiDate: formatThaiDate,
     detectColumns: detectColumns, splitTopics: splitTopics, hospitalKey: hospitalKey,
     loadDataset: loadDataset, topicLabel: topicLabel, filterRecords: filterRecords,
@@ -1185,12 +1365,284 @@ var EHPCore = (function () {
   var OLD_DATA_KEY = 'ehp-nan-dashboard:data:v1'; // earlier version cached response rows; removed on start
   var LINK_KEY = 'ehp-nan-dashboard:sheet-link';
   var THEME_KEY = 'ehp-nan-dashboard:theme';
+  var SKIN_KEY = 'ehp-nan-dashboard:skin';
+  var LANG_KEY = 'ehp-nan-dashboard:lang';
   var AUTO_KEY = 'ehp-nan-dashboard:auto-refresh';
   var RECENT_PAGE = 15;
   var AUTO_REFRESH_MS = 60 * 1000;
   var state = { ds: null, loadedAt: null, recentShown: RECENT_PAGE, loading: false, timer: null, view: 'overview' };
-  var VIEWS = { overview: 'ภาพรวม', followup: 'ติดตามงาน', plan: 'แผนติดตั้ง', topics: 'รายหัวข้อ', hospitals: 'ราย รพ.สต.', staff: 'เจ้าหน้าที่ / รอบ', recent: 'บันทึกล่าสุด', source: 'แหล่งข้อมูล' };
+  // Sign-in with Google + visit log (constitution V). Both empty = no sign-in, page works as before.
+  var AUTH = {
+    clientId: '',   // OAuth Client ID (Google Cloud Console → Credentials)
+    endpoint: ''    // Apps Script web app URL (apps-script/Code.gs)
+  };
+  var AUTH_ON = !!(AUTH.clientId && AUTH.endpoint);
+  var HEARTBEAT_MS = 60 * 1000;
+  var VIEWS = { overview: 'ภาพรวม', followup: 'ติดตามงาน', plan: 'แผนติดตั้ง', topics: 'รายหัวข้อ', hospitals: 'ราย รพ.สต.', staff: 'เจ้าหน้าที่ / รอบ', recent: 'บันทึกล่าสุด', viewers: 'ผู้เข้าชม', source: 'แหล่งข้อมูล' };
   var $ = function (id) { return document.getElementById(id); };
+
+  // ---------- Language (constitution VII) ----------
+  // Thai is the source text everywhere. In English mode, page text is translated after it is rendered:
+  // exact phrases first, then the patterns below. Data from the form and the Master plan (names of
+  // รพ.สต., อำเภอ, people, Checklist topics) is left as written.
+  var EN_EXACT = {
+    'ข้ามไปยังเนื้อหา': 'Skip to content',
+    'EHP On Cloud อบจ.น่าน': 'EHP On Cloud · Nan PAO',
+    'EHP On Cloud น่าน': 'EHP On Cloud Nan',
+    'ลงชื่อเข้าใช้ด้วยบัญชี Google เพื่อดู Dashboard': 'Sign in with your Google account to view the dashboard',
+    'ระบบบันทึก ชื่อ อีเมล เวลา เมนูที่เปิด ตัวกรอง การส่งออก และชนิดอุปกรณ์ ทุกครั้งที่ใช้งาน': 'Each use is logged: name, e-mail, time, menu opened, filters, exports and device type',
+    'เก็บไว้ใน Google Sheet ของทีม เพื่อดูการใช้งาน Dashboard เท่านั้น': "Stored in the team's Google Sheet, only to review how the dashboard is used",
+    'ผู้ที่ลงชื่อแล้วจะเห็นชื่อ (ไม่เห็นอีเมล) ของผู้ที่กำลังดูและประวัติการเข้าชมในเมนู “ผู้เข้าชม”': 'Signed-in viewers see the names (not e-mails) of current viewers and the visit history under “Viewers”',
+    'ลงชื่อไม่สำเร็จ ลองใหม่อีกครั้ง': 'Sign-in failed. Please try again.',
+    'หมดเวลาการลงชื่อ กรุณาลงชื่ออีกครั้ง': 'Your sign-in expired. Please sign in again.',
+    'โหลดระบบลงชื่อของ Google ไม่สำเร็จ — ตรวจสอบอินเทอร์เน็ตแล้วรีเฟรชหน้า': 'Could not load Google sign-in — check the internet and refresh the page',
+    'อบจ.น่าน · รพ.สต. 106 แห่ง': 'Nan PAO · 106 health centres',
+    'ภาพรวม': 'Overview', 'ติดตามงาน': 'Follow-up', 'แผนติดตั้ง': 'Rollout plan', 'รายหัวข้อ': 'By topic',
+    'ราย รพ.สต.': 'By health centre', 'เจ้าหน้าที่ / รอบ': 'Staff / rounds', 'บันทึกล่าสุด': 'Latest records',
+    'ผู้เข้าชม': 'Viewers', 'แหล่งข้อมูล': 'Data source',
+    'ลงชื่อเป็น': 'Signed in as', 'ออกจากระบบ': 'Sign out', 'ชุดสี': 'Colour', 'ภาษา': 'Language',
+    'โหมดมืด': 'Dark mode', 'โหมดสว่าง': 'Light mode', 'สลับโหมดสว่าง/มืด': 'Toggle light/dark mode',
+    'ฟ้า': 'Blue', 'เขียว': 'Green', 'ม่วง': 'Violet', 'ส้ม': 'Orange', 'ชมพู': 'Pink', 'เทา': 'Slate',
+    'มีชื่อบุคคล โปรดใช้อย่างระมัดระวัง': 'Contains personal names — handle with care',
+    'มีชื่อบุคคล โปรดใช้อย่างระมัดระวัง · ตัวเลขคำนวณจากการตอบกลับของฟอร์มและ Master plan อบจ.น่าน': 'Contains personal names — handle with care · figures come from the form responses and the Nan PAO Master plan',
+    'เมนูหลัก': 'Main menu', 'เปิดเมนู': 'Open menu', 'ปิดเมนู': 'Close menu',
+    'ยังไม่มีข้อมูล': 'No data yet', 'กำลังโหลด…': 'Loading…', 'กำลังโหลดข้อมูล…': 'Loading data…',
+    'กำลังโหลดข้อมูลจาก Google Sheet…': 'Loading data from Google Sheet…',
+    'ดึงข้อมูลการตอบกลับของฟอร์มจาก Google Sheet': 'Fetching form responses from Google Sheet',
+    'ดึงข้อมูลการตอบกลับของฟอร์ม “Checklist ยืนยันการดำเนินงานดูแลการใช้งานระบบ EHP On Cloud อบจ.น่าน”': 'Fetching the responses of the form “Checklist ยืนยันการดำเนินงานดูแลการใช้งานระบบ EHP On Cloud อบจ.น่าน”',
+    'โหลดข้อมูลไม่สำเร็จ ดูรายละเอียดด้านบน หรือไปที่เมนู “แหล่งข้อมูล” เพื่อเปลี่ยนลิงก์ Google Sheet': 'Loading failed — see the details above, or open “Data source” to change the Google Sheet link',
+    'โหลดข้อมูลจาก Google Sheet ไม่สำเร็จ — ตรวจสอบอินเทอร์เน็ต, ลิงก์ถูกต้อง และ Sheet แชร์แบบ “ทุกคนที่มีลิงก์ดูได้” แล้วกด “โหลดข้อมูลล่าสุด” อีกครั้ง': 'Could not load the Google Sheet — check the internet, the link, and that the Sheet is shared as “Anyone with the link can view”, then press “Reload data” again',
+    'ส่งออกไม่สำเร็จ — ตรวจสอบอินเทอร์เน็ต (ต้องโหลดตัวช่วยส่งออกจาก cdnjs) แล้วลองอีกครั้ง': 'Export failed — check the internet (the export helper loads from cdnjs) and try again',
+    'ส่งออก': 'Export', 'รูปภาพ PNG': 'PNG image', 'รูปภาพ JPG': 'JPG image', 'โหลดข้อมูลล่าสุด': 'Reload data',
+    'ส่งออกข้อมูลของหน้านี้': 'Export this page', 'ส่งออกเฉพาะคำแนะนำ': 'Export the advice only',
+    'ตัวกรอง': 'Filters', 'ตัวชี้วัดหลัก': 'Key figures', 'ความคืบหน้าตามแผน': 'Progress against plan',
+    'อำเภอ': 'District', 'รอบที่ขึ้นระบบ': 'Go-live round', 'เจ้าหน้าที่': 'Staff', 'ล้างตัวกรอง': 'Clear filters',
+    'ทุกอำเภอ': 'All districts', 'ทุกรอบ': 'All rounds', 'ทุกคน': 'Everyone', 'ทั้งหมด': 'All', 'ทั้งจังหวัด': 'Whole province',
+    'รายอำเภอ': 'By district', 'ไม่กรองตามอำเภอ เพื่อเปรียบเทียบ · แตะชื่ออำเภอเพื่อกรอง': 'Not filtered by district, for comparison · tap a district to filter',
+    'ร้อยละ = รพ.สต. ที่มีบันทึก (รวม รพ.สต.นำร่องที่ทำเสร็จสิ้นแล้ว) ÷ จำนวน รพ.สต. ของอำเภอตาม Master plan · นำร่องนับความครบ 100% · ความครบเฉลี่ย = ค่าเฉลี่ยของ (หัวข้อที่แนะนำแล้ว ÷ หัวข้อทั้งหมด) ของ รพ.สต. ในอำเภอ': '% = health centres with records (incl. finished pilot sites) ÷ health centres in the district per the Master plan · pilots count as 100% complete · average completeness = mean of (topics advised ÷ applicable topics) per health centre',
+    'ความสำเร็จ': 'Success', 'คุณภาพงาน': 'Work quality', 'งานค้างของแต่ละคน': 'Open work per person',
+    'แตะชื่อเพื่อดูรายการของคนนั้น': "Tap a name to see that person's list",
+    'รพ.สต. ที่ต้องติดตาม': 'Health centres to follow up',
+    'เรียงจากหัวข้อที่ยังขาดมากที่สุด (Cleansing Data, ติดตาม Drug Catalog, Lab Online ไว้ท้ายสุด) แล้วตามวันที่เข้าครั้งล่าสุดนานที่สุด · นับหัวข้อจากทุกครั้งที่มีผู้เข้าแนะนำ (ไม่ว่าใครเข้า) · ขอบสีส้ม = ไม่ได้เข้านาน': 'Sorted by most missing topics (Cleansing Data, ติดตาม Drug Catalog, Lab Online last), then longest since the last visit · topics count from every visit, by anyone · orange edge = no visit for',
+    'วันขึ้นไป': 'days or more',
+    'ยังไม่ได้เข้าแนะนำ (ถึงวันเปิดใช้งานแล้ว)': 'Not visited yet (past go-live)',
+    'ตามเจ้าหน้าที่รับผิดชอบใน Master plan · ยังไม่มีบันทึกในฟอร์มเลย': 'By responsible staff in the Master plan · no form record at all',
+    'เลือกชื่อของคุณที่ตัวกรอง “เจ้าหน้าที่” ด้านบน หรือแตะชื่อในตาราง เพื่อดูเฉพาะงานของตัวเอง': 'Pick your name in the “Staff” filter above, or tap a name in the table, to see only your own work',
+    'ความคืบหน้ารายรอบ': 'Progress by round', 'ตาม Master plan อบจ.น่าน · รพ.สต.นำร่องนับรวมในรอบของอำเภอ': "Per the Nan PAO Master plan · pilot sites count in their district's round",
+    'ความคืบหน้ารายระบบเดิม': 'Progress by legacy system', 'ระบบเดิมของหน่วยบริการก่อนย้ายมา EHP On Cloud': 'System used before moving to EHP On Cloud',
+    'ถึงวันเปิดใช้งานแล้ว แต่ยังไม่มีบันทึกการเข้าแนะนำ': 'Past go-live but no visit recorded',
+    'ความครอบคลุมรายหัวข้อ': 'Coverage by topic', 'สถานะราย รพ.สต.': 'Status by health centre',
+    'นับรวมทุกครั้งที่เข้าแนะนำ · แตะ “ยังขาด” เพื่อดูหัวข้อที่ยังไม่ได้แนะนำ': 'Combines every visit · tap “missing” to see the topics not advised yet',
+    'ค้นหา รพ.สต.': 'Search health centres', 'ค้นหาชื่อ/รหัส รพ.สต. ชื่อเจ้าหน้าที่ หรือระบบเดิม': 'Search name/code, staff or legacy system',
+    'เฉพาะที่ยังไม่ครบ': 'Incomplete only', 'เรียง': 'Sort',
+    'ความครบ น้อย → มาก': 'Completeness low → high', 'ความครบ มาก → น้อย': 'Completeness high → low',
+    'รอบ / วันเปิดใช้งาน': 'Round / go-live date', 'เข้าแนะนำล่าสุด': 'Latest visit',
+    'แนะนำแล้ว': 'Advised', 'ยังไม่ได้แนะนำ': 'Not advised', 'ไม่นับ': 'Not counted',
+    'ไม่นับ (Lab Online เฉพาะ อ.ปัว · Drug Catalog MY PCU เฉพาะระบบเดิม MyPCU)': 'Not counted (Lab Online: Pua only · Drug Catalog MY PCU: MyPCU legacy only)',
+    'หมายเลขหัวข้อ': 'Topic numbers', 'หัวข้อที่ยังขาด': 'Missing topics', 'ใหม่': 'new',
+    'เจ้าหน้าที่ให้คำแนะนำ': 'Advising staff',
+    'กำลังดูอยู่ตอนนี้': 'Viewing now', 'ประวัติการเข้าชมล่าสุด': 'Recent visits',
+    'แสดงชื่อเท่านั้น · บันทึกฉบับเต็ม (รวมอีเมล) อยู่ใน Google Sheet บันทึกการเข้าชมของทีม · อัปเดตทุก 1 นาที': "Names only · the full log (with e-mails) is in the team's visit-log Google Sheet · updates every minute",
+    'ไม่มีผู้ดูคนอื่น': 'No other viewers', '(คุณ)': '(you)', 'เมื่อสักครู่': 'just now',
+    'เปิดหน้า': 'Opened page', 'เปลี่ยนเมนู': 'Changed menu',
+    'แสดงเพิ่ม': 'Show more', 'Google Sheet การตอบกลับของฟอร์ม': 'Form responses Google Sheet', 'เปิด Google Sheet': 'Open Google Sheet',
+    'อัปเดตอัตโนมัติทุก 1 นาที': 'Auto-update every minute', 'เปลี่ยนลิงก์': 'Change link',
+    'ลิงก์ Google Sheet (คัดลอกจากแถบที่อยู่ของเบราว์เซอร์ ขณะเปิดแท็บการตอบกลับ)': 'Google Sheet link (copy it from the address bar while the responses tab is open)',
+    'บันทึกและโหลด': 'Save and load', 'ยกเลิก': 'Cancel', 'ใช้ลิงก์เริ่มต้น': 'Use the default link',
+    'Sheet ต้องแชร์แบบ “ทุกคนที่มีลิงก์ดูได้” หน้านี้จึงอ่านข้อมูลได้ · ลิงก์ที่เปลี่ยนจะจำไว้ในเบราว์เซอร์เครื่องนี้': 'The Sheet must be shared as “Anyone with the link can view” · a changed link is remembered in this browser',
+    '(ลิงก์เริ่มต้น)': '(default link)', '(ลิงก์ที่เปลี่ยนไว้ในเครื่องนี้)': '(link changed on this device)',
+    '· หยุดชั่วคราวขณะไม่ได้เปิดดูหน้านี้': '· paused while this page is hidden',
+    'ถึงวันเปิดใช้งานแล้ว': 'Past go-live', 'ได้รับการดูแลแล้ว': 'Covered', 'เปิดใช้แล้วแต่ยังไม่ได้เข้า': 'Live but not visited',
+    'ดูรายชื่อด้านล่าง': 'See the list below', 'ไม่มีค้าง': 'None pending',
+    'รพ.สต. ที่ได้รับการดูแล': 'Health centres covered', 'ความครบของหัวข้อ (เฉลี่ย)': 'Topic completeness (avg)',
+    'บันทึกการเข้าแนะนำ': 'Visit records', 'หัวข้อ Checklist': 'Checklist topics', 'ตามมาตรฐาน 15 หัวข้อ': 'Standard 15 topics',
+    'หัวข้อที่แนะนำแล้ว': 'Topics advised', 'รพ.สต. ครบทุกหัวข้อ': 'Health centres complete', 'ครบทุกหัวข้อ': 'All topics done',
+    '✓ ครบทุกหัวข้อ': '✓ All topics done', 'เฉลี่ยครั้งจนครบ': 'Avg visits to complete', 'ยังไม่มีแห่งที่ครบทุกหัวข้อ': 'None complete yet',
+    'ยังไม่มีบันทึก': 'No records yet', 'ไม่ระบุ': 'Not specified', 'ไม่ระบุ รพ.สต.': 'Health centre not specified', 'ไม่ระบุวันที่': 'No date',
+    'ไม่อยู่ใน Master plan': 'Not in the Master plan',
+    'ไม่มี รพ.สต. ตามตัวกรอง': 'No health centres for this filter', 'ไม่มีบันทึกตามตัวกรอง': 'No records for this filter',
+    'ไม่มี รพ.สต. ที่ต้องติดตาม': 'Nothing to follow up', 'ไม่มี รพ.สต. ที่ตรงกับเงื่อนไข': 'No health centres match',
+    '✓ ทุกแห่งที่ถึงวันเปิดใช้งานแล้ว มีบันทึกการเข้าแนะนำแล้ว': '✓ Every site past go-live has a visit record',
+    'รอบ': 'Round', 'ระบบเดิม': 'Legacy system', 'ได้รับการดูแล': 'Covered', 'บันทึก': 'Records', 'ความครบเฉลี่ย': 'Avg completeness',
+    'รพ.สต. ที่ได้รับการดูแล / ทั้งหมด': 'Health centres covered / total', 'รพ.สต.': 'Health centre', 'ความครบ': 'Completeness',
+    'ครั้ง': 'visits', 'ล่าสุด': 'Latest', 'ดูแล': 'Covers', 'ยังไม่ครบ': 'Incomplete', 'หัวข้อสำเร็จ': 'Topics done',
+    'แห่ง': 'sites', 'หัวข้อ': 'topics', 'คน': 'people',
+    'เวลา': 'Time', 'ชื่อ': 'Name', 'การกระทำ': 'Action', 'เมนู': 'Menu', 'อุปกรณ์': 'Device',
+    'ผู้รับคำแนะนำ': 'Recipient', 'คำแนะนำอื่น': 'Other advice', 'ข้อเสนอแนะ': 'Suggestions',
+    'คำแนะนำสำหรับทั้งทีม': 'Advice for the whole team', 'งานรายคน:': 'Workload by person:', 'มี': '', 'เริ่มที่': 'Start with',
+    'คำแนะนำ': 'Advice', 'งานรายคน': 'Workload by person', 'ยังไม่ครบ (แห่ง)': 'Incomplete (sites)', 'ยังไม่ได้เข้า (แห่ง)': 'Not visited (sites)',
+    'เจ้าหน้าที่รับผิดชอบ': 'Responsible staff', 'รหัส': 'Code', 'วันเปิดใช้งาน': 'Go-live date', 'เปิดใช้มาแล้ว (วัน)': 'Live for (days)',
+    'ตัวชี้วัด': 'Measure', 'ค่า': 'Value', 'รพ.สต. ที่ได้รับการดูแล (แห่ง)': 'Health centres covered (sites)',
+    'รวมนำร่องที่เสร็จแล้ว (แห่ง)': 'Incl. finished pilots (sites)', 'รพ.สต. ทั้งหมด (แห่ง)': 'All health centres (sites)',
+    'ร้อยละที่ได้รับการดูแล (%)': 'Covered (%)', 'ความครบของหัวข้อเฉลี่ย (%)': 'Avg topic completeness (%)', 'ครบทุกหัวข้อ (แห่ง)': 'All topics done (sites)',
+    'บันทึกการเข้าแนะนำ (ครั้ง)': 'Visit records', 'บันทึกล่าสุด (ครั้ง)': 'Latest record', 'ได้รับการดูแล (แห่ง)': 'Covered (sites)',
+    'ทั้งหมดตามแผน (แห่ง)': 'Planned (sites)', 'ร้อยละ (%)': 'Percent (%)', 'รวมนำร่อง (แห่ง)': 'Incl. pilots (sites)', 'บันทึก (ครั้ง)': 'Records',
+    'ความครบเฉลี่ย (%)': 'Avg completeness (%)', 'ดูแล (แห่ง)': 'Covers (sites)', 'หัวข้อสำเร็จ (%)': 'Topics done (%)', 'ครบทุกหัวข้อ (%)': 'All topics done (%)',
+    'ต้องติดตาม': 'To follow up', 'ขาด (หัวข้อ)': 'Missing (topics)', 'ทั้งหมด (หัวข้อ)': 'Applicable (topics)', 'เข้าแล้ว (ครั้ง)': 'Visits',
+    'เข้าล่าสุด': 'Last visit', 'ไม่ได้เข้ามา (วัน)': 'Days since visit', 'มีการแนะนำอื่นๆ': 'Other advice', 'ยังไม่ได้เข้า': 'Not visited',
+    'ทั้งหมด (แห่ง)': 'Total (sites)', 'รายรอบ': 'By round', 'นำร่อง (แห่ง)': 'Pilots (sites)', 'รายระบบเดิม': 'By legacy system',
+    'ลำดับ': 'No.', 'ใช้กับ': 'Applies to', 'แนะนำแล้ว (แห่ง)': 'Advised (sites)', 'ฐาน (แห่ง)': 'Base (sites)', 'ข้อความในฟอร์ม': 'Form text',
+    'ทุกแห่ง': 'All sites', 'เข้า (ครั้ง)': 'Visits', 'แนะนำแล้ว (หัวข้อ)': 'Advised (topics)', 'ความครบ (%)': 'Completeness (%)',
+    'รพ.สต. (แห่ง)': 'Health centres', 'วันเวลา': 'Date & time', 'จำนวนหัวข้อ': 'Topics', 'แถวใน Sheet': 'Sheet row',
+    'หมายเหตุ': 'Note', 'ข้อมูลการส่งออก': 'Export info', 'ข้อมูล ณ': 'Data as of', 'ส่งออกเมื่อ': 'Exported at',
+    'มือถือ/แท็บเล็ต': 'Mobile/tablet', 'คอมพิวเตอร์': 'Computer'
+  };
+  var TH_MON = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+  var EN_MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  var EN_RULES = [
+    // dates: "2 ต.ค. 2569 19:07 น." → "2 Oct 2026 19:07"
+    [/(\d{1,2}) (ม\.ค\.|ก\.พ\.|มี\.ค\.|เม\.ย\.|พ\.ค\.|มิ\.ย\.|ก\.ค\.|ส\.ค\.|ก\.ย\.|ต\.ค\.|พ\.ย\.|ธ\.ค\.) (\d{4})/g,
+      function (m, d, mon, y) { return d + ' ' + EN_MON[TH_MON.indexOf(mon)] + ' ' + (y - 543); }],
+    [/(\d{1,2}:\d{2}) น\./g, '$1'],
+    [/^EHP-น่าน_/, 'EHP-Nan_'],
+    [/EHP On Cloud น่าน/g, 'EHP On Cloud Nan'],
+    // status, filters, counts
+    [/ บันทึก · โหลดเมื่อ /g, ' records · loaded '],
+    [/ครั้งถัดไป /g, 'next at '],
+    [/กำลังกรอง: /g, 'Filtered: '],
+    [/ — แสดง (\d[\d,]*) จาก (\d[\d,]*) บันทึก/g, ' — showing $1 of $2 records'],
+    [/แสดงทั้งหมด (\d[\d,]*) บันทึก/g, 'Showing all $1 records'],
+    [/แสดง (\d[\d,]*) จาก (\d[\d,]*) บันทึก/g, 'Showing $1 of $2 records'],
+    [/แสดง (\d[\d,]*) จาก (\d[\d,]*) แห่ง/g, 'Showing $1 of $2 sites'],
+    [/จาก รพ\.สต\. ที่มีบันทึก (\d[\d,]*) แห่ง/g, 'of $1 health centres with records'],
+    [/ข้อสังเกตจากข้อมูล (\d+) รายการ \(ไม่มีบันทึกใดถูกทิ้ง\)/g, '$1 data notes (no record was dropped)'],
+    [/แถวที่ (\d+) ใน Sheet/g, 'Sheet row $1'],
+    // insight and follow-up
+    [/^คำแนะนำสำหรับคุณ/, 'Advice for '],
+    [/^คำแนะนำสำหรับ/, 'Advice for '],
+    [/✓ รพ\.สต\. ทั้ง (\d+) แห่งที่(.+)ดูแล ได้รับคำแนะนำครบทุกหัวข้อแล้ว/g, '✓ All $1 health centres covered by $2 have every topic'],
+    [/ยังไม่มีบันทึกการเข้าแนะนำของ(.+)ตามตัวกรองนี้/g, 'No visits by $1 for this filter'],
+    [/ต้องติดตามอีก (\d+) แห่ง/g, '$1 to follow up'],
+    [/ที่ยังไม่ครบและไม่ได้เข้านาน (\d+) วันขึ้นไป — ควรนัดเข้าก่อน/g, 'incomplete and not visited for $1+ days — schedule these first'],
+    [/หัวข้อที่ควรเตรียมไปแนะนำ: /g, 'Topics to prepare: '],
+    [/จากนั้น: /g, 'Then: '],
+    [/ถึงวันเปิดใช้งานแล้วแต่ยังไม่ได้เข้า /g, 'Past go-live but not visited: '],
+    [/ — ดูรายชื่อแยกตามเจ้าหน้าที่ด้านล่าง/g, ' — see the list by staff below'],
+    [/ดูแลโดย /g, 'handled by '],
+    [/ · โดย /g, ' · by '],
+    [/ควรนัดเข้า/g, 'schedule a visit'],
+    [/มีการแนะนำอื่นๆ: /g, 'Other advice: '],
+    [/ขาด (\d+)\/(\d+) หัวข้อ/g, 'missing $1/$2 topics'],
+    [/ยังขาด (\d+) หัวข้อ/g, 'missing $1 topics'],
+    [/เข้าแล้ว (\d+) ครั้ง/g, 'visited $1×'],
+    [/ · ล่าสุด /g, ' · last '],
+    [/\((\d+) วันก่อน\)/g, '($1 days ago)'],
+    [/เปิดใช้มาแล้ว (\d+) วัน/g, 'live for $1 days'],
+    [/เปิดใช้วันนี้/g, 'live today'],
+    [/รับผิดชอบ: /g, 'responsible: '],
+    [/ · ที่ (.+) รับผิดชอบ/g, ' · assigned to $1'],
+    [/ทั้งจังหวัด/g, 'Whole province'],
+    [/เปิดใช้ /g, 'go-live '],
+    [/(\d+) จาก (\d+) หัวข้อ \((\d+) แห่ง × หัวข้อที่ใช้กับแต่ละแห่ง · Lab Online นับเฉพาะ อ\.ปัว\)/g, '$1 of $2 topics ($3 sites × applicable topics · Lab Online only in Pua)'],
+    [/(\d+) จาก (\d+) แห่ง ครบทุกหัวข้อ/g, '$1 of $2 sites have every topic'],
+    [/จาก (\d+) แห่งที่ครบแล้ว · ยิ่งน้อยยิ่งดี/g, 'from $1 complete sites · lower is better'],
+    // KPIs and tables
+    [/ ของ รพ\.สต\. ที่ถ่ายโอนทั้งหมด/g, ' of all transferred health centres'],
+    [/ ของ รพ\.สต\. ตามแผน/g, ' of planned health centres'],
+    [/ ของ รพ\.สต\. ในอำเภอ/g, ' of health centres in '],
+    [/ · ไม่มีอำเภอนี้ใน Master plan จึงไม่แสดงร้อยละ/g, ' · district not in the Master plan, so no %'],
+    [/^ในอำเภอ/, 'In '],
+    [/รวมนำร่องที่เสร็จแล้ว (\d+) แห่ง/g, 'incl. $1 finished pilots'],
+    [/รวมนำร่อง (\d+) แห่ง/g, 'incl. $1 pilots'],
+    [/นำร่อง (\d+) แห่ง/g, '$1 pilots'],
+    [/\(นำร่องนับ 100%\)/g, '(pilots count 100%)'],
+    [/\(นำร่อง\)/g, '(pilot)'],
+    [/คงเหลือ (\d+) แห่ง/g, '$1 remaining'],
+    [/รอเปิดใช้อีก (\d+) แห่ง/g, '$1 not live yet'],
+    [/เฉลี่ยจาก (\d+) แห่ง/g, 'average of $1 sites'],
+    [/ครบทุกหัวข้อ (\d+) แห่ง/g, '$1 with every topic'],
+    [/ครบแล้ว (\d+) แห่ง/g, '$1 complete'],
+    [/ดูแล (\d+) แห่ง/g, 'Covers $1 sites'],
+    [/ยังไม่ครบ (\d+) แห่ง/g, '$1 incomplete'],
+    [/ยังไม่ได้เข้า (\d+) แห่ง/g, '$1 not visited'],
+    [/มาตรฐาน 15 \+ หัวข้อใหม่จากฟอร์ม (\d+)/g, 'standard 15 + $1 new from the form'],
+    [/ยังไม่มีบันทึก/g, 'No records yet'],
+    [/^ล่าสุด /, 'Latest '],
+    [/นับว่า “ได้รับการดูแล” เมื่อมีการตอบฟอร์มของ รพ\.สต\. นั้นอย่างน้อย 1 ครั้ง ไม่ว่ารอบใดหรือใครเข้า · /g, '“Covered” = at least one form response for the health centre, any round, anyone · '],
+    [/รพ\.สต\.นำร่องทำเสร็จสิ้นแล้วตามกระบวนการทั้งหมด จึงนับว่าได้รับการดูแลและครบทุกหัวข้อ · /g, 'pilot sites finished the whole process, so they count as covered and complete · '],
+    [/ใช้ Master plan \(อบจ\.น่าน 106 แห่ง\) — กำหนดการอาจเปลี่ยนตามการย้ายฐานข้อมูลของแต่ละหน่วยบริการ/g, 'based on the Master plan (Nan PAO, 106 sites) — dates may change with each site\'s data migration'],
+    [/ · มีรหัส รพ\.สต\. ในฟอร์มที่ไม่อยู่ในแผน: /g, ' · codes in the form that are not in the plan: '],
+    [/เฉพาะ อ\./g, 'only in '],
+    [/เฉพาะระบบเดิม /g, 'only legacy '],
+    [/ — แนะนำแล้ว/g, ' — advised'],
+    [/ — ยังไม่ได้แนะนำ/g, ' — not advised'],
+    [/ — ไม่นับ \(/g, ' — not counted ('],
+    [/(^|[\s(·])อ\.(?=[฀-๿])/g, '$1Dist. '],
+    [/^อำเภอ(?=[฀-๿])/, 'District '],
+    [/ · อำเภอ(?=[฀-๿])/g, ' · District '],
+    [/เจ้าหน้าที่: /g, 'Staff: '],
+    [/(\d+) หัวข้อ: /g, '$1 topics: '],
+    [/รอบที่ (\d+)/g, 'Round $1'],
+    [/ไม่ระบุรอบ/g, 'No round'],
+    [/^ส่งออก (\w+)$/, 'Exported $1'],
+    [/(\d+) นาทีที่แล้ว/g, '$1 min ago'],
+    [/(\d[\d,]*) รายการล่าสุด/g, '$1 latest entries'],
+    [/มือถือ\/แท็บเล็ต/g, 'Mobile/tablet'],
+    [/คอมพิวเตอร์/g, 'Computer'],
+    [/อื่น ๆ/g, 'Other'],
+    [/(\d[\d,]*)\/(\d[\d,]*) แห่ง/g, '$1/$2 sites'],
+    [/(\d[\d,]*) แห่ง/g, '$1 sites'],
+    [/(\d[\d,]*) หัวข้อ/g, '$1 topics'],
+    [/(\d[\d,]*) ครั้ง/g, '$1 visits'],
+    [/(\d[\d,]*) คน/g, '$1 people'],
+    [/(\d[\d,]*) วัน/g, '$1 days'],
+    [/^\/(\d[\d,]*) sites$/, '/$1 sites']
+  ];
+
+  function tx(s) {
+    if (state.lang !== 'en' || !s || !/[฀-๿]/.test(s)) return s;
+    var t = s.trim();
+    if (Object.prototype.hasOwnProperty.call(EN_EXACT, t)) return s.replace(t, EN_EXACT[t]);
+    return EN_RULES.reduce(function (out, r) { return out.replace(r[0], r[1]); }, s);
+  }
+
+  // Translate rendered text in place, remembering the Thai original of every node and attribute.
+  var I18N_ATTRS = ['placeholder', 'aria-label', 'title'];
+  var nodeOrig = new WeakMap(), nodeSet = new WeakMap(), attrOrig = new WeakMap(), attrSet = new WeakMap();
+  function trText(node) {
+    var cur = node.nodeValue;
+    if (nodeSet.get(node) !== cur) nodeOrig.set(node, cur); // changed by the page, not by us
+    var v = tx(nodeOrig.get(node));
+    nodeSet.set(node, v);
+    if (v !== cur) node.nodeValue = v;
+  }
+  function trAttr(el, name) {
+    if (!el.hasAttribute(name)) return;
+    var o = attrOrig.get(el) || {}, w = attrSet.get(el) || {}, cur = el.getAttribute(name);
+    if (w[name] !== cur) o[name] = cur;
+    var v = tx(o[name]);
+    w[name] = v; attrOrig.set(el, o); attrSet.set(el, w);
+    if (v !== cur) el.setAttribute(name, v);
+  }
+  function trTree(root) {
+    if (root.nodeType === 3) { trText(root); return; }
+    if (root.nodeType !== 1 || /^(SCRIPT|STYLE)$/.test(root.tagName)) return;
+    I18N_ATTRS.forEach(function (a) { trAttr(root, a); });
+    root.querySelectorAll('[placeholder],[aria-label],[title]').forEach(function (el) { I18N_ATTRS.forEach(function (a) { trAttr(el, a); }); });
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (n) { return n.parentNode && /^(SCRIPT|STYLE)$/.test(n.parentNode.nodeName) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT; }
+    });
+    for (var n = w.nextNode(); n; n = w.nextNode()) trText(n);
+  }
+  new MutationObserver(function (muts) {
+    if (state.lang !== 'en') return;
+    muts.forEach(function (m) {
+      if (m.type === 'characterData') trText(m.target);
+      else if (m.type === 'attributes') trAttr(m.target, m.attributeName);
+      else m.addedNodes.forEach(trTree);
+    });
+  }).observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: I18N_ATTRS });
+
+  function applyLang(lang) {
+    state.lang = lang === 'en' ? 'en' : 'th';
+    document.documentElement.lang = state.lang;
+    document.querySelectorAll('.lang-btn').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-lang') === state.lang)); });
+    trTree(document.body); // English: translate; Thai: restore every original
+    document.title = tx(VIEWS[state.view] || '') + ' · ' + tx('EHP On Cloud น่าน');
+    if (window.google && google.accounts && !$('authGate').hidden) {
+      google.accounts.id.renderButton($('gsiButton'), { theme: 'outline', size: 'large', text: 'signin_with', shape: 'pill', locale: state.lang });
+    }
+  }
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -1245,7 +1697,7 @@ var EHPCore = (function () {
 
   // background = true for timer/visibility reloads: keep scroll, paging and filters as they are.
   function loadFromSheet(background) {
-    if (state.loading) return;
+    if (state.loading || (AUTH_ON && !state.user)) return;
     var url;
     try { url = Core.sheetCsvUrl(sheetLink()); } catch (e) { showError(e.message); render(); return; }
     if (!background) showError('');
@@ -1313,7 +1765,8 @@ var EHPCore = (function () {
     var ds = state.ds;
     var has = !!ds;
     var onSource = state.view === 'source';
-    $('exportMenu').hidden = !has || onSource;
+    $('exportMenu').hidden = !has || onSource || state.view === 'viewers';
+    document.querySelector('.filters-bar').hidden = state.view === 'viewers';
     $('dashboard').hidden = !has || onSource;
     $('emptyState').hidden = has || onSource;
     renderWarnings(ds);
@@ -1703,7 +2156,7 @@ var EHPCore = (function () {
   function exportName(title, ext) {
     var d = new Date();
     var day = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
-    return 'EHP-น่าน_' + title.replace(/[\\/:*?"<>|\s]+/g, '-') + '_' + day + '.' + ext;
+    return tx('EHP-น่าน_') + tx(title).replace(/[\\/:*?"<>|\s]+/g, '-') + '_' + day + '.' + ext;
   }
 
   // Parts of a view that can be exported on their own (menu with data-section).
@@ -1827,6 +2280,8 @@ var EHPCore = (function () {
     return loadLib('xlsx').then(function (X) {
       var wb = X.utils.book_new();
       target.sheets().forEach(function (sh) {
+        sh.rows = sh.rows.map(function (r) { return r.map(function (c) { return typeof c === 'string' ? tx(c) : c; }); });
+        sh.name = tx(sh.name);
         var ws = X.utils.aoa_to_sheet(sh.rows);
         ws['!cols'] = sh.rows[0].map(function (_, c) {
           var w = sh.rows.reduce(function (m, r) { return Math.max(m, String(r[c] == null ? '' : r[c]).length); }, 6);
@@ -1834,11 +2289,11 @@ var EHPCore = (function () {
         });
         X.utils.book_append_sheet(wb, ws, sh.name.slice(0, 31));
       });
-      var info = X.utils.aoa_to_sheet([['EHP On Cloud น่าน — ' + target.title], ['ตัวกรอง', filterText(state.cur.f)],
+      var info = X.utils.aoa_to_sheet([[tx('EHP On Cloud น่าน') + ' — ' + tx(target.title)], ['ตัวกรอง', filterText(state.cur.f)],
         ['ข้อมูล ณ', Core.formatThaiDate(state.loadedAt)], ['ส่งออกเมื่อ', Core.formatThaiDate(new Date())],
-        ['หมายเหตุ', 'มีชื่อบุคคล โปรดใช้ภายในทีมเท่านั้น']]);
+        ['หมายเหตุ', 'มีชื่อบุคคล โปรดใช้อย่างระมัดระวัง']].map(function (r) { return r.map(tx); }));
       info['!cols'] = [{ wch: 14 }, { wch: 60 }];
-      X.utils.book_append_sheet(wb, info, 'ข้อมูลการส่งออก');
+      X.utils.book_append_sheet(wb, info, tx('ข้อมูลการส่งออก'));
       X.writeFile(wb, fileName);
     });
   }
@@ -1848,7 +2303,7 @@ var EHPCore = (function () {
     var node = target.node;
     var caption = document.createElement('div');
     caption.className = 'export-caption';
-    caption.textContent = 'EHP On Cloud น่าน · ' + VIEWS[state.view] + ' · ' + filterText(state.cur.f) + ' · ข้อมูล ณ ' + Core.formatThaiDate(state.loadedAt);
+    caption.textContent = [tx('EHP On Cloud น่าน'), tx(VIEWS[state.view]), tx(filterText(state.cur.f)), tx('ข้อมูล ณ') + ' ' + tx(Core.formatThaiDate(state.loadedAt))].join(' · ');
     return loadLib('image').then(function (H) {
       node.insertBefore(caption, node.firstChild);
       node.classList.add('exporting');
@@ -1875,6 +2330,7 @@ var EHPCore = (function () {
     menu.classList.add('busy');
     var target = exportTarget(menu.getAttribute('data-section'));
     var fileName = exportName(target.title, kind); // named now: the view may change while the file is being made
+    track('export', kind);
     (kind === 'xlsx' ? exportExcel(target, fileName) : exportImage(target, kind, fileName))
       .catch(function (e) {
         console.error('[EHP dashboard] export failed', kind, e);
@@ -1883,16 +2339,128 @@ var EHPCore = (function () {
       .finally(function () { menu.classList.remove('busy'); });
   }
 
+  // ---------- Sign-in and visit log ----------
+  function device() {
+    var ua = navigator.userAgent;
+    var kind = /Mobi|Android|iPhone|iPad/i.test(ua) ? 'มือถือ/แท็บเล็ต' : 'คอมพิวเตอร์';
+    var browser = /Edg\//.test(ua) ? 'Edge' : /Chrome\//.test(ua) ? 'Chrome' : /Firefox\//.test(ua) ? 'Firefox' : /Safari\//.test(ua) ? 'Safari' : 'อื่น ๆ';
+    return kind + ' · ' + browser;
+  }
+
+  function showGate(msg) {
+    $('authGate').hidden = false;
+    $('authError').hidden = !msg;
+    $('authError').textContent = msg || '';
+  }
+
+  function onCredential(resp) {
+    var p = Core.decodeJwt(resp && resp.credential);
+    if (!p || p.aud !== AUTH.clientId || !p.email || p.exp * 1000 < Date.now()) { showGate('ลงชื่อไม่สำเร็จ ลองใหม่อีกครั้ง'); return; }
+    var first = !state.user;
+    state.user = { name: p.name || p.email, email: p.email, token: resp.credential, exp: p.exp * 1000 };
+    $('authGate').hidden = true;
+    $('userBox').hidden = false;
+    $('userName').textContent = state.user.name;
+    if (first) {
+      track('open');
+      clearInterval(state.beat);
+      state.beat = setInterval(function () { if (!document.hidden) track('heartbeat'); }, HEARTBEAT_MS);
+      if (!state.ds) loadFromSheet(false);
+    }
+  }
+
+  // Google ID tokens last about an hour; ask Google for a fresh one (silent when auto-select is allowed).
+  function freshToken() {
+    if (state.user && state.user.exp - Date.now() > 60 * 1000) return true;
+    if (window.google && google.accounts) {
+      google.accounts.id.prompt(function (n) {
+        if (n.isNotDisplayed() || n.isSkippedMoment()) signOut('หมดเวลาการลงชื่อ กรุณาลงชื่ออีกครั้ง');
+      });
+    }
+    return false;
+  }
+
+  function track(action, detail) {
+    if (!AUTH_ON || !state.user || !freshToken()) return;
+    var f = currentFilter();
+    fetch(AUTH.endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // simple request: no CORS preflight to Apps Script
+      body: JSON.stringify({ token: state.user.token, action: action, view: state.view, filter: filterText(f), device: device(), detail: detail || '' })
+    }).then(function (r) { return r.json(); }).then(function (res) {
+      if (!res.ok) throw new Error(res.error);
+      state.presence = { online: res.online || [], recent: res.recent || [], at: new Date() };
+      renderViewers();
+    }).catch(function (e) { console.error('[EHP dashboard] visit log failed', e); });
+  }
+
+  function signOut(msg) {
+    if (window.google && google.accounts) google.accounts.id.disableAutoSelect();
+    clearInterval(state.beat);
+    state.user = null; state.ds = null; state.presence = null;
+    $('userBox').hidden = true;
+    render();
+    showGate(msg);
+  }
+
+  function startAuth() {
+    $('viewersItem').hidden = false;
+    showGate();
+    var el = document.createElement('script');
+    el.src = 'https://accounts.google.com/gsi/client';
+    el.async = true;
+    el.onload = function () {
+      google.accounts.id.initialize({ client_id: AUTH.clientId, callback: onCredential, auto_select: true, cancel_on_tap_outside: false });
+      google.accounts.id.renderButton($('gsiButton'), { theme: 'outline', size: 'large', text: 'signin_with', shape: 'pill', locale: state.lang });
+      google.accounts.id.prompt();
+    };
+    el.onerror = function () { showGate('โหลดระบบลงชื่อของ Google ไม่สำเร็จ — ตรวจสอบอินเทอร์เน็ตแล้วรีเฟรชหน้า'); };
+    document.head.appendChild(el);
+  }
+
+  function ago(ms) {
+    var m = Math.max(0, Math.round((Date.now() - ms) / 60000));
+    return m < 1 ? 'เมื่อสักครู่' : m + ' นาทีที่แล้ว';
+  }
+
+  function renderViewers() {
+    var p = state.presence;
+    $('onlineBadge').hidden = !p || !p.online.length;
+    $('onlineBadge').textContent = p ? p.online.length : '';
+    if (state.view !== 'viewers') return;
+    if (!p) {
+      $('onlineCount').textContent = '';
+      $('onlineList').innerHTML = '<li class="empty-state">กำลังโหลด…</li>';
+      $('visitTable').innerHTML = '';
+      return;
+    }
+    $('onlineCount').textContent = fmt(p.online.length) + ' คน';
+    $('onlineList').innerHTML = p.online.length ? p.online.map(function (o) {
+      return '<li><span><span class="online-dot" aria-hidden="true"></span><b>' + esc(o.name) + '</b>' + (o.name === state.user.name ? ' <span class="small muted">(คุณ)</span>' : '') + '</span>' +
+        '<span class="small muted"><span>' + esc(VIEWS[o.view] || o.view || '') + '</span> · <span>' + ago(o.at) + '</span></span></li>';
+    }).join('') : '<li class="empty-state">ไม่มีผู้ดูคนอื่น</li>';
+    $('visitCount').textContent = fmt(p.recent.length) + ' รายการล่าสุด';
+    $('visitTable').innerHTML = p.recent.length
+      ? '<thead><tr><th scope="col">เวลา</th><th scope="col">ชื่อ</th><th scope="col">การกระทำ</th><th scope="col">เมนู</th><th scope="col">อุปกรณ์</th></tr></thead><tbody>' +
+        p.recent.map(function (r) {
+          return '<tr><td class="small" style="white-space:nowrap">' + (r.at ? Core.formatThaiDate(new Date(r.at)) : '') + '</td><td>' + esc(r.name) + '</td>' +
+            '<td>' + esc(r.action + (r.detail ? ' ' + r.detail.toUpperCase() : '')) + '</td><td>' + esc(VIEWS[r.view] || r.view || '') + '</td><td class="small">' + esc(r.device) + '</td></tr>';
+        }).join('') + '</tbody>'
+      : '<tbody><tr><td class="empty-state">ยังไม่มีบันทึก</td></tr></tbody>';
+  }
+
   // ---------- Views (left menu) ----------
   function setView(view) {
-    state.view = VIEWS[view] ? view : 'overview';
+    state.view = VIEWS[view] && (view !== 'viewers' || AUTH_ON) ? view : 'overview';
     document.querySelectorAll('[data-panel]').forEach(function (p) { p.hidden = p.getAttribute('data-panel') !== state.view; });
     document.querySelectorAll('.menu a').forEach(function (a) {
       if (a.getAttribute('data-view') === state.view) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     });
     $('viewTitle').textContent = VIEWS[state.view];
-    document.title = VIEWS[state.view] + ' · EHP On Cloud น่าน';
+    document.title = tx(VIEWS[state.view]) + ' · ' + tx('EHP On Cloud น่าน');
     render();
+    renderViewers();
+    if (state.user) track('view');
   }
 
   // ---------- Theme ----------
@@ -1900,6 +2468,11 @@ var EHPCore = (function () {
     if (t) document.documentElement.setAttribute('data-theme', t);
     var dark = t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
     $('themeBtn').textContent = dark ? 'โหมดสว่าง' : 'โหมดมืด';
+  }
+
+  function applySkin(skin) {
+    if (skin) document.documentElement.setAttribute('data-skin', skin); else document.documentElement.removeAttribute('data-skin');
+    document.querySelectorAll('.skin-swatch').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-skin') === (skin || ''))); });
   }
 
   // ---------- Events ----------
@@ -1967,6 +2540,23 @@ var EHPCore = (function () {
   document.addEventListener('click', function (e) {
     document.querySelectorAll('.export-menu[open]').forEach(function (m) { if (!m.contains(e.target)) m.open = false; });
   });
+  $('signOutBtn').addEventListener('click', function () { signOut(); });
+  document.querySelectorAll('.lang-btn').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var lang = b.getAttribute('data-lang');
+      storage(function (st) { st.setItem(LANG_KEY, lang); });
+      applyLang(lang);
+      render();
+      renderViewers();
+    });
+  });
+  document.querySelectorAll('.skin-swatch').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var skin = b.getAttribute('data-skin');
+      storage(function (st) { if (skin) st.setItem(SKIN_KEY, skin); else st.removeItem(SKIN_KEY); });
+      applySkin(skin);
+    });
+  });
   $('themeBtn').addEventListener('click', function () {
     var cur = document.documentElement.getAttribute('data-theme') ||
       (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
@@ -1977,11 +2567,13 @@ var EHPCore = (function () {
 
   // ---------- Start ----------
   applyTheme(storage(function (s) { return s.getItem(THEME_KEY); }));
+  applySkin(storage(function (s) { return s.getItem(SKIN_KEY); }));
+  applyLang(storage(function (s) { return s.getItem(LANG_KEY); }));
   storage(function (s) { s.removeItem(OLD_DATA_KEY); });
   $('autoRefresh').checked = storage(function (s) { return s.getItem(AUTO_KEY); }) !== '0';
   renderSource();
   setView(location.hash.slice(1));
-  loadFromSheet(false);
+  if (AUTH_ON) startAuth(); else loadFromSheet(false);
 })();
 </script>
 </body>
