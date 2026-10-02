@@ -8,7 +8,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop stop-color=%27%232563eb%27/%3E%3Cstop offset=%271%27 stop-color=%27%237c3aed%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27url(%23g)%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-size=%2717%27 font-family=%27sans-serif%27 font-weight=%27700%27 fill=%27white%27 text-anchor=%27middle%27%3EE%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet" crossorigin="anonymous">
 <style>
 :root {
   color-scheme: light;
@@ -124,6 +124,22 @@ h2 { font-size: 1.1rem; font-weight: 600; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 .top-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.export-menu { position: relative; }
+.export-menu > summary { list-style: none; cursor: pointer; }
+.export-menu > summary::-webkit-details-marker { display: none; }
+.export-pop { position: absolute; right: 0; top: calc(100% + 6px); z-index: 30; display: grid; gap: 4px; min-width: 170px; padding: 6px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; box-shadow: var(--shadow); }
+.export-pop button { text-align: left; border: 0; }
+.export-menu.busy > summary { opacity: .7; cursor: progress; }
+.export-caption { display: none; }
+.exporting .export-caption { display: block; font-weight: 600; margin-bottom: 10px; }
+#dashboard.exporting { width: max-content; min-width: 100%; padding: 16px; background: var(--bg); }
+#dashboard.exporting .export-caption { margin-bottom: 0; }
+#dashboard.exporting .table-scroll { overflow: visible; }
+#dashboard.exporting .matrix td.first, #dashboard.exporting .matrix th.first { position: static; }
+.has-export { position: relative; }
+.sec-export { position: absolute; top: 10px; right: 10px; }
+.sec-export > summary { min-height: 34px; padding: 4px 10px; font-size: .85rem; background: var(--surface); }
+.has-export > div > h2 { padding-right: 110px; }
 
 button, .btn {
   font: inherit; font-size: .9rem; cursor: pointer;
@@ -301,7 +317,9 @@ main { padding: 20px 28px 32px; }
   .topbar { padding: 10px 14px; }
   .topbar h1 { font-size: 1.12rem; }
   .topbar #dataStatus { font-size: .76rem; }
-  #refreshBtn .lbl { display: none; }
+  #refreshBtn .lbl, .export-menu .lbl { display: none; }
+  .export-menu > summary { width: 42px; padding: 0; }
+  .top-actions { flex-wrap: nowrap; flex: none; }
   #refreshBtn { width: 42px; padding: 0; }
   main { padding: 12px 14px 24px; gap: 12px; }
   .stack { gap: 12px; }
@@ -365,6 +383,14 @@ main { padding: 20px 28px 32px; }
         </div>
       </div>
       <div class="top-actions no-print">
+        <details class="export-menu" id="exportMenu" hidden>
+          <summary class="btn icon-btn" aria-label="ส่งออกข้อมูลของหน้านี้"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span class="lbl">ส่งออก</span></summary>
+          <div class="export-pop" role="menu">
+            <button type="button" role="menuitem" data-export="xlsx">Excel (.xlsx)</button>
+            <button type="button" role="menuitem" data-export="png">รูปภาพ PNG</button>
+            <button type="button" role="menuitem" data-export="jpg">รูปภาพ JPG</button>
+          </div>
+        </details>
         <button type="button" id="refreshBtn" class="btn-primary icon-btn" aria-label="โหลดข้อมูลล่าสุด"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg><span class="lbl">โหลดข้อมูลล่าสุด</span></button>
       </div>
     </header>
@@ -402,7 +428,17 @@ main { padding: 20px 28px 32px; }
         </div>
 
         <div class="stack" data-panel="followup">
-          <section class="insight" id="fuInsight" aria-live="polite"></section>
+          <section class="insight has-export" id="fuInsightCard">
+            <details class="export-menu sec-export no-print" data-section="insight">
+              <summary class="btn icon-btn" aria-label="ส่งออกเฉพาะคำแนะนำ"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span class="lbl">ส่งออก</span></summary>
+              <div class="export-pop" role="menu">
+                <button type="button" role="menuitem" data-export="xlsx">Excel (.xlsx)</button>
+                <button type="button" role="menuitem" data-export="png">รูปภาพ PNG</button>
+                <button type="button" role="menuitem" data-export="jpg">รูปภาพ JPG</button>
+              </div>
+            </details>
+            <div id="fuInsight" aria-live="polite"></div>
+          </section>
           <section aria-labelledby="fuOkHead">
             <h2 id="fuOkHead" class="score-head">ความสำเร็จ</h2>
             <div class="kpis" id="fuSuccess"></div>
@@ -1161,6 +1197,7 @@ var EHPCore = (function () {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
   }
+  function htmlText(html) { var d = document.createElement('div'); d.innerHTML = html; return d.textContent; }
   function pct(x) { return x == null ? '–' : Math.round(x * 100) + '%'; }
   function fmt(n) { return Number(n).toLocaleString('th-TH'); }
   function bar(ratio) { return '<span style="width:' + Math.max(0, Math.min(100, ratio * 100)).toFixed(1) + '%"></span>'; }
@@ -1276,6 +1313,7 @@ var EHPCore = (function () {
     var ds = state.ds;
     var has = !!ds;
     var onSource = state.view === 'source';
+    $('exportMenu').hidden = !has || onSource;
     $('dashboard').hidden = !has || onSource;
     $('emptyState').hidden = has || onSource;
     renderWarnings(ds);
@@ -1292,6 +1330,7 @@ var EHPCore = (function () {
     var records = Core.filterRecords(ds.records, f);
     var districtRecords = Core.filterRecords(ds.records, { round: f.round, staff: f.staff });
     var s = Core.summarize(ds, records, districtRecords, { district: f.district, staff: f.staff });
+    state.cur = { f: f, s: s };
 
     $('dataStatus').textContent = fmt(ds.records.length) + ' บันทึก · โหลดเมื่อ ' + Core.formatThaiDate(state.loadedAt);
     renderActiveFilter(f, records.length, ds.records.length);
@@ -1369,6 +1408,7 @@ var EHPCore = (function () {
   function renderFollowUp(ds, f) {
     var fu = Core.followUp(ds, Core.filterRecords(ds.records, { district: f.district, round: f.round }), f.staff);
     var who = f.staff ? 'คุณ' + f.staff : 'ทั้งทีม';
+    var people = [];
     var miss = Core.planOverview(ds, Core.filterRecords(ds.records, { district: f.district }), { district: f.district, staff: f.staff }).notVisited;
     var tips = [];
     if (!fu.hospitals) {
@@ -1394,7 +1434,7 @@ var EHPCore = (function () {
     }
     if (!f.staff) {
       // Per installer: form names (with nickname) for staff who have records, Master plan names otherwise.
-      var people = fu.team.map(function (t) { return { name: t.name, filter: true, incomplete: t.incomplete, notVisited: 0 }; });
+      people = fu.team.map(function (t) { return { name: t.name, filter: true, incomplete: t.incomplete, notVisited: 0 }; });
       miss.forEach(function (i) {
         var p = people.filter(function (x) { return Core.sameStaff(i.plan.staff, x.name); })[0];
         if (!p) { p = { name: i.plan.staff, filter: false, incomplete: 0, notVisited: 0 }; people.push(p); }
@@ -1404,6 +1444,7 @@ var EHPCore = (function () {
         return (b.incomplete + b.notVisited) - (a.incomplete + a.notVisited) || a.name.localeCompare(b.name, 'th');
       });
       if (people.length) {
+        var peopleTip = tips.length;
         tips.push('งานรายคน:<ul class="who-list">' + people.map(function (p) {
           var name = p.filter ? '<button type="button" class="link" data-staff="' + esc(p.name) + '">' + esc(p.name) + '</button>' : '<b>' + esc(p.name) + '</b>';
           var parts = [];
@@ -1413,8 +1454,10 @@ var EHPCore = (function () {
         }).join('') + '</ul>');
       }
     }
+    state.insight = { title: 'คำแนะนำสำหรับ' + who, people: people,
+      tips: tips.filter(function (t, i) { return i !== peopleTip; }).map(htmlText) };
     $('fuInsight').innerHTML = '<h2>คำแนะนำสำหรับ' + esc(who) + '</h2>' +
-      (f.staff ? '' : '<p class="small muted" style="margin:0">เลือกชื่อของคุณที่ตัวกรอง “เจ้าหน้าที่” ด้านบน หรือแตะชื่อในตาราง เพื่อดูเฉพาะงานของตัวเอง</p>') +
+      (f.staff ? '' : '<p class="small muted no-print" style="margin:0">เลือกชื่อของคุณที่ตัวกรอง “เจ้าหน้าที่” ด้านบน หรือแตะชื่อในตาราง เพื่อดูเฉพาะงานของตัวเอง</p>') +
       '<ul>' + tips.map(function (t) { return '<li>' + t + '</li>'; }).join('') + '</ul>';
 
     var sc = fu.score;
@@ -1557,13 +1600,18 @@ var EHPCore = (function () {
     return list.slice().sort(cmp);
   }
 
-  function renderHospitals(s, ds) {
+  // รพ.สต. rows as shown: search, "only incomplete" and sort order applied.
+  function hospitalList(s, ds) {
     var q = $('hospSearch').value.trim().toLowerCase();
     var only = $('onlyIncomplete').checked;
     var list = s.hospitals.filter(function (h) {
       return (!q || (h.name + ' ' + (h.code || '') + ' ' + h.staff.join(' ') + ' ' + (h.plan ? h.plan.system : '')).toLowerCase().indexOf(q) >= 0) && (!only || h.doneCount < h.totalTopics);
     });
-    list = sortHospitals(list, $('hospSort').value, ds.districts);
+    return sortHospitals(list, $('hospSort').value, ds.districts);
+  }
+
+  function renderHospitals(s, ds) {
+    var list = hospitalList(s, ds);
     $('hospCount').textContent = 'แสดง ' + fmt(list.length) + ' จาก ' + fmt(s.hospitals.length) + ' แห่ง';
     $('topicLegend').innerHTML = ds.topics.map(function (t, i) {
       var scope = Core.topicScope(t);
@@ -1626,6 +1674,213 @@ var EHPCore = (function () {
         '<dt>คำแนะนำอื่น</dt><dd>' + esc(r.otherAdvice || 'ไม่ระบุ') + '</dd>' +
         '<dt>ข้อเสนอแนะ</dt><dd>' + esc(r.suggestion || 'ไม่ระบุ') + '</dd></dl></li>';
     }).join('');
+  }
+
+  // ---------- Export (Excel / PNG / JPG of the current view) ----------
+  var LIBS = {
+    xlsx: { src: 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
+      sri: 'sha384-vtjasyidUo0kW94K5MXDXntzOJpQgBKXmE7e2Ga4LG0skTTLeBi97eFAXsqewJjw', global: 'XLSX' },
+    image: { src: 'https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js',
+      sri: 'sha384-YAj4cGTKsNinHUzylwDJDDZEpC6gnqNubmrp9eerckq7+gwWjABe5s2plXl3uUKb', global: 'htmlToImage' }
+  };
+  var libLoads = {};
+  // Libraries load only when someone exports, so the dashboard itself stays light.
+  function loadLib(name) {
+    var lib = LIBS[name];
+    if (window[lib.global]) return Promise.resolve(window[lib.global]);
+    if (!libLoads[name]) {
+      libLoads[name] = new Promise(function (resolve, reject) {
+        var el = document.createElement('script');
+        el.src = lib.src; el.integrity = lib.sri; el.crossOrigin = 'anonymous'; el.referrerPolicy = 'no-referrer';
+        el.onload = function () { resolve(window[lib.global]); };
+        el.onerror = function () { delete libLoads[name]; reject(new Error('load ' + name)); };
+        document.head.appendChild(el);
+      });
+    }
+    return libLoads[name];
+  }
+
+  function exportName(title, ext) {
+    var d = new Date();
+    var day = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+    return 'EHP-น่าน_' + title.replace(/[\\/:*?"<>|\s]+/g, '-') + '_' + day + '.' + ext;
+  }
+
+  // Parts of a view that can be exported on their own (menu with data-section).
+  var SECTIONS = {
+    insight: {
+      node: function () { return $('fuInsightCard'); },
+      title: function () { return state.insight.title; },
+      sheets: function () {
+        var i = state.insight;
+        var out = [{ name: 'คำแนะนำ', rows: [[i.title]].concat(i.tips.map(function (t) { return [t]; })) }];
+        if (i.people.length) {
+          out.push({ name: 'งานรายคน', rows: [['เจ้าหน้าที่', 'ยังไม่ครบ (แห่ง)', 'ยังไม่ได้เข้า (แห่ง)']].concat(i.people.map(function (p) {
+            return [p.name, p.incomplete, p.notVisited];
+          })) });
+        }
+        return out;
+      }
+    }
+  };
+  // What an export covers: the whole current view, or one section of it.
+  function exportTarget(section) {
+    var sec = section && SECTIONS[section];
+    return sec
+      ? { title: sec.title(), node: sec.node(), sheets: sec.sheets }
+      : { title: VIEWS[state.view], node: $('dashboard'), sheets: exportSheets };
+  }
+
+  function filterText(f) {
+    var parts = [];
+    if (f.district) parts.push('อำเภอ' + f.district);
+    if (f.round) parts.push(f.round);
+    if (f.staff) parts.push('เจ้าหน้าที่: ' + f.staff);
+    return parts.length ? parts.join(' · ') : 'ทั้งหมด';
+  }
+
+  function pctNum(x) { return x == null ? '' : Math.round(x * 100); }
+  function day(d) { return d ? Core.formatThaiDate(d, false) : ''; }
+  function planDay(p) { return Core.formatThaiDate(new Date(p.goLive.replace(/-/g, '/')), false); }
+
+  function missRows(items) {
+    return [['เจ้าหน้าที่รับผิดชอบ', 'รพ.สต.', 'รหัส', 'อำเภอ', 'ระบบเดิม', 'รอบ', 'วันเปิดใช้งาน', 'เปิดใช้มาแล้ว (วัน)']].concat(items.map(function (i) {
+      var p = i.plan;
+      return [p.staff, p.name, p.code, p.district, p.system, Core.planRound(p.round).name, planDay(p), i.daysSinceLive];
+    }));
+  }
+
+  // Sheets for the current view: [{ name, rows }], built from the same numbers the page shows.
+  function exportSheets() {
+    var ds = state.ds, f = state.cur.f, s = state.cur.s;
+    var visits = Core.filterRecords(ds.records, { district: f.district });
+    switch (state.view) {
+      case 'overview':
+        return [
+          { name: 'ตัวชี้วัด', rows: [['ตัวชี้วัด', 'ค่า'],
+            ['รพ.สต. ที่ได้รับการดูแล (แห่ง)', s.coveredCount], ['รวมนำร่องที่เสร็จแล้ว (แห่ง)', s.pilotsDone],
+            ['รพ.สต. ทั้งหมด (แห่ง)', s.totalHospitals], ['ร้อยละที่ได้รับการดูแล (%)', pctNum(s.coverage)],
+            ['ความครบของหัวข้อเฉลี่ย (%)', pctNum(s.avgCompleteness)], ['ครบทุกหัวข้อ (แห่ง)', s.completeHospitals],
+            ['บันทึกการเข้าแนะนำ (ครั้ง)', s.totalRecords], ['บันทึกล่าสุด', s.lastRecord ? Core.formatThaiDate(s.lastRecord) : '']] },
+          { name: 'รายอำเภอ', rows: [['อำเภอ', 'ได้รับการดูแล (แห่ง)', 'ทั้งหมดตามแผน (แห่ง)', 'ร้อยละ (%)', 'รวมนำร่อง (แห่ง)', 'บันทึก (ครั้ง)', 'ความครบเฉลี่ย (%)']].concat(
+            s.byDistrict.map(function (d) {
+              return [d.district, d.covered, d.planned || '', d.planned ? pctNum(d.covered / d.planned) : '', d.pilotsDone, d.records, pctNum(d.avgCompleteness)];
+            })) }
+        ];
+      case 'followup': {
+        var fu = Core.followUp(ds, Core.filterRecords(ds.records, { district: f.district, round: f.round }), f.staff);
+        var miss = Core.planOverview(ds, visits, { district: f.district, staff: f.staff }).notVisited;
+        var sheets = [];
+        if (!f.staff) {
+          sheets.push({ name: 'งานรายคน', rows: [['เจ้าหน้าที่', 'ดูแล (แห่ง)', 'ยังไม่ครบ (แห่ง)', 'หัวข้อสำเร็จ (%)', 'ครบทุกหัวข้อ (%)']].concat(fu.team.map(function (t) {
+            return [t.name, t.hospitals, t.incomplete, pctNum(t.score.topicPct), pctNum(t.score.completePct)];
+          })) });
+        }
+        sheets.push({ name: 'ต้องติดตาม', rows: [['รพ.สต.', 'รหัส', 'อำเภอ', 'ระบบเดิม', 'ขาด (หัวข้อ)', 'ทั้งหมด (หัวข้อ)', 'หัวข้อที่ยังขาด', 'เข้าแล้ว (ครั้ง)', 'เข้าล่าสุด', 'ไม่ได้เข้ามา (วัน)', 'เจ้าหน้าที่', 'มีการแนะนำอื่นๆ']].concat(fu.items.map(function (i) {
+          var h = i.hospital;
+          return [h.name, h.code || '', h.district, h.plan ? h.plan.system : '', h.missing.length, h.totalTopics,
+            h.missing.map(Core.topicLabel).join(', '), h.visits, day(h.lastVisit), i.daysSince == null ? '' : i.daysSince, h.staff.join(', '), h.lastNote];
+        })) });
+        sheets.push({ name: 'ยังไม่ได้เข้า', rows: missRows(miss) });
+        return sheets;
+      }
+      case 'plan': {
+        var o = Core.planOverview(ds, visits, { district: f.district, staff: f.staff });
+        var head = ['ได้รับการดูแล (แห่ง)', 'ทั้งหมด (แห่ง)', 'ร้อยละ (%)', 'ครบทุกหัวข้อ (แห่ง)', 'ความครบเฉลี่ย (%)'];
+        var vals = function (g) { return [g.visited, g.total, pctNum(g.total ? g.visited / g.total : null), g.complete, pctNum(g.avgCompleteness)]; };
+        return [
+          { name: 'รายรอบ', rows: [['รอบ', 'วันเปิดใช้งาน', 'นำร่อง (แห่ง)'].concat(head)].concat(o.byRound.map(function (g) { return [g.name, g.goLive, g.pilots].concat(vals(g)); })) },
+          { name: 'รายระบบเดิม', rows: [['ระบบเดิม'].concat(head)].concat(o.bySystem.map(function (g) { return [g.key].concat(vals(g)); })) },
+          { name: 'ยังไม่ได้เข้า', rows: missRows(o.notVisited) }
+        ];
+      }
+      case 'topics':
+        return [{ name: 'รายหัวข้อ', rows: [['ลำดับ', 'หัวข้อ', 'ใช้กับ', 'แนะนำแล้ว (แห่ง)', 'ฐาน (แห่ง)', 'ร้อยละ (%)', 'ข้อความในฟอร์ม']].concat(s.topicCoverage.map(function (t, i) {
+          return [i + 1, t.label, t.scope || 'ทุกแห่ง', t.hospitals, t.eligible, t.eligible ? pctNum(t.hospitals / t.eligible) : '', t.text];
+        })) }];
+      case 'hospitals': {
+        var labels = ds.topics.map(Core.topicLabel);
+        return [{ name: 'ราย รพ.สต.', rows: [['รพ.สต.', 'รหัส', 'อำเภอ', 'ระบบเดิม', 'รอบ', 'วันเปิดใช้งาน', 'เจ้าหน้าที่', 'เข้า (ครั้ง)', 'เข้าล่าสุด', 'แนะนำแล้ว (หัวข้อ)', 'ทั้งหมด (หัวข้อ)', 'ความครบ (%)'].concat(labels)].concat(
+          hospitalList(s, ds).map(function (h) {
+            var p = h.plan;
+            return [h.name, h.code || '', h.district, p ? p.system : '', p ? Core.planRound(p.round).name + (p.pilot ? ' (นำร่อง)' : '') : '', p ? planDay(p) : '',
+              h.staff.join(', '), h.visits, day(h.lastVisit), h.doneCount, h.totalTopics, pctNum(h.completeness)].concat(ds.topics.map(function (t) {
+              return !Core.topicApplies(t, h.district, p ? p.system : null) ? 'ไม่นับ' : h.topicSet[t] ? '✓' : '–';
+            }));
+          })) }];
+      }
+      case 'staff':
+        return [
+          { name: 'เจ้าหน้าที่', rows: [['เจ้าหน้าที่', 'บันทึก (ครั้ง)', 'รพ.สต. (แห่ง)']].concat(s.staffStats.map(function (r) { return [r.name, r.records, r.hospitals]; })) },
+          { name: 'รอบที่ขึ้นระบบ', rows: [['รอบ', 'บันทึก (ครั้ง)', 'รพ.สต. (แห่ง)']].concat(s.roundStats.map(function (r) { return [r.name, r.records, r.hospitals]; })) }
+        ];
+      case 'recent':
+        return [{ name: 'บันทึก', rows: [['วันเวลา', 'รอบ', 'อำเภอ', 'รหัส', 'รพ.สต.', 'ผู้รับคำแนะนำ', 'เจ้าหน้าที่', 'จำนวนหัวข้อ', 'หัวข้อ', 'คำแนะนำอื่น', 'ข้อเสนอแนะ', 'แถวใน Sheet']].concat(s.recent.map(function (r) {
+          return [Core.formatThaiDate(r.timestamp), r.round, r.district, r.hospitalCode || '', r.hospitalKey ? r.hospitalName : 'ไม่ระบุ รพ.สต.', r.recipient, r.staff,
+            r.topics.length, r.topics.map(Core.topicLabel).join(', '), r.otherAdvice, r.suggestion, r.row];
+        })) }];
+    }
+    return [];
+  }
+
+  function exportExcel(target, fileName) {
+    return loadLib('xlsx').then(function (X) {
+      var wb = X.utils.book_new();
+      target.sheets().forEach(function (sh) {
+        var ws = X.utils.aoa_to_sheet(sh.rows);
+        ws['!cols'] = sh.rows[0].map(function (_, c) {
+          var w = sh.rows.reduce(function (m, r) { return Math.max(m, String(r[c] == null ? '' : r[c]).length); }, 6);
+          return { wch: Math.min(60, w + 2) };
+        });
+        X.utils.book_append_sheet(wb, ws, sh.name.slice(0, 31));
+      });
+      var info = X.utils.aoa_to_sheet([['EHP On Cloud น่าน — ' + target.title], ['ตัวกรอง', filterText(state.cur.f)],
+        ['ข้อมูล ณ', Core.formatThaiDate(state.loadedAt)], ['ส่งออกเมื่อ', Core.formatThaiDate(new Date())],
+        ['หมายเหตุ', 'มีชื่อบุคคล โปรดใช้ภายในทีมเท่านั้น']]);
+      info['!cols'] = [{ wch: 14 }, { wch: 60 }];
+      X.utils.book_append_sheet(wb, info, 'ข้อมูลการส่งออก');
+      X.writeFile(wb, fileName);
+    });
+  }
+
+  var fontCSS = null; // embedded web font, fetched once per page load
+  function exportImage(target, type, fileName) {
+    var node = target.node;
+    var caption = document.createElement('div');
+    caption.className = 'export-caption';
+    caption.textContent = 'EHP On Cloud น่าน · ' + VIEWS[state.view] + ' · ' + filterText(state.cur.f) + ' · ข้อมูล ณ ' + Core.formatThaiDate(state.loadedAt);
+    return loadLib('image').then(function (H) {
+      node.insertBefore(caption, node.firstChild);
+      node.classList.add('exporting');
+      var opts = {
+        pixelRatio: 2,
+        backgroundColor: getComputedStyle(document.body).backgroundColor,
+        filter: function (el) { return !(el.classList && (el.classList.contains('no-print') || el.id === 'moreBtn')); }
+      };
+      var shoot = function (o) { return type === 'jpg' ? H.toJpeg(node, Object.assign({ quality: 0.95 }, o)) : H.toPng(node, o); };
+      // Embedding the web font can fail (offline, blocked); fall back to the system font rather than no image.
+      var fonts = fontCSS != null ? Promise.resolve(fontCSS) : H.getFontEmbedCSS(node).then(function (css) { fontCSS = css; return css; });
+      return fonts.then(function (css) { return shoot(Object.assign({ fontEmbedCSS: css }, opts)); })
+        .catch(function () { return shoot(Object.assign({ skipFonts: true }, opts)); });
+    }).then(function (url) {
+      var a = document.createElement('a');
+      a.href = url; a.download = fileName;
+      document.body.appendChild(a); a.click(); a.remove();
+    }).finally(function () { node.classList.remove('exporting'); caption.remove(); });
+  }
+
+  function runExport(menu, kind) {
+    menu.open = false;
+    if (!state.ds || menu.classList.contains('busy')) return;
+    menu.classList.add('busy');
+    var target = exportTarget(menu.getAttribute('data-section'));
+    var fileName = exportName(target.title, kind); // named now: the view may change while the file is being made
+    (kind === 'xlsx' ? exportExcel(target, fileName) : exportImage(target, kind, fileName))
+      .catch(function (e) {
+        console.error('[EHP dashboard] export failed', kind, e);
+        showError('ส่งออกไม่สำเร็จ — ตรวจสอบอินเทอร์เน็ต (ต้องโหลดตัวช่วยส่งออกจาก cdnjs) แล้วลองอีกครั้ง');
+      })
+      .finally(function () { menu.classList.remove('busy'); });
   }
 
   // ---------- Views (left menu) ----------
@@ -1706,6 +1961,12 @@ var EHPCore = (function () {
     });
   });
   $('moreBtn').addEventListener('click', function () { state.recentShown += RECENT_PAGE; render(); });
+  document.querySelectorAll('[data-export]').forEach(function (b) {
+    b.addEventListener('click', function () { runExport(b.closest('.export-menu'), b.getAttribute('data-export')); });
+  });
+  document.addEventListener('click', function (e) {
+    document.querySelectorAll('.export-menu[open]').forEach(function (m) { if (!m.contains(e.target)) m.open = false; });
+  });
   $('themeBtn').addEventListener('click', function () {
     var cur = document.documentElement.getAttribute('data-theme') ||
       (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
