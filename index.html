@@ -451,6 +451,46 @@ main { padding: 20px 28px 32px; }
 .online-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--good); margin-right: 6px; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 @media print { .no-print { display: none !important; } body { background: #fff; } }
+
+/* Export menu */
+.ex-check { align-self: end; }
+.ex-check span { display: flex; align-items: center; gap: 8px; min-height: 40px; color: var(--text); font-size: .9rem; }
+.ex-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+.ex-actions button { min-height: 44px; }
+.ex-help { margin: 10px 0 12px; padding-left: 20px; display: grid; gap: 2px; }
+.ex-links { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.alert-info { background: var(--surface-2); color: var(--text-2); }
+.ex-state { white-space: nowrap; }
+.ex-state.ok { color: var(--good); font-weight: 500; }
+
+/* Per-รพ.สต. report: printed only, black on white, one site per A4 page */
+#printArea { display: none; }
+@media print {
+  body.print-report > *:not(#printArea) { display: none !important; }
+  body.print-report #printArea { display: block; }
+}
+@page { size: A4; margin: 12mm; }
+.rpt { font: 10.5pt/1.45 "IBM Plex Sans Thai", "Noto Sans Thai", Tahoma, sans-serif; color: #000; background: #fff; break-after: page; page-break-after: always; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.rpt:last-child { break-after: auto; page-break-after: auto; }
+.rpt-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; border-bottom: 2px solid #000; padding-bottom: 6px; margin-bottom: 10px; }
+.rpt-org { font-size: 9.5pt; }
+.rpt h1 { font-size: 14pt; line-height: 1.3; margin: 2px 0 0; }
+.rpt-code { font-size: 12pt; font-weight: 700; white-space: nowrap; }
+.rpt h2 { font-size: 11.5pt; margin: 10px 0 4px; break-after: avoid; page-break-after: avoid; }
+.rpt table { width: calc(100% - 1px); border-collapse: collapse; font-size: 9.5pt; } /* -1px keeps the right border inside the printable area */
+.rpt th, .rpt td { border: 1px solid #888; padding: 2px 6px; text-align: left; vertical-align: top; }
+.rpt thead th, .rpt-info th { background: #eee; font-weight: 600; }
+.rpt-info th { width: 19%; white-space: nowrap; }
+.rpt-info td { width: 31%; }
+.rpt tr { break-inside: avoid; page-break-inside: avoid; }
+.rpt td.n, .rpt th.n { text-align: center; white-space: nowrap; }
+.rpt tr.miss td { font-weight: 600; }
+.rpt tr.na td { color: #555; }
+.rpt-sum { font-weight: 600; }
+.rpt-sign { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 22px; text-align: center; break-inside: avoid; page-break-inside: avoid; }
+.rpt-sign p { margin: 0; }
+.rpt-meta { font-size: 8.5pt; color: #333; margin: -4px 0 8px; }
+.rpt-visits td:nth-child(3), .rpt-visits td:nth-child(4) { white-space: nowrap; }
 </style>
 </head>
 <body>
@@ -488,6 +528,7 @@ main { padding: 20px 28px 32px; }
         <li><a href="#hospitals" data-view="hospitals"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V9l8-5 8 5v11zM12 10v6M9 13h6"/></svg><span>ราย รพ.สต.</span></a></li>
         <li><a href="#staff" data-view="staff"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4.5-6 8-6s7 2 8 6"/></svg><span>เจ้าหน้าที่ / รอบ</span></a></li>
         <li><a href="#recent" data-view="recent"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg><span>บันทึกล่าสุด</span></a></li>
+        <li><a href="#export" data-view="export"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span>ส่งออกข้อมูล</span></a></li>
         <li id="viewersItem" hidden><a href="#viewers" data-view="viewers"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M16 4.5a3.5 3.5 0 0 1 0 7M18 14.8c1.9.7 3.1 2.4 3.5 5.2"/></svg><span>ผู้เข้าชม</span><b id="onlineBadge" class="menu-badge" hidden></b></a></li>
         <li><a href="#source" data-view="source"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v14H5zM5 10h14M10 10v9"/></svg><span>แหล่งข้อมูล</span><b id="warnBadge" class="menu-badge" hidden></b></a></li>
       </ul>
@@ -716,6 +757,47 @@ main { padding: 20px 28px 32px; }
           <ul class="recent" id="recentList"></ul>
           <div style="text-align:center;margin-top:12px"><button type="button" id="moreBtn" hidden>แสดงเพิ่ม</button></div>
         </section>
+
+        <!-- Export: one report per รพ.สต. (print / PDF) and an Excel workbook, scoped by the Master plan -->
+        <div class="stack" data-panel="export">
+          <section class="card" aria-labelledby="exHead">
+            <div class="card-head">
+              <h2 id="exHead">ส่งออกข้อมูลราย รพ.สต.</h2>
+              <span class="small muted" id="exCount" aria-live="polite"></span>
+            </div>
+            <div class="filters">
+              <label>รอบ (ตาม Master plan)<select id="exRound" autocomplete="off"></select></label>
+              <label>อำเภอ<select id="exDistrict" autocomplete="off"></select></label>
+              <label>ผู้รับผิดชอบตามแผน<select id="exStaff" autocomplete="off"></select></label>
+              <label class="ex-check"><span><input type="checkbox" id="exPilots" checked> รวม รพ.สต.นำร่อง</span></label>
+            </div>
+            <div class="ex-actions">
+              <button type="button" class="btn-primary" id="exPrint">พิมพ์รายงานราย รพ.สต.</button>
+              <button type="button" id="exExcel">ดาวน์โหลด Excel</button>
+            </div>
+            <ul class="ex-help small muted">
+              <li><b>พิมพ์</b>: 1 แห่งต่อหน้า (A4) เรียงตามรอบ อำเภอ และรหัส · ในหน้าต่างพิมพ์เลือก “บันทึกเป็น PDF” เพื่อเก็บเป็นไฟล์</li>
+              <li><b>Excel</b>: สรุปราย รพ.สต. · หัวข้อราย รพ.สต. (วันที่และผู้แนะนำครั้งแรก) · ประวัติการเข้าแนะนำทุกครั้ง</li>
+            </ul>
+            <div id="exDrive" class="alert" role="status"></div>
+          </section>
+          <section class="card" aria-labelledby="exListHead">
+            <div class="card-head">
+              <h2 id="exListHead">รายการที่จะส่งออก</h2>
+              <span class="small muted">กด “พิมพ์” ท้ายแถวเพื่อพิมพ์เฉพาะแห่งนั้น</span>
+            </div>
+            <div class="table-scroll"><table id="exTable"></table></div>
+          </section>
+          <section class="card" aria-labelledby="exLinkHead">
+            <div class="card-head"><h2 id="exLinkHead">แหล่งข้อมูลต้นฉบับ</h2></div>
+            <ul class="ex-links">
+              <li><a id="exSheetLink" href="#" target="_blank" rel="noopener noreferrer">รายงาน Checklist แนะนำการใช้งานระบบ (Google Sheet)</a></li>
+              <li><a href="https://drive.google.com/drive/folders/1sdauK6xls7iJqJcXRZ4_U_q2mMy_ZOHg" target="_blank" rel="noopener noreferrer">รายงานการติดตั้งระบบ ข้อมูลแยกรอบ (Google Drive)</a></li>
+              <li><a href="https://drive.google.com/drive/folders/1F6GbqiGF9QpqJjpC2ASiaEA10prKIt4o" target="_blank" rel="noopener noreferrer">รายงาน Cleansing ข้อมูลแยกรอบ (Google Drive)</a></li>
+            </ul>
+            <p class="note">สิทธิ์การเปิดโฟลเดอร์ขึ้นกับการแชร์ใน Google Drive · ไฟล์ Cleansing อาจมีข้อมูลผู้ป่วย ควรแชร์เฉพาะทีม</p>
+          </section>
+        </div>
       </div>
 
       <!-- Data source: the form's response Google Sheet (link can be changed) -->
@@ -1365,8 +1447,99 @@ var EHPCore = (function () {
       staff: Object.keys(load).map(function (s) { return { name: s, sites: load[s] }; }).sort(function (a, b) { return b.sites - a.sites || thSort(a.name, b.name); }) };
   }
 
+  // ---------- Export menu: Drive file status and one report per รพ.สต. ----------
+  // The team's LINE bot writes this tab into the form's Sheet every 15 minutes: which report files each
+  // รพ.สต. folder in Google Drive has. Only file presence — never what is inside the files (constitution V).
+  var DRIVE_TAB = 'สถานะไฟล์ Drive';
+  var INSTALL_FILES = ['BF1', 'BF2', 'AT1', 'AT2'];
+  var CLEANSING_FILES = ['C01', 'C02', 'C03'];
+
+  // CSV link of that tab. Google returns the first tab when the name is missing, so parseDriveStatus checks the header.
+  function driveStatusUrl(link) {
+    var id = String(link || '').match(/^https:\/\/docs\.google\.com\/spreadsheets\/d\/([\w-]+)/);
+    return id ? 'https://docs.google.com/spreadsheets/d/' + id[1] + '/gviz/tq?tqx=out:csv&sheet=' + encodeURIComponent(DRIVE_TAB) : null;
+  }
+
+  // "2026-10-10 14:05" (Bangkok time, as the bot writes it) → Date
+  function parseStamp(s) {
+    var m = String(s || '').match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/);
+    return m ? new Date(+m[1], m[2] - 1, +m[3], +m[4], +m[5]) : null;
+  }
+
+  // { updatedAt, sites: { code: { installFolder, installRound, install: { BF1: true, … }, installFiles, installLatest,
+  //   cleansingFolder, cleansingRound, cleansing: { C01: true, … } } } } — null when the text is not that tab.
+  function parseDriveStatus(text) {
+    var rows = parseTable(String(text || ''));
+    if (!rows.length) return null;
+    var head = rows[0].map(norm);
+    var col = function (name) { return head.indexOf(name); };
+    var need = ['รหัส', 'โฟลเดอร์รายงานติดตั้ง', 'โฟลเดอร์ Cleansing'].concat(INSTALL_FILES, CLEANSING_FILES);
+    if (need.some(function (n) { return col(n) < 0; })) return null;
+    var yes = function (row, name) { return cell(row, col(name)) === 'มี'; };
+    var flags = function (row, names) { var o = {}; names.forEach(function (n) { o[n] = yes(row, n); }); return o; };
+    var sites = {}, updatedAt = null;
+    rows.slice(1).forEach(function (row) {
+      var code = (cell(row, col('รหัส')).match(/\d{5}/) || [''])[0];
+      if (!code) return;
+      var at = parseStamp(cell(row, col('อัปเดตเมื่อ')));
+      if (at && (!updatedAt || at > updatedAt)) updatedAt = at;
+      sites[code] = {
+        installFolder: yes(row, 'โฟลเดอร์รายงานติดตั้ง'), installRound: cell(row, col('รอบ (รายงานติดตั้ง)')),
+        install: flags(row, INSTALL_FILES), installFiles: Number(cell(row, col('จำนวนไฟล์รายงาน'))) || 0,
+        installLatest: parseStamp(cell(row, col('แก้ไขล่าสุด'))),
+        cleansingFolder: yes(row, 'โฟลเดอร์ Cleansing'), cleansingRound: cell(row, col('รอบ (Cleansing)')),
+        cleansing: flags(row, CLEANSING_FILES)
+      };
+    });
+    return { updatedAt: updatedAt, sites: sites };
+  }
+
+  // Every รพ.สต. in the Master plan for the export scope, sorted by round, อำเภอ (Master plan order), code: plan details, every visit
+  // (any round or installer), and each topic's status with when and by whom it was first advised.
+  // Pilot sites finished before this form: unrecorded topics are 'pilot' and count as done (constitution I).
+  // opts: round (number), district, staff (Master plan name), pilots (false leaves pilot sites out).
+  function districtRank(d) {
+    for (var i = 0; i < MASTER_PLAN.length; i++) if (MASTER_PLAN[i].district === d) return i;
+    return MASTER_PLAN.length;
+  }
+  function siteReports(ds, opts) {
+    opts = opts || {};
+    var byCode = {};
+    ds.records.forEach(function (r) { if (r.hospitalCode) (byCode[r.hospitalCode] = byCode[r.hospitalCode] || []).push(r); });
+    return MASTER_PLAN.filter(function (p) {
+      return (!opts.round || p.round === opts.round) && (!opts.district || p.district === opts.district) &&
+        (!opts.staff || p.staff === opts.staff) && (opts.pilots !== false || !p.pilot);
+    }).sort(function (a, b) {
+      return a.round - b.round || districtRank(a.district) - districtRank(b.district) || a.code.localeCompare(b.code);
+    }).map(function (p) {
+      var visits = (byCode[p.code] || []).slice().sort(function (a, b) { return (a.timestamp || 0) - (b.timestamp || 0); });
+      var topics = ds.topics.map(function (t) {
+        var first = null;
+        for (var i = 0; i < visits.length && !first; i++) if (visits[i].topics.indexOf(t) >= 0) first = visits[i];
+        var applies = topicApplies(t, p.district, p.system);
+        return { text: t, label: topicLabel(t), scope: applies ? '' : topicScope(t),
+          status: !applies ? 'na' : first ? 'done' : p.pilot ? 'pilot' : 'missing',
+          first: first ? first.timestamp : null, by: first ? first.staff : '' };
+      });
+      var counted = topics.filter(function (t) { return t.status !== 'na'; });
+      var done = counted.filter(function (t) { return t.status !== 'missing'; }).length;
+      var uniq = function (field) {
+        var out = [];
+        visits.forEach(function (v) { if (v[field] && v[field] !== UNSPECIFIED && out.indexOf(v[field]) < 0) out.push(v[field]); });
+        return out;
+      };
+      return { plan: p, visits: visits, topics: topics, done: done, total: counted.length,
+        completeness: counted.length ? done / counted.length : null,
+        missing: counted.filter(function (t) { return t.status === 'missing'; }).map(function (t) { return t.label; }),
+        staff: uniq('staff'), recipients: uniq('recipient'),
+        firstVisit: visits.length ? visits[0].timestamp : null, lastVisit: visits.length ? visits[visits.length - 1].timestamp : null };
+    });
+  }
+
   return {
-    TOTAL_HOSPITALS: TOTAL_HOSPITALS, planOverview: planOverview, nextRound: nextRound, planRound: planRound, sameStaff: sameStaff, MASTER_PLAN: MASTER_PLAN, PLAN_ROUNDS: PLAN_ROUNDS, planFor: planFor, followUp: followUp, isLaterTopic: isLaterTopic, topicApplies: topicApplies, topicScope: topicScope, NO_ROUND: NO_ROUND, STANDARD_TOPICS: STANDARD_TOPICS,
+    TOTAL_HOSPITALS: TOTAL_HOSPITALS, planOverview: planOverview, nextRound: nextRound,
+    DRIVE_TAB: DRIVE_TAB, INSTALL_FILES: INSTALL_FILES, CLEANSING_FILES: CLEANSING_FILES,
+    driveStatusUrl: driveStatusUrl, parseDriveStatus: parseDriveStatus, siteReports: siteReports, planRound: planRound, sameStaff: sameStaff, MASTER_PLAN: MASTER_PLAN, PLAN_ROUNDS: PLAN_ROUNDS, planFor: planFor, followUp: followUp, isLaterTopic: isLaterTopic, topicApplies: topicApplies, topicScope: topicScope, NO_ROUND: NO_ROUND, STANDARD_TOPICS: STANDARD_TOPICS,
     DEFAULT_SHEET_URL: DEFAULT_SHEET_URL, sheetCsvUrl: sheetCsvUrl, decodeJwt: decodeJwt,
     parseTable: parseTable, parseThaiDate: parseThaiDate, formatThaiDate: formatThaiDate,
     detectColumns: detectColumns, splitTopics: splitTopics, hospitalKey: hospitalKey,
@@ -1389,7 +1562,7 @@ var EHPCore = (function () {
   var AUTO_KEY = 'ehp-nan-dashboard:auto-refresh';
   var RECENT_PAGE = 15;
   var AUTO_REFRESH_MS = 60 * 1000;
-  var state = { ds: null, loadedAt: null, recentShown: RECENT_PAGE, loading: false, timer: null, view: 'overview' };
+  var state = { ds: null, loadedAt: null, recentShown: RECENT_PAGE, loading: false, timer: null, view: 'overview', drive: null, driveChecked: false, exList: [] };
   // Sign-in with Google + visit log (constitution V). Both empty = no sign-in, page works as before.
   var AUTH = {
     clientId: '',   // OAuth Client ID (Google Cloud Console → Credentials)
@@ -1397,7 +1570,7 @@ var EHPCore = (function () {
   };
   var AUTH_ON = !!(AUTH.clientId && AUTH.endpoint);
   var HEARTBEAT_MS = 60 * 1000;
-  var VIEWS = { overview: 'ภาพรวม', followup: 'ติดตามงาน', plan: 'แผนติดตั้ง', topics: 'รายหัวข้อ', hospitals: 'ราย รพ.สต.', staff: 'เจ้าหน้าที่ / รอบ', recent: 'บันทึกล่าสุด', viewers: 'ผู้เข้าชม', source: 'แหล่งข้อมูล' };
+  var VIEWS = { overview: 'ภาพรวม', followup: 'ติดตามงาน', plan: 'แผนติดตั้ง', topics: 'รายหัวข้อ', hospitals: 'ราย รพ.สต.', staff: 'เจ้าหน้าที่ / รอบ', recent: 'บันทึกล่าสุด', export: 'ส่งออกข้อมูล', viewers: 'ผู้เข้าชม', source: 'แหล่งข้อมูล' };
   var $ = function (id) { return document.getElementById(id); };
 
   // ---------- Language (constitution VII) ----------
@@ -1418,7 +1591,20 @@ var EHPCore = (function () {
     'อบจ.น่าน · รพ.สต. 106 แห่ง': 'Nan PAO · 106 health centres',
     'ภาพรวม': 'Overview', 'ติดตามงาน': 'Follow-up', 'แผนติดตั้ง': 'Rollout plan', 'รายหัวข้อ': 'By topic',
     'ราย รพ.สต.': 'By health centre', 'เจ้าหน้าที่ / รอบ': 'Staff / rounds', 'บันทึกล่าสุด': 'Latest records',
-    'ผู้เข้าชม': 'Viewers', 'แหล่งข้อมูล': 'Data source',
+    'ผู้เข้าชม': 'Viewers', 'แหล่งข้อมูล': 'Data source', 'ส่งออกข้อมูล': 'Export data',
+    'ส่งออกข้อมูลราย รพ.สต.': 'Export by health centre', 'รอบ (ตาม Master plan)': 'Round (Master plan)',
+    'ผู้รับผิดชอบตามแผน': 'Responsible (plan)', 'ผู้รับผิดชอบ': 'Responsible', 'รวม รพ.สต.นำร่อง': 'Include pilot sites',
+    'พิมพ์รายงานราย รพ.สต.': 'Print a report per health centre', 'ดาวน์โหลด Excel': 'Download Excel',
+    'รายการที่จะส่งออก': 'Sites to export', 'กด “พิมพ์” ท้ายแถวเพื่อพิมพ์เฉพาะแห่งนั้น': 'Press “Print” at the end of a row to print that site only',
+    'แหล่งข้อมูลต้นฉบับ': 'Original sources', 'พิมพ์': 'Print', 'การแนะนำ': 'Advice', 'รายงานติดตั้ง': 'Install report',
+    'ยังไม่มีโฟลเดอร์': 'No folder yet', 'ไม่มีข้อมูล': 'No data', 'ยังไม่เข้า': 'Not visited', 'ครบ (นำร่อง)': 'Complete (pilot)',
+    'ไม่มี รพ.สต. ตามเงื่อนไข': 'No health centres match', 'กำลังอ่านสถานะไฟล์ใน Google Drive…': 'Reading Google Drive file status…',
+    ': 1 แห่งต่อหน้า (A4) เรียงตามรอบ อำเภอ และรหัส · ในหน้าต่างพิมพ์เลือก “บันทึกเป็น PDF” เพื่อเก็บเป็นไฟล์': ': one site per A4 page, by round, district and code · choose “Save as PDF” in the print dialog to keep a file',
+    ': สรุปราย รพ.สต. · หัวข้อราย รพ.สต. (วันที่และผู้แนะนำครั้งแรก) · ประวัติการเข้าแนะนำทุกครั้ง': ': summary per health centre · topics per health centre (first date and advisor) · every visit',
+    'รายงาน Checklist แนะนำการใช้งานระบบ (Google Sheet)': 'Checklist of system guidance (Google Sheet)',
+    'รายงานการติดตั้งระบบ ข้อมูลแยกรอบ (Google Drive)': 'Installation reports by round (Google Drive)',
+    'รายงาน Cleansing ข้อมูลแยกรอบ (Google Drive)': 'Cleansing reports by round (Google Drive)',
+    'สิทธิ์การเปิดโฟลเดอร์ขึ้นกับการแชร์ใน Google Drive · ไฟล์ Cleansing อาจมีข้อมูลผู้ป่วย ควรแชร์เฉพาะทีม': 'Folder access follows Google Drive sharing · Cleansing files may contain patient data — share with the team only',
     'ลงชื่อเป็น': 'Signed in as', 'ออกจากระบบ': 'Sign out', 'ชุดสี': 'Colour', 'ภาษา': 'Language',
     'โหมดมืด': 'Dark mode', 'โหมดสว่าง': 'Light mode', 'สลับโหมดสว่าง/มืด': 'Toggle light/dark mode',
     'ฟ้า': 'Blue', 'เขียว': 'Green', 'ม่วง': 'Violet', 'ส้ม': 'Orange', 'ชมพู': 'Pink', 'เทา': 'Slate',
@@ -1533,6 +1719,14 @@ var EHPCore = (function () {
     [/ยังไม่มีบันทึกการเข้าแนะนำของ(.+)ตามตัวกรองนี้/g, 'No visits by $1 for this filter'],
     [/ต้องติดตามอีก (\d+) แห่ง/g, '$1 to follow up'],
     [/ที่ยังไม่ครบและไม่ได้เข้านาน (\d+) วันขึ้นไป — ควรนัดเข้าก่อน/g, 'incomplete and not visited for $1+ days — schedule these first'],
+    [/^ตรงเงื่อนไข (\d[\d,]*) แห่ง/, '$1 sites match'],
+    [/ · มีบันทึกการเข้าแนะนำ (\d[\d,]*) แห่ง/g, ' · $1 with visit records'],
+    [/ · รวมนำร่อง (\d[\d,]*) แห่ง/g, ' · incl. $1 pilots'],
+    [/^สถานะไฟล์ใน Google Drive จากบอทแมวส้ม · ข้อมูล ณ /, 'Google Drive file status from the แมวส้ม bot · as of '],
+    [/ — เกิน 1 ชั่วโมง บอทอาจหยุดทำงาน/, ' — over an hour old, the bot may have stopped'],
+    [/^ยังอ่านแท็บ “(.+)” ใน Google Sheet ไม่ได้ — รายงานจะแสดงสถานะไฟล์ Drive ว่า “ไม่มีข้อมูล” \(วิธีเปิดใช้: (.+)\)$/, 'Cannot read the “$1” tab in the Google Sheet — reports show Drive file status as “No data” (set-up: $2)'],
+    [/^ครบ (\d+)\/(\d+)$/, 'Complete $1/$2'],
+    [/^(\d+)\/(\d+) · ขาด /, '$1/$2 · missing '],
     [/^ก่อนรอบที่ (\d+) เปิดใช้ (.+) \(อีก (\d+) วัน\): /, 'Before round $1 goes live $2 (in $3 days): '],
     [/ รับรอบนี้ (\d[\d,]*) แห่ง แต่ยังค้าง (\d[\d,]*) แห่ง/g, ' takes $1 sites this round with $2 still open'],
     [/ทุกคนที่รับรอบนี้ไม่มีงานค้าง/g, 'everyone in this round has no open work'],
@@ -1625,7 +1819,9 @@ var EHPCore = (function () {
   // Translate rendered text in place, remembering the Thai original of every node and attribute.
   var I18N_ATTRS = ['placeholder', 'aria-label', 'title'];
   var nodeOrig = new WeakMap(), nodeSet = new WeakMap(), attrOrig = new WeakMap(), attrSet = new WeakMap();
+  function i18nSkip(el) { return !!(el && el.closest && el.closest('[data-i18n-skip]')); }
   function trText(node) {
+    if (i18nSkip(node.parentNode)) return;
     var cur = node.nodeValue;
     if (nodeSet.get(node) !== cur) nodeOrig.set(node, cur); // changed by the page, not by us
     var v = tx(nodeOrig.get(node));
@@ -1633,7 +1829,7 @@ var EHPCore = (function () {
     if (v !== cur) node.nodeValue = v;
   }
   function trAttr(el, name) {
-    if (!el.hasAttribute(name)) return;
+    if (!el.hasAttribute(name) || i18nSkip(el)) return;
     var o = attrOrig.get(el) || {}, w = attrSet.get(el) || {}, cur = el.getAttribute(name);
     if (w[name] !== cur) o[name] = cur;
     var v = tx(o[name]);
@@ -1726,7 +1922,7 @@ var EHPCore = (function () {
     if (state.loading || (AUTH_ON && !state.user)) return;
     var url;
     try { url = Core.sheetCsvUrl(sheetLink()); } catch (e) { showError(e.message); render(); return; }
-    if (!background) showError('');
+    if (!background) { showError(''); state.drive = null; state.driveChecked = false; }
     setLoading(true);
     if (!background) render();
     fetch(url, { cache: 'no-store', credentials: 'omit' })
@@ -1741,6 +1937,7 @@ var EHPCore = (function () {
         if (!background) state.recentShown = RECENT_PAGE;
         showError('');
         buildFilters();
+        loadDriveStatus();
       })
       .catch(function (e) {
         console.error('[EHP dashboard] load failed', url, e);
@@ -1791,8 +1988,9 @@ var EHPCore = (function () {
     var ds = state.ds;
     var has = !!ds;
     var onSource = state.view === 'source';
-    $('exportMenu').hidden = !has || onSource || state.view === 'viewers';
-    document.querySelector('.filters-bar').hidden = state.view === 'viewers';
+    var ownScope = state.view === 'viewers' || state.view === 'export'; // these views do not use the global filters
+    $('exportMenu').hidden = !has || onSource || ownScope;
+    document.querySelector('.filters-bar').hidden = ownScope;
     $('dashboard').hidden = !has || onSource;
     $('emptyState').hidden = has || onSource;
     renderWarnings(ds);
@@ -1823,6 +2021,7 @@ var EHPCore = (function () {
     renderPlan(ds, f);
     renderPlanAlert(ds, f);
     if (state.view === 'followup') renderFollowUp(ds, f);
+    if (state.view === 'export') renderExport();
   }
 
   // Overview banner: รพ.สต. past go-live with no visit yet, scoped like the Rollout plan view.
@@ -2359,9 +2558,9 @@ var EHPCore = (function () {
         });
         X.utils.book_append_sheet(wb, ws, sh.name.slice(0, 31));
       });
-      var info = X.utils.aoa_to_sheet([[tx('EHP On Cloud น่าน') + ' — ' + tx(target.title)], ['ตัวกรอง', filterText(state.cur.f)],
-        ['ข้อมูล ณ', Core.formatThaiDate(state.loadedAt)], ['ส่งออกเมื่อ', Core.formatThaiDate(new Date())],
-        ['หมายเหตุ', 'มีชื่อบุคคล โปรดใช้อย่างระมัดระวัง']].map(function (r) { return r.map(tx); }));
+      var info = X.utils.aoa_to_sheet([[tx('EHP On Cloud น่าน') + ' — ' + tx(target.title)], ['ตัวกรอง', target.scope || filterText(state.cur.f)],
+        ['ข้อมูล ณ', Core.formatThaiDate(state.loadedAt)]].concat(target.info || [], [['ส่งออกเมื่อ', Core.formatThaiDate(new Date())],
+        ['หมายเหตุ', 'มีชื่อบุคคล โปรดใช้อย่างระมัดระวัง']]).map(function (r) { return r.map(tx); }));
       info['!cols'] = [{ wch: 14 }, { wch: 60 }];
       X.utils.book_append_sheet(wb, info, tx('ข้อมูลการส่งออก'));
       X.writeFile(wb, fileName);
@@ -2407,6 +2606,232 @@ var EHPCore = (function () {
         showError('ส่งออกไม่สำเร็จ — ตรวจสอบอินเทอร์เน็ต (ต้องโหลดตัวช่วยส่งออกจาก cdnjs) แล้วลองอีกครั้ง');
       })
       .finally(function () { menu.classList.remove('busy'); });
+  }
+
+  // ---------- Export menu: one report per รพ.สต. (print / PDF) and an Excel workbook ----------
+  var DRIVE_STALE_MS = 60 * 60 * 1000; // the bot rewrites the tab every 15 minutes; older than this = bot stopped
+  var EX_STATUS = { done: 'แนะนำแล้ว', pilot: 'ครบ (นำร่อง)', missing: 'ยังไม่ได้แนะนำ', na: 'ไม่นับ' };
+
+  // Drive file status tab written by the LINE bot. Missing or unreadable → reports say "ไม่มีข้อมูล".
+  function loadDriveStatus() {
+    var url = Core.driveStatusUrl(sheetLink());
+    if (!url) { state.drive = null; state.driveChecked = true; return; }
+    fetch(url, { cache: 'no-store', credentials: 'omit' })
+      .then(function (res) { if (!res.ok) throw new Error('HTTP ' + res.status); return res.text(); })
+      .then(function (text) { state.drive = Core.parseDriveStatus(text); })
+      .catch(function (e) { console.warn('[EHP dashboard] drive status not loaded', e); state.drive = null; })
+      .then(function () { state.driveChecked = true; if (state.view === 'export') renderExport(); });
+  }
+
+  function exScope() {
+    return { round: Number($('exRound').value) || 0, district: $('exDistrict').value, staff: $('exStaff').value, pilots: $('exPilots').checked };
+  }
+  function exScopeText(o) {
+    var parts = [o.round ? Core.planRound(o.round).name : 'ทุกรอบ'];
+    if (o.district) parts.push('อำเภอ' + o.district);
+    if (o.staff) parts.push('ผู้รับผิดชอบ ' + o.staff);
+    if (!o.pilots) parts.push('ไม่รวมนำร่อง');
+    return parts.join(' · ');
+  }
+
+  // Round, district and staff choices come from the Master plan; districts follow the chosen round.
+  function fillExportFilters() {
+    var o = exScope();
+    var uniq = function (list) {
+      return list.filter(function (x, i) { return list.indexOf(x) === i; }).sort(function (a, b) { return a.localeCompare(b, 'th'); });
+    };
+    $('exRound').innerHTML = '<option value="">ทุกรอบ</option>' + [1, 2, 3, 4].map(function (r) {
+      var pr = Core.planRound(r);
+      return '<option value="' + r + '"' + (o.round === r ? ' selected' : '') + '>' + esc(pr.name + ' (' + pr.goLive + ')') + '</option>';
+    }).join('');
+    var districts = uniq(Core.MASTER_PLAN.filter(function (p) { return !o.round || p.round === o.round; }).map(function (p) { return p.district; }));
+    fillSelect($('exDistrict'), 'ทุกอำเภอ', districts, districts.indexOf(o.district) >= 0 ? o.district : '');
+    fillSelect($('exStaff'), 'ทุกคน', uniq(Core.MASTER_PLAN.map(function (p) { return p.staff; })), o.staff);
+  }
+
+  function driveSite(code) { return state.drive ? state.drive.sites[code] || null : null; }
+  function hasFolder(s, kind) { return !!s && (kind === 'install' ? s.installFolder : s.cleansingFolder); }
+  // "ครบ 4/4" · "3/4 · ขาด AT1" · "ยังไม่มีโฟลเดอร์" · "ไม่มีข้อมูล" (status tab not available)
+  function driveSummary(code, kind) {
+    if (!state.drive) return { text: 'ไม่มีข้อมูล', ok: false };
+    var s = driveSite(code), files = kind === 'install' ? Core.INSTALL_FILES : Core.CLEANSING_FILES;
+    if (!hasFolder(s, kind)) return { text: 'ยังไม่มีโฟลเดอร์', ok: false };
+    var missing = files.filter(function (f) { return !s[kind][f]; });
+    return missing.length
+      ? { text: (files.length - missing.length) + '/' + files.length + ' · ขาด ' + missing.join(' '), ok: false }
+      : { text: 'ครบ ' + files.length + '/' + files.length, ok: true };
+  }
+  function driveFlag(code, kind, file) {
+    if (!state.drive) return 'ไม่มีข้อมูล';
+    var s = driveSite(code);
+    if (!hasFolder(s, kind)) return 'ไม่มีโฟลเดอร์';
+    return s[kind][file] ? 'มี' : 'ไม่มี';
+  }
+
+  function renderExport() {
+    if (!state.ds) return;
+    fillExportFilters();
+    var o = exScope();
+    var list = Core.siteReports(state.ds, o);
+    state.exList = list;
+    $('exSheetLink').href = sheetLink();
+    $('exCount').textContent = 'ตรงเงื่อนไข ' + fmt(list.length) + ' แห่ง · มีบันทึกการเข้าแนะนำ ' +
+      fmt(list.filter(function (r) { return r.visits.length; }).length) + ' แห่ง' +
+      (function (n) { return n ? ' · รวมนำร่อง ' + fmt(n) + ' แห่ง' : ''; })(list.filter(function (r) { return r.plan.pilot; }).length);
+    $('exPrint').disabled = $('exExcel').disabled = !list.length;
+
+    var box = $('exDrive');
+    if (state.drive) {
+      var at = state.drive.updatedAt;
+      var stale = !at || Date.now() - at.getTime() > DRIVE_STALE_MS;
+      box.className = 'alert ' + (stale ? 'alert-warn' : 'alert-info');
+      box.textContent = 'สถานะไฟล์ใน Google Drive จากบอทแมวส้ม · ข้อมูล ณ ' + (at ? Core.formatThaiDate(at) : 'ไม่ทราบเวลา') +
+        (stale ? ' — เกิน 1 ชั่วโมง บอทอาจหยุดทำงาน' : '');
+    } else {
+      box.className = 'alert alert-warn';
+      box.textContent = state.driveChecked
+        ? 'ยังอ่านแท็บ “' + Core.DRIVE_TAB + '” ใน Google Sheet ไม่ได้ — รายงานจะแสดงสถานะไฟล์ Drive ว่า “ไม่มีข้อมูล” (วิธีเปิดใช้: apps-script/bot/README.md)'
+        : 'กำลังอ่านสถานะไฟล์ใน Google Drive…';
+    }
+
+    $('exTable').innerHTML = list.length
+      ? '<thead><tr><th scope="col">รอบ</th><th scope="col">รพ.สต.</th><th scope="col">ผู้รับผิดชอบ</th><th class="n" scope="col">การแนะนำ</th>' +
+        '<th scope="col">รายงานติดตั้ง</th><th scope="col">Cleansing</th><th scope="col"><span class="sr-only">พิมพ์</span></th></tr></thead><tbody>' +
+        list.map(function (r) {
+          var p = r.plan, ins = driveSummary(p.code, 'install'), cl = driveSummary(p.code, 'cleansing');
+          var advice = p.pilot && !r.visits.length ? 'ครบ (นำร่อง)' : !r.visits.length ? 'ยังไม่เข้า' : r.done + '/' + r.total + ' หัวข้อ';
+          var state_ = function (x, ok) { return '<span class="ex-state' + (ok ? ' ok' : '') + '">' + esc(x) + '</span>'; };
+          return '<tr><td>' + esc(Core.planRound(p.round).name) + '</td>' +
+            '<th scope="row" style="font-weight:500">' + esc(p.code + ' ' + p.name) +
+            '<div class="small muted">อ.' + esc(p.district) + ' · ' + esc(p.system) + (p.pilot ? ' · นำร่อง' : '') + '</div></th>' +
+            '<td>' + esc(p.staff) + '</td><td class="n">' + state_(advice, r.completeness === 1) + '</td>' +
+            '<td>' + state_(ins.text, ins.ok) + '</td><td>' + state_(cl.text, cl.ok) + '</td>' +
+            '<td><button type="button" class="link" data-print="' + esc(p.code) + '">พิมพ์</button></td></tr>';
+        }).join('') + '</tbody>'
+      : '<tbody><tr><td class="empty-state">ไม่มี รพ.สต. ตามเงื่อนไข</td></tr></tbody>';
+  }
+
+  function dayText(d) { return d ? Core.formatThaiDate(d, false) : '–'; }
+
+  // One A4 report for a รพ.สต. Always Thai: it is an official document (#printArea is never translated).
+  function reportHtml(r, n, count, meta) {
+    var p = r.plan, pr = Core.planRound(p.round);
+    var mark = { done: '✓', pilot: '✓', missing: '✗', na: '–' };
+    var topicRows = r.topics.map(function (t, i) {
+      var status = EX_STATUS[t.status] + (t.scope ? ' (' + t.scope + ')' : '');
+      return '<tr class="' + (t.status === 'missing' ? 'miss' : t.status === 'na' ? 'na' : '') + '"><td class="n">' + (i + 1) + '</td>' +
+        '<td>' + esc(t.label) + '</td><td>' + mark[t.status] + ' ' + esc(status) + '</td>' +
+        '<td class="n">' + esc(dayText(t.first)) + '</td><td>' + esc(t.by || '–') + '</td></tr>';
+    }).join('');
+    var visitRows = r.visits.length ? r.visits.map(function (v, i) {
+      var note = [v.otherAdvice, v.suggestion].filter(Boolean).join(' / ');
+      return '<tr><td class="n">' + (i + 1) + '</td><td class="n">' + esc(v.timestamp ? Core.formatThaiDate(v.timestamp) : 'ไม่ทราบวันที่') + '</td>' +
+        '<td>' + esc(v.staff) + '</td><td>' + esc(v.recipient) + '</td><td class="n">' + v.topics.length + '</td><td>' + esc(note || '–') + '</td></tr>';
+    }).join('') : '<tr><td colspan="6">' + (p.pilot
+      ? 'รพ.สต.นำร่อง ดำเนินการครบตามกระบวนการก่อนใช้ฟอร์มนี้ จึงไม่มีบันทึกในฟอร์ม'
+      : 'ยังไม่มีบันทึกการเข้าแนะนำในฟอร์ม') + '</td></tr>';
+    var driveRow = function (label, kind, files) {
+      var cells = files.map(function (f) {
+        var v = driveFlag(p.code, kind, f);
+        return '<td class="n">' + (v === 'มี' ? '✓ ' : v === 'ไม่มี' ? '✗ ' : '') + esc(f) + ' ' + esc(v) + '</td>';
+      });
+      while (cells.length < 4) cells.push('<td></td>');
+      return '<tr><th scope="row">' + label + '</th>' + cells.join('') + '<td class="rpt-sum">' + esc(driveSummary(p.code, kind).text) + '</td></tr>';
+    };
+    var sign = function (role) {
+      return '<div><p>ลงชื่อ ...................................................</p><p>(...................................................)</p>' +
+        '<p>' + esc(role) + '</p><p>วันที่ ........../........../..........</p></div>';
+    };
+    return '<article class="rpt">' +
+      '<header class="rpt-head"><div><div class="rpt-org">องค์การบริหารส่วนจังหวัดน่าน · ระบบ EHP On Cloud · รพ.สต. ที่ถ่ายโอน 106 แห่ง</div>' +
+      '<h1>รายงานการติดตั้งและการแนะนำการใช้งานระบบ EHP On Cloud</h1></div><div class="rpt-code">รหัส ' + esc(p.code) + '</div></header>' +
+      '<div class="rpt-meta">' + meta.line + ' · แห่งที่ ' + n + ' จาก ' + count + '</div>' +
+      '<table class="rpt-info"><tbody>' +
+      '<tr><th>หน่วยบริการ</th><td><b>' + esc(p.name) + '</b></td><th>อำเภอ</th><td>' + esc(p.district) + '</td></tr>' +
+      '<tr><th>รอบ</th><td>' + esc(pr.name) + (p.pilot ? ' (นำร่อง)' : '') + '</td><th>วันเปิดใช้งาน</th><td>' + esc(planDay(p)) + '</td></tr>' +
+      '<tr><th>ระบบเดิม</th><td>' + esc(p.system) + '</td><th>ผู้รับผิดชอบตามแผน</th><td>' + esc(p.staff) + '</td></tr>' +
+      '<tr><th>เข้าแนะนำ</th><td>' + (r.visits.length ? fmt(r.visits.length) + ' ครั้ง (' + esc(dayText(r.firstVisit)) + ' – ' + esc(dayText(r.lastVisit)) + ')' : '–') + '</td>' +
+      '<th>ผู้รับคำแนะนำ</th><td>' + esc(r.recipients.join(', ') || '–') + '</td></tr>' +
+      '</tbody></table>' +
+      '<h2>1. ผลการแนะนำการใช้งานตาม Checklist — แนะนำแล้ว ' + r.done + '/' + r.total + ' หัวข้อ' +
+      (r.completeness == null ? '' : ' (' + pct(r.completeness) + ')') + '</h2>' +
+      '<table><thead><tr><th class="n">ที่</th><th>หัวข้อ</th><th>สถานะ</th><th class="n">แนะนำครั้งแรก</th><th>โดย</th></tr></thead><tbody>' + topicRows + '</tbody></table>' +
+      '<h2>2. ประวัติการเข้าแนะนำ</h2>' +
+      '<table class="rpt-visits"><thead><tr><th class="n">ครั้งที่</th><th class="n">วันเวลา</th><th>เจ้าหน้าที่</th><th>ผู้รับคำแนะนำ</th><th class="n">หัวข้อ</th><th>คำแนะนำอื่น / ข้อเสนอแนะ</th></tr></thead>' +
+      '<tbody>' + visitRows + '</tbody></table>' +
+      '<h2>3. เอกสารใน Google Drive</h2>' +
+      (meta.drive
+        ? '<table><tbody>' + driveRow('รายงานการติดตั้ง', 'install', Core.INSTALL_FILES) +
+          driveRow('ไฟล์ตอบกลับ Cleansing', 'cleansing', Core.CLEANSING_FILES) + '</tbody></table>'
+        : '<p>ไม่มีข้อมูลสถานะไฟล์ (ยังอ่านแท็บ “' + esc(Core.DRIVE_TAB) + '” ไม่ได้) — ตรวจในโฟลเดอร์ Google Drive โดยตรง</p>') +
+      '<div class="rpt-sign">' + sign('เจ้าหน้าที่ผู้ติดตั้ง / ให้คำแนะนำ') + sign('ผู้รับผิดชอบ ' + p.name) + '</div>' +
+      '</article>';
+  }
+
+  // Fill #printArea, print it alone, then clear it. The tab title becomes the suggested PDF file name.
+  function printReports(list, label) {
+    if (!list.length) return;
+    var meta = { drive: state.drive, line: esc('ข้อมูลจาก Google Form ณ ' + Core.formatThaiDate(state.loadedAt) +
+      (state.drive && state.drive.updatedAt ? ' · สถานะไฟล์ Drive ณ ' + Core.formatThaiDate(state.drive.updatedAt) : '') +
+      ' · พิมพ์เมื่อ ' + Core.formatThaiDate(new Date()) + ' · มีชื่อบุคคล โปรดใช้อย่างระมัดระวัง') };
+    $('printArea').innerHTML = list.map(function (r, i) { return reportHtml(r, i + 1, list.length, meta); }).join('');
+    var title = document.title;
+    document.title = exportName('รายงานการติดตั้ง ' + label, 'pdf').replace(/\.pdf$/, '');
+    document.body.classList.add('print-report');
+    var done = function () {
+      window.removeEventListener('afterprint', done);
+      document.body.classList.remove('print-report');
+      $('printArea').innerHTML = '';
+      document.title = title;
+    };
+    window.addEventListener('afterprint', done);
+    track('export', 'print');
+    setTimeout(function () { window.print(); }, 50); // let the pages lay out before the dialog opens
+  }
+
+  function siteSheets(list) {
+    var labels = state.ds.topics.map(Core.topicLabel);
+    var cellOf = { done: '✓', pilot: 'นำร่อง', missing: '–', na: 'ไม่นับ' };
+    var summary = [['ลำดับ', 'รอบ', 'อำเภอ', 'รหัส', 'รพ.สต.', 'ระบบเดิม', 'นำร่อง', 'วันเปิดใช้งาน', 'ผู้รับผิดชอบตามแผน',
+      'เข้าแนะนำ (ครั้ง)', 'เข้าครั้งแรก', 'เข้าล่าสุด', 'เจ้าหน้าที่ที่เข้าแนะนำ', 'ผู้รับคำแนะนำ',
+      'แนะนำแล้ว (หัวข้อ)', 'ทั้งหมด (หัวข้อ)', 'ความครบ (%)', 'หัวข้อที่ยังขาด']
+      .concat(labels, ['รายงานการติดตั้ง'], Core.INSTALL_FILES, ['Cleansing'], Core.CLEANSING_FILES)];
+    var topics = [['รอบ', 'อำเภอ', 'รหัส', 'รพ.สต.', 'ลำดับหัวข้อ', 'หัวข้อ', 'สถานะ', 'แนะนำครั้งแรก', 'โดย']];
+    var visits = [['รอบ', 'อำเภอ', 'รหัส', 'รพ.สต.', 'ครั้งที่', 'วันเวลา', 'เจ้าหน้าที่', 'ผู้รับคำแนะนำ', 'จำนวนหัวข้อ', 'หัวข้อ',
+      'คำแนะนำอื่น', 'ข้อเสนอแนะ', 'แถวใน Sheet']];
+    list.forEach(function (r, i) {
+      var p = r.plan, round = Core.planRound(p.round).name;
+      summary.push([i + 1, round, p.district, p.code, p.name, p.system, p.pilot ? 'นำร่อง' : '', planDay(p), p.staff,
+        r.visits.length, day(r.firstVisit), day(r.lastVisit), r.staff.join(', '), r.recipients.join(', '),
+        r.done, r.total, pctNum(r.completeness), r.missing.join(', ')]
+        .concat(r.topics.map(function (t) { return cellOf[t.status]; }),
+          [driveSummary(p.code, 'install').text], Core.INSTALL_FILES.map(function (f) { return driveFlag(p.code, 'install', f); }),
+          [driveSummary(p.code, 'cleansing').text], Core.CLEANSING_FILES.map(function (f) { return driveFlag(p.code, 'cleansing', f); })));
+      r.topics.forEach(function (t, k) {
+        topics.push([round, p.district, p.code, p.name, k + 1, t.label, EX_STATUS[t.status] + (t.scope ? ' (' + t.scope + ')' : ''), day(t.first), t.by]);
+      });
+      r.visits.forEach(function (v, k) {
+        visits.push([round, p.district, p.code, p.name, k + 1, v.timestamp ? Core.formatThaiDate(v.timestamp) : '', v.staff, v.recipient,
+          v.topics.length, v.topics.map(Core.topicLabel).join(', '), v.otherAdvice, v.suggestion, v.row]);
+      });
+    });
+    return [{ name: 'สรุปราย รพ.สต.', rows: summary }, { name: 'หัวข้อราย รพ.สต.', rows: topics }, { name: 'ประวัติการเข้าแนะนำ', rows: visits }];
+  }
+
+  function exportSitesExcel(btn) {
+    var list = state.exList || [];
+    if (!list.length || btn.disabled) return;
+    var scope = exScopeText(exScope());
+    var target = { title: 'รายงานราย รพ.สต.', scope: scope, sheets: function () { return siteSheets(list); },
+      info: [['สถานะไฟล์ Drive ณ', state.drive && state.drive.updatedAt ? Core.formatThaiDate(state.drive.updatedAt) : 'ไม่มีข้อมูล']] };
+    btn.disabled = true;
+    track('export', 'xlsx-sites');
+    exportExcel(target, exportName('รายงานราย รพ.สต. ' + scope, 'xlsx'))
+      .catch(function (e) {
+        console.error('[EHP dashboard] export failed', e);
+        showError('ส่งออกไม่สำเร็จ — ตรวจสอบอินเทอร์เน็ต (ต้องโหลดตัวช่วยส่งออกจาก cdnjs) แล้วลองอีกครั้ง');
+      })
+      .finally(function () { btn.disabled = false; });
   }
 
   // ---------- Sign-in and visit log ----------
@@ -2604,6 +3029,15 @@ var EHPCore = (function () {
     });
   });
   $('moreBtn').addEventListener('click', function () { state.recentShown += RECENT_PAGE; render(); });
+  ['exRound', 'exDistrict', 'exStaff', 'exPilots'].forEach(function (id) { $(id).addEventListener('change', renderExport); });
+  $('exPrint').addEventListener('click', function () { printReports(state.exList || [], exScopeText(exScope())); });
+  $('exExcel').addEventListener('click', function () { exportSitesExcel($('exExcel')); });
+  $('exTable').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-print]');
+    if (!b) return;
+    var one = (state.exList || []).filter(function (x) { return x.plan.code === b.getAttribute('data-print'); });
+    if (one.length) printReports(one, one[0].plan.code + ' ' + one[0].plan.name);
+  });
   document.querySelectorAll('[data-export]').forEach(function (b) {
     b.addEventListener('click', function () { runExport(b.closest('.export-menu'), b.getAttribute('data-export')); });
   });
@@ -2646,5 +3080,7 @@ var EHPCore = (function () {
   if (AUTH_ON) startAuth(); else loadFromSheet(false);
 })();
 </script>
+<!-- Filled only while printing per-รพ.สต. reports; always Thai (official document) -->
+<div id="printArea" data-i18n-skip></div>
 </body>
 </html>

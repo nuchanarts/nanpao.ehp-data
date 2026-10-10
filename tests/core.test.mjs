@@ -334,3 +334,69 @@ test('nextRound: first round with no site live yet, load per installer without p
   assert.equal(Core.nextRound(new Date(2026, 9, 16)).round, 4);
   assert.equal(Core.nextRound(new Date(2026, 9, 23)), null);
 });
+
+const T = Core.STANDARD_TOPICS.map((t) => t.text);
+const visit = (code, day, topics, staff, recipient) =>
+  ({ hospitalCode: code, timestamp: new Date(2026, 9, day, 10), topics, staff, recipient, round: 'รอบที่ 1' });
+
+test('siteReports: one report per planned รพ.สต., sorted by round, อำเภอ, code, with first-advised date and staff', () => {
+  const ds = { topics: T, records: [
+    visit('06474', 3, [T[1], T[2]], 'เจ้าหน้าที่ ข', 'ผู้รับ ข'),
+    visit('06474', 2, [T[0], T[1]], 'เจ้าหน้าที่ ก', 'ผู้รับ ก')
+  ] };
+  const all = Core.siteReports(ds);
+  assert.equal(all.length, 106);
+  assert.ok(all.every((r, i) => !i || all[i - 1].plan.round <= r.plan.round), 'rounds in order');
+  const r1 = Core.siteReports(ds, { round: 1 });
+  assert.equal(r1.length, Core.MASTER_PLAN.filter((p) => p.round === 1).length);
+  const r = r1.find((x) => x.plan.code === '06474');
+  assert.deepEqual([...r.visits].map((v) => v.timestamp.getDate()), [2, 3], 'visits oldest first');
+  const t1 = r.topics.find((t) => t.text === T[1]);
+  assert.equal(t1.status, 'done');
+  assert.equal(t1.first.getDate(), 2);
+  assert.equal(t1.by, 'เจ้าหน้าที่ ก');
+  // แม่จริม, HOSxP-PCU: Lab Online (ปัว only) and Drug Catalog MY PCU (MyPCU only) do not count.
+  assert.equal(r.topics.filter((t) => t.status === 'na').length, 2);
+  assert.equal(r.total, 13);
+  assert.equal(r.done, 3);
+  assert.equal(r.missing.length, 10);
+  assert.deepEqual([...r.staff], ['เจ้าหน้าที่ ก', 'เจ้าหน้าที่ ข']);
+  assert.deepEqual([...r.recipients], ['ผู้รับ ก', 'ผู้รับ ข']);
+});
+
+test('siteReports: pilot sites count as complete without inventing dates; filters by staff and drop pilots', () => {
+  const ds = { topics: T, records: [] };
+  const pilot = Core.siteReports(ds).find((x) => x.plan.pilot);
+  assert.equal(pilot.completeness, 1);
+  assert.ok(pilot.topics.every((t) => t.status === 'pilot' || t.status === 'na'));
+  assert.ok(pilot.topics.every((t) => t.first === null));
+  assert.equal(Core.siteReports(ds, { pilots: false }).length, 106 - Core.MASTER_PLAN.filter((p) => p.pilot).length);
+  const staff = Core.MASTER_PLAN[0].staff;
+  assert.ok(Core.siteReports(ds, { staff }).every((x) => x.plan.staff === staff));
+});
+
+test('parseDriveStatus reads the bot tab by header text and rejects any other tab', () => {
+  const csv = [
+    'รหัส,โฟลเดอร์รายงานติดตั้ง,รอบ (รายงานติดตั้ง),BF1,BF2,AT1,AT2,จำนวนไฟล์รายงาน,แก้ไขล่าสุด,โฟลเดอร์ Cleansing,รอบ (Cleansing),C01,C02,C03,อัปเดตเมื่อ',
+    '06474,มี,1,มี,มี,ไม่มี,มี,3,2026-10-05 14:20,มี,1,มี,ไม่มี,ไม่มี,2026-10-10 09:15',
+    '06475,ไม่มี,,ไม่มี,ไม่มี,ไม่มี,ไม่มี,0,,มี,1,มี,มี,มี,2026-10-10 09:15'
+  ].join('\n');
+  const d = Core.parseDriveStatus(csv);
+  assert.equal(d.updatedAt.getHours(), 9);
+  assert.deepEqual(JSON.parse(JSON.stringify(d.sites['06474'].install)), { BF1: true, BF2: true, AT1: false, AT2: true });
+  assert.equal(d.sites['06474'].installFiles, 3);
+  assert.equal(d.sites['06474'].installLatest.getDate(), 5);
+  assert.equal(d.sites['06475'].installFolder, false);
+  assert.equal(d.sites['06475'].cleansing.C03, true);
+  assert.equal(Core.parseDriveStatus(header), null, 'the form tab (what Google returns when the tab is missing)');
+  assert.equal(Core.parseDriveStatus(''), null);
+  assert.match(Core.driveStatusUrl(Core.DEFAULT_SHEET_URL), /\/gviz\/tq\?tqx=out:csv&sheet=%E0%B8%AA/);
+  assert.equal(Core.driveStatusUrl('https://example.com'), null);
+});
+
+test('siteReports keeps the Master plan order of อำเภอ within a round', () => {
+  const r1 = Core.siteReports({ topics: T, records: [] }, { round: 1 });
+  const order = [...new Set(r1.map((r) => r.plan.district))];
+  const planOrder = [...new Set(Core.MASTER_PLAN.filter((p) => p.round === 1).map((p) => p.district))];
+  assert.deepEqual(order, planOrder);
+});
