@@ -321,3 +321,16 @@ test('planOverview: progress by round/system and live รพ.สต. without a v
   assert.ok(mine.total > 0 && mine.notVisited.every((i) => i.plan.staff === 'ศศิธร จันทำ'));
   assert.equal(Core.planOverview(ds, ds.records, { now, district: 'ปัว' }).total, 12);
 });
+
+test('nextRound: first round with no site live yet, load per installer without pilots', () => {
+  const nr = Core.nextRound(new Date(2026, 9, 10));
+  assert.equal(nr.round, 3);
+  assert.equal(nr.start, '2026-10-16');
+  assert.equal(nr.daysUntil, 6);
+  const planned = Core.MASTER_PLAN.filter((p) => p.round === 3 && !p.pilot).length;
+  assert.equal(nr.staff.reduce((n, s) => n + s.sites, 0), planned);
+  assert.ok(nr.staff.every((s, i) => !i || nr.staff[i - 1].sites >= s.sites), 'busiest first');
+  // Once round 3 has started (even partly), the next one is round 4; after round 4 there is none.
+  assert.equal(Core.nextRound(new Date(2026, 9, 16)).round, 4);
+  assert.equal(Core.nextRound(new Date(2026, 9, 23)), null);
+});

@@ -269,6 +269,7 @@ main { padding: 16px 24px 32px; display: grid; gap: 16px; max-width: 1600px; wid
 .alert-error { background: var(--err-bg); color: var(--err-ink); }
 .alert-warn { background: var(--warn-bg); color: var(--warn-ink); }
 .alert ul { margin: 6px 0 0; padding-left: 20px; }
+.alert a { color: inherit; font-weight: 500; text-decoration: underline; }
 .alert summary { cursor: pointer; font-weight: 500; }
 
 /* Filters */
@@ -560,6 +561,7 @@ main { padding: 20px 28px 32px; }
         </section>
 
         <div class="stack" data-panel="overview">
+          <div id="planAlert" class="alert alert-warn" role="status" hidden></div>
           <section class="kpis" id="kpis" aria-label="ตัวชี้วัดหลัก"></section>
           <section class="card" aria-labelledby="distHead">
             <div class="card-head">
@@ -1346,8 +1348,25 @@ var EHPCore = (function () {
     };
   }
 
+  // The next round with no รพ.สต. live yet: its first go-live day and how many รพ.สต. each installer takes on
+  // (pilots excluded — they finished before this form). null once every round has started.
+  function nextRound(now) {
+    var today = isoDay(now || new Date());
+    var start = {};
+    MASTER_PLAN.forEach(function (p) {
+      if (!p.pilot && (!start[p.round] || p.goLive < start[p.round])) start[p.round] = p.goLive;
+    });
+    var round = Object.keys(start).map(Number).filter(function (r) { return start[r] > today; })
+      .sort(function (a, b) { return start[a] < start[b] ? -1 : 1; })[0];
+    if (round == null) return null;
+    var load = {};
+    MASTER_PLAN.forEach(function (p) { if (p.round === round && !p.pilot) load[p.staff] = (load[p.staff] || 0) + 1; });
+    return { round: round, start: start[round], daysUntil: daysBetween(isoToDate(today), isoToDate(start[round])),
+      staff: Object.keys(load).map(function (s) { return { name: s, sites: load[s] }; }).sort(function (a, b) { return b.sites - a.sites || thSort(a.name, b.name); }) };
+  }
+
   return {
-    TOTAL_HOSPITALS: TOTAL_HOSPITALS, planOverview: planOverview, planRound: planRound, sameStaff: sameStaff, MASTER_PLAN: MASTER_PLAN, PLAN_ROUNDS: PLAN_ROUNDS, planFor: planFor, followUp: followUp, isLaterTopic: isLaterTopic, topicApplies: topicApplies, topicScope: topicScope, NO_ROUND: NO_ROUND, STANDARD_TOPICS: STANDARD_TOPICS,
+    TOTAL_HOSPITALS: TOTAL_HOSPITALS, planOverview: planOverview, nextRound: nextRound, planRound: planRound, sameStaff: sameStaff, MASTER_PLAN: MASTER_PLAN, PLAN_ROUNDS: PLAN_ROUNDS, planFor: planFor, followUp: followUp, isLaterTopic: isLaterTopic, topicApplies: topicApplies, topicScope: topicScope, NO_ROUND: NO_ROUND, STANDARD_TOPICS: STANDARD_TOPICS,
     DEFAULT_SHEET_URL: DEFAULT_SHEET_URL, sheetCsvUrl: sheetCsvUrl, decodeJwt: decodeJwt,
     parseTable: parseTable, parseThaiDate: parseThaiDate, formatThaiDate: formatThaiDate,
     detectColumns: detectColumns, splitTopics: splitTopics, hospitalKey: hospitalKey,
@@ -1466,7 +1485,7 @@ var EHPCore = (function () {
     'รอบ': 'Round', 'ระบบเดิม': 'Legacy system', 'ได้รับการดูแล': 'Covered', 'บันทึก': 'Records', 'ความครบเฉลี่ย': 'Avg completeness',
     'รพ.สต. ที่ได้รับการดูแล / ทั้งหมด': 'Health centres covered / total', 'รพ.สต.': 'Health centre', 'ความครบ': 'Completeness',
     'ครั้ง': 'visits', 'ล่าสุด': 'Latest', 'ดูแล': 'Covers', 'ยังไม่ครบ': 'Incomplete', 'หัวข้อสำเร็จ': 'Topics done',
-    'แห่ง': 'sites', 'หัวข้อ': 'topics', 'คน': 'people',
+    'แห่ง': 'sites', 'หัวข้อ': 'topics', 'คน': 'people', 'ดูรายชื่อในเมนูแผนติดตั้ง': 'See the list in Rollout plan',
     'เวลา': 'Time', 'ชื่อ': 'Name', 'การกระทำ': 'Action', 'เมนู': 'Menu', 'อุปกรณ์': 'Device',
     'ผู้รับคำแนะนำ': 'Recipient', 'คำแนะนำอื่น': 'Other advice', 'ข้อเสนอแนะ': 'Suggestions',
     'คำแนะนำสำหรับทั้งทีม': 'Advice for the whole team', 'งานรายคน:': 'Workload by person:', 'มี': '', 'เริ่มที่': 'Start with',
@@ -1514,8 +1533,15 @@ var EHPCore = (function () {
     [/ยังไม่มีบันทึกการเข้าแนะนำของ(.+)ตามตัวกรองนี้/g, 'No visits by $1 for this filter'],
     [/ต้องติดตามอีก (\d+) แห่ง/g, '$1 to follow up'],
     [/ที่ยังไม่ครบและไม่ได้เข้านาน (\d+) วันขึ้นไป — ควรนัดเข้าก่อน/g, 'incomplete and not visited for $1+ days — schedule these first'],
+    [/^ก่อนรอบที่ (\d+) เปิดใช้ (.+) \(อีก (\d+) วัน\): /, 'Before round $1 goes live $2 (in $3 days): '],
+    [/ รับรอบนี้ (\d[\d,]*) แห่ง แต่ยังค้าง (\d[\d,]*) แห่ง/g, ' takes $1 sites this round with $2 still open'],
+    [/ทุกคนที่รับรอบนี้ไม่มีงานค้าง/g, 'everyone in this round has no open work'],
+    [/ไม่มี รพ\.สต\. ในรอบนี้ — ช่วงนี้เคลียร์งานค้างได้: /g, 'No sites in this round — time to clear open work: '],
+    [/\(ค้าง (\d[\d,]*) แห่ง\)/g, '($1 open)'],
     [/หัวข้อที่ควรเตรียมไปแนะนำ: /g, 'Topics to prepare: '],
     [/จากนั้น: /g, 'Then: '],
+    [/ถึงวันเปิดใช้งานแล้วแต่ยังไม่ได้เข้า (\d[\d,]*) แห่ง/g, 'Past go-live but not visited: $1 sites'],
+    [/เปิดใช้เกิน (\d+) วันแล้ว (\d[\d,]*) แห่ง/g, '$2 live over $1 days'],
     [/ถึงวันเปิดใช้งานแล้วแต่ยังไม่ได้เข้า /g, 'Past go-live but not visited: '],
     [/ — ดูรายชื่อแยกตามเจ้าหน้าที่ด้านล่าง/g, ' — see the list by staff below'],
     [/ดูแลโดย /g, 'handled by '],
@@ -1795,7 +1821,20 @@ var EHPCore = (function () {
     renderCountTable($('roundTable'), 'รอบ', s.roundStats);
     renderRecent(s);
     renderPlan(ds, f);
+    renderPlanAlert(ds, f);
     if (state.view === 'followup') renderFollowUp(ds, f);
+  }
+
+  // Overview banner: รพ.สต. past go-live with no visit yet, scoped like the Rollout plan view.
+  var LATE_DAYS = 3; // live this many days with no visit → called out as late
+  function renderPlanAlert(ds, f) {
+    var miss = Core.planOverview(ds, Core.filterRecords(ds.records, { district: f.district }), { district: f.district, staff: f.staff }).notVisited;
+    var late = miss.filter(function (i) { return i.daysSinceLive >= LATE_DAYS; }).length;
+    $('planAlert').hidden = !miss.length;
+    $('planAlert').innerHTML = !miss.length ? '' :
+      '<b>ถึงวันเปิดใช้งานแล้วแต่ยังไม่ได้เข้า ' + fmt(miss.length) + ' แห่ง</b>' +
+      (late ? '<span> · </span><span>เปิดใช้เกิน ' + LATE_DAYS + ' วันแล้ว ' + fmt(late) + ' แห่ง</span>' : '') +
+      '<span> · </span><a href="#plan">ดูรายชื่อในเมนูแผนติดตั้ง</a>';
   }
 
   function goLiveText(p) { return Core.formatThaiDate(new Date(p.goLive.replace(/-/g, '/')), false); }
@@ -1907,6 +1946,7 @@ var EHPCore = (function () {
         }).join('') + '</ul>');
       }
     }
+    tips = tips.concat(nextRoundTips(fu, miss, people, f));
     state.insight = { title: 'คำแนะนำสำหรับ' + who, people: people,
       tips: tips.filter(function (t, i) { return i !== peopleTip; }).map(htmlText) };
     $('fuInsight').innerHTML = '<h2>คำแนะนำสำหรับ' + esc(who) + '</h2>' +
@@ -1954,6 +1994,36 @@ var EHPCore = (function () {
         (i.laterMissing.length ? i.laterMissing.map(function (t) { return '<li class="chip later">' + esc(Core.topicLabel(t)) + '</li>'; }).join('') : '') + '</ul>' +
         (h.lastNote ? '<div class="fu-note">มีการแนะนำอื่นๆ: ' + esc(h.lastNote) + '</div>' : '') + '</li>';
     }).join('') : '<li class="empty-state">ไม่มี รพ.สต. ที่ต้องติดตาม</li>';
+  }
+
+  // Who starts the next round with open work, and who has no site in it and can clear backlog meanwhile.
+  // Whole-team scope only: a district or round filter would understate each person's backlog.
+  function nextRoundTips(fu, miss, people, f) {
+    var nr = Core.nextRound();
+    if (!nr || f.district || f.round) return [];
+    var head = 'ก่อน' + Core.planRound(nr.round).name + ' เปิดใช้ ' + Core.formatThaiDate(new Date(nr.start.replace(/-/g, '/')), false) +
+      ' (อีก ' + nr.daysUntil + ' วัน): ';
+    var line = function (name, sites, open) { return '<b>' + esc(name) + '</b> รับรอบนี้ ' + fmt(sites) + ' แห่ง แต่ยังค้าง ' + fmt(open) + ' แห่ง'; };
+    if (f.staff) {
+      var mine = nr.staff.filter(function (s) { return Core.sameStaff(s.name, f.staff); })[0];
+      var open = fu.items.length + miss.length;
+      return mine && open ? [head + line(f.staff, mine.sites, open)] : [];
+    }
+    var backlog = function (name) {
+      return people.filter(function (p) { return Core.sameStaff(name, p.name); })
+        .reduce(function (n, p) { return n + p.incomplete + p.notVisited; }, 0);
+    };
+    var busy = nr.staff.map(function (s) { return { name: s.name, sites: s.sites, open: backlog(s.name) }; })
+      .filter(function (s) { return s.open; });
+    var free = people.filter(function (p) {
+      return !nr.staff.some(function (s) { return Core.sameStaff(s.name, p.name); });
+    });
+    if (!busy.length && !free.length) return [];
+    var out = [head + (busy.length ? busy.map(function (s) { return line(s.name, s.sites, s.open); }).join(', ') : 'ทุกคนที่รับรอบนี้ไม่มีงานค้าง')];
+    if (free.length) out.push('ไม่มี รพ.สต. ในรอบนี้ — ช่วงนี้เคลียร์งานค้างได้: ' + free.map(function (p) {
+      return '<b>' + esc(p.name) + '</b> (ค้าง ' + fmt(p.incomplete + p.notVisited) + ' แห่ง)';
+    }).join(', '));
+    return out;
   }
 
   function renderWarnings(ds) {
