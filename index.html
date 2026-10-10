@@ -457,9 +457,11 @@ main { padding: 20px 28px 32px; }
 .ex-check span { display: flex; align-items: center; gap: 8px; min-height: 40px; color: var(--text); font-size: .9rem; }
 .ex-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
 .ex-actions button { min-height: 44px; }
+.ex-row-actions { display: flex; gap: 12px; white-space: nowrap; }
 .ex-help { margin: 10px 0 12px; padding-left: 20px; display: grid; gap: 2px; }
 .ex-links { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
 .alert-info { background: var(--surface-2); color: var(--text-2); }
+#exDrive div + div { margin-top: 2px; }
 .ex-state { white-space: nowrap; }
 .ex-state.ok { color: var(--good); font-weight: 500; }
 
@@ -478,17 +480,21 @@ main { padding: 20px 28px 32px; }
 .rpt-code { font-size: 12pt; font-weight: 700; white-space: nowrap; }
 .rpt h2 { font-size: 11.5pt; margin: 10px 0 4px; break-after: avoid; page-break-after: avoid; }
 .rpt table { width: calc(100% - 1px); border-collapse: collapse; font-size: 9.5pt; } /* -1px keeps the right border inside the printable area */
-.rpt th, .rpt td { border: 1px solid #888; padding: 2px 6px; text-align: left; vertical-align: top; }
+.rpt th, .rpt td { position: static; border: 1px solid #888; padding: 2px 6px; text-align: left; vertical-align: top; }
 .rpt thead th, .rpt-info th { background: #eee; font-weight: 600; }
 .rpt-info th { width: 19%; white-space: nowrap; }
 .rpt-info td { width: 31%; }
 .rpt tr { break-inside: avoid; page-break-inside: avoid; }
+.rpt tr:last-child td, .rpt tr:last-child th { border-bottom: 1px solid #888; }
 .rpt td.n, .rpt th.n { text-align: center; white-space: nowrap; }
 .rpt tr.miss td { font-weight: 600; }
 .rpt tr.na td { color: #555; }
 .rpt-sum { font-weight: 600; }
 .rpt-sign { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 22px; text-align: center; break-inside: avoid; page-break-inside: avoid; }
 .rpt-sign p { margin: 0; }
+.rpt-imghead { font-size: 9.5pt; border-bottom: 1px solid #999; padding-bottom: 3px; margin-bottom: 6px; }
+.rpt-img img { display: block; width: 100%; max-height: 262mm; object-fit: contain; }
+.rpt-gap { padding: 40px 16px; border: 1px dashed #999; text-align: center; }
 .rpt-meta { font-size: 8.5pt; color: #333; margin: -4px 0 8px; }
 .rpt-visits td:nth-child(3), .rpt-visits td:nth-child(4) { white-space: nowrap; }
 </style>
@@ -772,10 +778,12 @@ main { padding: 20px 28px 32px; }
               <label class="ex-check"><span><input type="checkbox" id="exPilots" checked> รวม รพ.สต.นำร่อง</span></label>
             </div>
             <div class="ex-actions">
+              <button type="button" class="btn-primary" id="exPrintImages">พิมพ์รูปรายงานการติดตั้ง (BF1 BF2 AT1 AT2)</button>
               <button type="button" class="btn-primary" id="exPrint">พิมพ์รายงานราย รพ.สต.</button>
               <button type="button" id="exExcel">ดาวน์โหลด Excel</button>
             </div>
             <ul class="ex-help small muted">
+              <li><b>พิมพ์รูป</b>: รูปจากโฟลเดอร์ Google Drive ของแต่ละแห่ง 1 รูปต่อหน้า เรียง BF1 BF2 AT1 AT2 ทุก รพ.สต. ตามรอบที่เลือก หน้าแรกเป็นสารบัญบอกแห่งที่ไฟล์ไม่ครบ</li>
               <li><b>พิมพ์</b>: 1 แห่งต่อหน้า (A4) เรียงตามรอบ อำเภอ และรหัส · ในหน้าต่างพิมพ์เลือก “บันทึกเป็น PDF” เพื่อเก็บเป็นไฟล์</li>
               <li><b>Excel</b>: สรุปราย รพ.สต. · หัวข้อราย รพ.สต. (วันที่และผู้แนะนำครั้งแรก) · ประวัติการเข้าแนะนำทุกครั้ง</li>
             </ul>
@@ -784,7 +792,7 @@ main { padding: 20px 28px 32px; }
           <section class="card" aria-labelledby="exListHead">
             <div class="card-head">
               <h2 id="exListHead">รายการที่จะส่งออก</h2>
-              <span class="small muted">กด “พิมพ์” ท้ายแถวเพื่อพิมพ์เฉพาะแห่งนั้น</span>
+              <span class="small muted">กด “รูป” หรือ “รายงาน” ท้ายแถวเพื่อพิมพ์เฉพาะแห่งนั้น</span>
             </div>
             <div class="table-scroll"><table id="exTable"></table></div>
           </section>
@@ -796,7 +804,6 @@ main { padding: 20px 28px 32px; }
               <li><a href="https://drive.google.com/drive/folders/1F6GbqiGF9QpqJjpC2ASiaEA10prKIt4o" target="_blank" rel="noopener noreferrer">รายงาน Cleansing ข้อมูลแยกรอบ (Google Drive)</a></li>
             </ul>
             <p class="note">สิทธิ์การเปิดโฟลเดอร์ขึ้นกับการแชร์ใน Google Drive · ไฟล์ Cleansing อาจมีข้อมูลผู้ป่วย ควรแชร์เฉพาะทีม</p>
-            <p class="note"><b>พิมพ์รูปรายงานการติดตั้ง (BF1 BF2 AT1 AT2) ทั้งรอบในครั้งเดียว</b>: เปิด Google Sheet → เมนู 🐱 แมวส้ม → พิมพ์รวมรายงานการติดตั้ง รอบ N · ได้ PDF เรียงทุก รพ.สต. 1 แห่งต่อหน้า เก็บไว้ในโฟลเดอร์ของรอบนั้น</p>
           </section>
         </div>
       </div>
@@ -1537,8 +1544,31 @@ var EHPCore = (function () {
     });
   }
 
+  // Index of the installation report images (BF1 BF2 AT1 AT2) in the team's public Drive folder, rebuilt every
+  // 30 minutes by a GitHub Action (tools/drive-index.mjs). The images are aggregate migration reports with
+  // no patient data (team decision 2026-10-10); Cleansing files are never indexed.
+  var DRIVE_INDEX_URL = 'https://raw.githubusercontent.com/nuchanarts/nanpao.ehp-data/drive-index/drive-index.json';
+  function parseDriveIndex(json) {
+    var d = typeof json === 'string' ? JSON.parse(json) : json;
+    if (!d || !d.rounds || typeof d.rounds !== 'object') return null;
+    var at = d.updatedAt ? new Date(d.updatedAt) : null;
+    return { updatedAt: at && !isNaN(at) ? at : null, rounds: d.rounds };
+  }
+  // A planned รพ.สต.'s folder: in its round's folder first (pilot sites: "นำร่อง"), else in any round folder.
+  function installFolder(index, plan) {
+    if (!index) return null;
+    var own = index.rounds[plan.pilot ? 'pilot' : String(plan.round)];
+    if (own && own.sites && own.sites[plan.code]) return own.sites[plan.code];
+    for (var k in index.rounds) {
+      if (index.rounds[k].sites && index.rounds[k].sites[plan.code]) return index.rounds[k].sites[plan.code];
+    }
+    return null;
+  }
+  function imageUrl(id) { return 'https://lh3.googleusercontent.com/d/' + encodeURIComponent(id) + '=w2000'; }
+
   return {
     TOTAL_HOSPITALS: TOTAL_HOSPITALS, planOverview: planOverview, nextRound: nextRound,
+    DRIVE_INDEX_URL: DRIVE_INDEX_URL, parseDriveIndex: parseDriveIndex, installFolder: installFolder, imageUrl: imageUrl,
     DRIVE_TAB: DRIVE_TAB, INSTALL_FILES: INSTALL_FILES, CLEANSING_FILES: CLEANSING_FILES,
     driveStatusUrl: driveStatusUrl, parseDriveStatus: parseDriveStatus, siteReports: siteReports, planRound: planRound, sameStaff: sameStaff, MASTER_PLAN: MASTER_PLAN, PLAN_ROUNDS: PLAN_ROUNDS, planFor: planFor, followUp: followUp, isLaterTopic: isLaterTopic, topicApplies: topicApplies, topicScope: topicScope, NO_ROUND: NO_ROUND, STANDARD_TOPICS: STANDARD_TOPICS,
     DEFAULT_SHEET_URL: DEFAULT_SHEET_URL, sheetCsvUrl: sheetCsvUrl, decodeJwt: decodeJwt,
@@ -1563,7 +1593,7 @@ var EHPCore = (function () {
   var AUTO_KEY = 'ehp-nan-dashboard:auto-refresh';
   var RECENT_PAGE = 15;
   var AUTO_REFRESH_MS = 60 * 1000;
-  var state = { ds: null, loadedAt: null, recentShown: RECENT_PAGE, loading: false, timer: null, view: 'overview', drive: null, driveChecked: false, exList: [] };
+  var state = { ds: null, loadedAt: null, recentShown: RECENT_PAGE, loading: false, timer: null, view: 'overview', drive: null, driveChecked: false, driveIndex: null, driveIndexChecked: false, exList: [] };
   // Sign-in with Google + visit log (constitution V). Both empty = no sign-in, page works as before.
   var AUTH = {
     clientId: '',   // OAuth Client ID (Google Cloud Console → Credentials)
@@ -1597,7 +1627,11 @@ var EHPCore = (function () {
     'ผู้รับผิดชอบตามแผน': 'Responsible (plan)', 'ผู้รับผิดชอบ': 'Responsible', 'รวม รพ.สต.นำร่อง': 'Include pilot sites',
     'พิมพ์รายงานราย รพ.สต.': 'Print a report per health centre', 'ดาวน์โหลด Excel': 'Download Excel',
     'รายการที่จะส่งออก': 'Sites to export', 'กด “พิมพ์” ท้ายแถวเพื่อพิมพ์เฉพาะแห่งนั้น': 'Press “Print” at the end of a row to print that site only',
-    'แหล่งข้อมูลต้นฉบับ': 'Original sources', 'พิมพ์รูปรายงานการติดตั้ง (BF1 BF2 AT1 AT2) ทั้งรอบในครั้งเดียว': 'Print every installation image (BF1 BF2 AT1 AT2) of a round at once',
+    'แหล่งข้อมูลต้นฉบับ': 'Original sources', 'พิมพ์รูปรายงานการติดตั้ง (BF1 BF2 AT1 AT2)': 'Print installation images (BF1 BF2 AT1 AT2)',
+    'พิมพ์รูป': 'Print images', 'รูป': 'Images', 'รายงาน': 'Report', 'กด “รูป” หรือ “รายงาน” ท้ายแถวเพื่อพิมพ์เฉพาะแห่งนั้น': 'Press “Images” or “Report” at the end of a row to print that site only',
+    ': รูปจากโฟลเดอร์ Google Drive ของแต่ละแห่ง 1 รูปต่อหน้า เรียง BF1 BF2 AT1 AT2 ทุก รพ.สต. ตามรอบที่เลือก หน้าแรกเป็นสารบัญบอกแห่งที่ไฟล์ไม่ครบ': ': the images in each site\'s Google Drive folder, one per page, BF1 BF2 AT1 AT2 for every site in the chosen scope; the first page lists sites with missing files',
+    'กำลังอ่านรายการรูปใน Google Drive…': 'Reading the image list from Google Drive…',
+    'โหลดรายการรูปจากโฟลเดอร์ Google Drive ไม่ได้ — ยังพิมพ์รูปรายงานการติดตั้งไม่ได้ ลองกด “โหลดข้อมูลล่าสุด”': 'Could not load the image list from Google Drive — installation images cannot be printed yet; try “Reload”', 'พิมพ์รูปรายงานการติดตั้ง (BF1 BF2 AT1 AT2) ทั้งรอบในครั้งเดียว': 'Print every installation image (BF1 BF2 AT1 AT2) of a round at once',
     ': เปิด Google Sheet → เมนู 🐱 แมวส้ม → พิมพ์รวมรายงานการติดตั้ง รอบ N · ได้ PDF เรียงทุก รพ.สต. 1 แห่งต่อหน้า เก็บไว้ในโฟลเดอร์ของรอบนั้น': ': open the Google Sheet → menu 🐱 แมวส้ม → พิมพ์รวมรายงานการติดตั้ง รอบ N · a PDF with every health centre, one per page, saved in that round folder', 'พิมพ์': 'Print', 'การแนะนำ': 'Advice', 'รายงานติดตั้ง': 'Install report',
     'ยังไม่มีโฟลเดอร์': 'No folder yet', 'ไม่มีข้อมูล': 'No data', 'ยังไม่เข้า': 'Not visited', 'ครบ (นำร่อง)': 'Complete (pilot)',
     'ไม่มี รพ.สต. ตามเงื่อนไข': 'No health centres match', 'กำลังอ่านสถานะไฟล์ใน Google Drive…': 'Reading Google Drive file status…',
@@ -1724,7 +1758,11 @@ var EHPCore = (function () {
     [/^ตรงเงื่อนไข (\d[\d,]*) แห่ง/, '$1 sites match'],
     [/ · มีบันทึกการเข้าแนะนำ (\d[\d,]*) แห่ง/g, ' · $1 with visit records'],
     [/ · รวมนำร่อง (\d[\d,]*) แห่ง/g, ' · incl. $1 pilots'],
-    [/^สถานะไฟล์ใน Google Drive จากบอทแมวส้ม · ข้อมูล ณ /, 'Google Drive file status from the แมวส้ม bot · as of '],
+    [/^รูปรายงานการติดตั้งจากโฟลเดอร์ Google Drive · ข้อมูล ณ /, 'Installation images from the Google Drive folder · as of '],
+    [/ — เกิน 2 ชั่วโมง ระบบอัปเดตรายการรูปอาจหยุดทำงาน/, ' — over 2 hours old, the image list updater may have stopped'],
+    [/^สถานะไฟล์ Cleansing จากบอทแมวส้ม · ข้อมูล ณ /, 'Cleansing file status from the แมวส้ม bot · as of '],
+    [/^สถานะไฟล์ Cleansing: ไม่มีข้อมูล \(ต้องติดตั้งแท็บ “(.+)” ในบอทแมวส้ม ดู (.+)\)$/, 'Cleansing file status: no data (install the “$1” tab in the แมวส้ม bot, see $2)'],
+    [/^กำลังโหลดรูป (\d+)\/(\d+)…$/, 'Loading images $1/$2…'],
     [/ — เกิน 1 ชั่วโมง บอทอาจหยุดทำงาน/, ' — over an hour old, the bot may have stopped'],
     [/^ยังอ่านแท็บ “(.+)” ใน Google Sheet ไม่ได้ — รายงานจะแสดงสถานะไฟล์ Drive ว่า “ไม่มีข้อมูล” \(วิธีเปิดใช้: (.+)\)$/, 'Cannot read the “$1” tab in the Google Sheet — reports show Drive file status as “No data” (set-up: $2)'],
     [/^ครบ (\d+)\/(\d+)$/, 'Complete $1/$2'],
@@ -1940,6 +1978,7 @@ var EHPCore = (function () {
         showError('');
         buildFilters();
         loadDriveStatus();
+        loadDriveIndex();
       })
       .catch(function (e) {
         console.error('[EHP dashboard] load failed', url, e);
@@ -2611,6 +2650,7 @@ var EHPCore = (function () {
   }
 
   // ---------- Export menu: one report per รพ.สต. (print / PDF) and an Excel workbook ----------
+  var DRIVE_INDEX_STALE_MS = 2 * 60 * 60 * 1000; // the GitHub Action rebuilds the image index every 30 minutes
   var DRIVE_STALE_MS = 60 * 60 * 1000; // the bot rewrites the tab every 15 minutes; older than this = bot stopped
   var EX_STATUS = { done: 'แนะนำแล้ว', pilot: 'ครบ (นำร่อง)', missing: 'ยังไม่ได้แนะนำ', na: 'ไม่นับ' };
 
@@ -2623,6 +2663,14 @@ var EHPCore = (function () {
       .then(function (text) { state.drive = Core.parseDriveStatus(text); })
       .catch(function (e) { console.warn('[EHP dashboard] drive status not loaded', e); state.drive = null; })
       .then(function () { state.driveChecked = true; if (state.view === 'export') renderExport(); });
+  }
+
+  function loadDriveIndex() {
+    fetch(Core.DRIVE_INDEX_URL, { cache: 'no-store', credentials: 'omit' })
+      .then(function (res) { if (!res.ok) throw new Error('HTTP ' + res.status); return res.text(); })
+      .then(function (text) { state.driveIndex = Core.parseDriveIndex(text); })
+      .catch(function (e) { console.warn('[EHP dashboard] drive index not loaded', e); })
+      .then(function () { state.driveIndexChecked = true; if (state.view === 'export') renderExport(); });
   }
 
   function exScope() {
@@ -2653,21 +2701,33 @@ var EHPCore = (function () {
 
   function driveSite(code) { return state.drive ? state.drive.sites[code] || null : null; }
   function hasFolder(s, kind) { return !!s && (kind === 'install' ? s.installFolder : s.cleansingFolder); }
-  // "ครบ 4/4" · "3/4 · ขาด AT1" · "ยังไม่มีโฟลเดอร์" · "ไม่มีข้อมูล" (status tab not available)
-  function driveSummary(code, kind) {
-    if (!state.drive) return { text: 'ไม่มีข้อมูล', ok: false };
-    var s = driveSite(code), files = kind === 'install' ? Core.INSTALL_FILES : Core.CLEANSING_FILES;
-    if (!hasFolder(s, kind)) return { text: 'ยังไม่มีโฟลเดอร์', ok: false };
-    var missing = files.filter(function (f) { return !s[kind][f]; });
+  // { folder, has: { BF1: true, … } } for a planned รพ.สต., or null when no source covers it.
+  // Installation images: the Drive folder index (always fresh); Cleansing: only the bot's status tab.
+  function driveFiles(p, kind) {
+    if (kind === 'install' && state.driveIndex) {
+      var f = Core.installFolder(state.driveIndex, p), has = {};
+      Core.INSTALL_FILES.forEach(function (k) { has[k] = !!(f && f.files && f.files[k]); });
+      return { folder: !!f, has: has };
+    }
+    if (!state.drive) return null;
+    var s = driveSite(p.code);
+    return { folder: hasFolder(s, kind), has: s ? s[kind] : {} };
+  }
+  // "ครบ 4/4" · "3/4 · ขาด AT1" · "ยังไม่มีโฟลเดอร์" · "ไม่มีข้อมูล" (no source)
+  function driveSummary(p, kind) {
+    var d = driveFiles(p, kind), files = kind === 'install' ? Core.INSTALL_FILES : Core.CLEANSING_FILES;
+    if (!d) return { text: 'ไม่มีข้อมูล', ok: false };
+    if (!d.folder) return { text: 'ยังไม่มีโฟลเดอร์', ok: false };
+    var missing = files.filter(function (f) { return !d.has[f]; });
     return missing.length
       ? { text: (files.length - missing.length) + '/' + files.length + ' · ขาด ' + missing.join(' '), ok: false }
       : { text: 'ครบ ' + files.length + '/' + files.length, ok: true };
   }
-  function driveFlag(code, kind, file) {
-    if (!state.drive) return 'ไม่มีข้อมูล';
-    var s = driveSite(code);
-    if (!hasFolder(s, kind)) return 'ไม่มีโฟลเดอร์';
-    return s[kind][file] ? 'มี' : 'ไม่มี';
+  function driveFlag(p, kind, file) {
+    var d = driveFiles(p, kind);
+    if (!d) return 'ไม่มีข้อมูล';
+    if (!d.folder) return 'ไม่มีโฟลเดอร์';
+    return d.has[file] ? 'มี' : 'ไม่มี';
   }
 
   function renderExport() {
@@ -2682,25 +2742,33 @@ var EHPCore = (function () {
       (function (n) { return n ? ' · รวมนำร่อง ' + fmt(n) + ' แห่ง' : ''; })(list.filter(function (r) { return r.plan.pilot; }).length);
     $('exPrint').disabled = $('exExcel').disabled = !list.length;
 
-    var box = $('exDrive');
-    if (state.drive) {
-      var at = state.drive.updatedAt;
-      var stale = !at || Date.now() - at.getTime() > DRIVE_STALE_MS;
-      box.className = 'alert ' + (stale ? 'alert-warn' : 'alert-info');
-      box.textContent = 'สถานะไฟล์ใน Google Drive จากบอทแมวส้ม · ข้อมูล ณ ' + (at ? Core.formatThaiDate(at) : 'ไม่ทราบเวลา') +
-        (stale ? ' — เกิน 1 ชั่วโมง บอทอาจหยุดทำงาน' : '');
+    var box = $('exDrive'), lines = [], warn = false;
+    if (state.driveIndex) {
+      var ia = state.driveIndex.updatedAt, istale = !ia || Date.now() - ia.getTime() > DRIVE_INDEX_STALE_MS;
+      warn = warn || istale;
+      lines.push('รูปรายงานการติดตั้งจากโฟลเดอร์ Google Drive · ข้อมูล ณ ' + (ia ? Core.formatThaiDate(ia) : 'ไม่ทราบเวลา') +
+        (istale ? ' — เกิน 2 ชั่วโมง ระบบอัปเดตรายการรูปอาจหยุดทำงาน' : ''));
     } else {
-      box.className = 'alert alert-warn';
-      box.textContent = state.driveChecked
-        ? 'ยังอ่านแท็บ “' + Core.DRIVE_TAB + '” ใน Google Sheet ไม่ได้ — รายงานจะแสดงสถานะไฟล์ Drive ว่า “ไม่มีข้อมูล” (วิธีเปิดใช้: apps-script/bot/README.md)'
-        : 'กำลังอ่านสถานะไฟล์ใน Google Drive…';
+      warn = true;
+      lines.push(state.driveIndexChecked ? 'โหลดรายการรูปจากโฟลเดอร์ Google Drive ไม่ได้ — ยังพิมพ์รูปรายงานการติดตั้งไม่ได้ ลองกด “โหลดข้อมูลล่าสุด”' : 'กำลังอ่านรายการรูปใน Google Drive…');
     }
+    if (state.drive) {
+      var at = state.drive.updatedAt, stale = !at || Date.now() - at.getTime() > DRIVE_STALE_MS;
+      warn = warn || stale;
+      lines.push('สถานะไฟล์ Cleansing จากบอทแมวส้ม · ข้อมูล ณ ' + (at ? Core.formatThaiDate(at) : 'ไม่ทราบเวลา') +
+        (stale ? ' — เกิน 1 ชั่วโมง บอทอาจหยุดทำงาน' : ''));
+    } else if (state.driveChecked) {
+      lines.push('สถานะไฟล์ Cleansing: ไม่มีข้อมูล (ต้องติดตั้งแท็บ “' + Core.DRIVE_TAB + '” ในบอทแมวส้ม ดู apps-script/bot/README.md)');
+    }
+    box.className = 'alert ' + (warn ? 'alert-warn' : 'alert-info');
+    box.innerHTML = lines.map(function (l) { return '<div>' + esc(l) + '</div>'; }).join('');
+    $('exPrintImages').disabled = !list.length || !state.driveIndex;
 
     $('exTable').innerHTML = list.length
       ? '<thead><tr><th scope="col">รอบ</th><th scope="col">รพ.สต.</th><th scope="col">ผู้รับผิดชอบ</th><th class="n" scope="col">การแนะนำ</th>' +
         '<th scope="col">รายงานติดตั้ง</th><th scope="col">Cleansing</th><th scope="col"><span class="sr-only">พิมพ์</span></th></tr></thead><tbody>' +
         list.map(function (r) {
-          var p = r.plan, ins = driveSummary(p.code, 'install'), cl = driveSummary(p.code, 'cleansing');
+          var p = r.plan, ins = driveSummary(p, 'install'), cl = driveSummary(p, 'cleansing');
           var advice = p.pilot && !r.visits.length ? 'ครบ (นำร่อง)' : !r.visits.length ? 'ยังไม่เข้า' : r.done + '/' + r.total + ' หัวข้อ';
           var state_ = function (x, ok) { return '<span class="ex-state' + (ok ? ' ok' : '') + '">' + esc(x) + '</span>'; };
           return '<tr><td>' + esc(Core.planRound(p.round).name) + '</td>' +
@@ -2708,7 +2776,8 @@ var EHPCore = (function () {
             '<div class="small muted">อ.' + esc(p.district) + ' · ' + esc(p.system) + (p.pilot ? ' · นำร่อง' : '') + '</div></th>' +
             '<td>' + esc(p.staff) + '</td><td class="n">' + state_(advice, r.completeness === 1) + '</td>' +
             '<td>' + state_(ins.text, ins.ok) + '</td><td>' + state_(cl.text, cl.ok) + '</td>' +
-            '<td><button type="button" class="link" data-print="' + esc(p.code) + '">พิมพ์</button></td></tr>';
+            '<td><span class="ex-row-actions"><button type="button" class="link" data-print-img="' + esc(p.code) + '">รูป</button>' +
+            '<button type="button" class="link" data-print="' + esc(p.code) + '">รายงาน</button></span></td></tr>';
         }).join('') + '</tbody>'
       : '<tbody><tr><td class="empty-state">ไม่มี รพ.สต. ตามเงื่อนไข</td></tr></tbody>';
   }
@@ -2734,11 +2803,11 @@ var EHPCore = (function () {
       : 'ยังไม่มีบันทึกการเข้าแนะนำในฟอร์ม') + '</td></tr>';
     var driveRow = function (label, kind, files) {
       var cells = files.map(function (f) {
-        var v = driveFlag(p.code, kind, f);
+        var v = driveFlag(p, kind, f);
         return '<td class="n">' + (v === 'มี' ? '✓ ' : v === 'ไม่มี' ? '✗ ' : '') + esc(f) + ' ' + esc(v) + '</td>';
       });
       while (cells.length < 4) cells.push('<td></td>');
-      return '<tr><th scope="row">' + label + '</th>' + cells.join('') + '<td class="rpt-sum">' + esc(driveSummary(p.code, kind).text) + '</td></tr>';
+      return '<tr><th scope="row">' + label + '</th>' + cells.join('') + '<td class="rpt-sum">' + esc(driveSummary(p, kind).text) + '</td></tr>';
     };
     var sign = function (role) {
       return '<div><p>ลงชื่อ ...................................................</p><p>(...................................................)</p>' +
@@ -2747,7 +2816,7 @@ var EHPCore = (function () {
     return '<article class="rpt">' +
       '<header class="rpt-head"><div><div class="rpt-org">องค์การบริหารส่วนจังหวัดน่าน · ระบบ EHP On Cloud · รพ.สต. ที่ถ่ายโอน 106 แห่ง</div>' +
       '<h1>รายงานการติดตั้งและการแนะนำการใช้งานระบบ EHP On Cloud</h1></div><div class="rpt-code">รหัส ' + esc(p.code) + '</div></header>' +
-      '<div class="rpt-meta">' + meta.line + ' · แห่งที่ ' + n + ' จาก ' + count + '</div>' +
+      '<div class="rpt-meta">' + meta.line + ' · ลำดับ ' + n + '/' + count + '</div>' +
       '<table class="rpt-info"><tbody>' +
       '<tr><th>หน่วยบริการ</th><td><b>' + esc(p.name) + '</b></td><th>อำเภอ</th><td>' + esc(p.district) + '</td></tr>' +
       '<tr><th>รอบ</th><td>' + esc(pr.name) + (p.pilot ? ' (นำร่อง)' : '') + '</td><th>วันเปิดใช้งาน</th><td>' + esc(planDay(p)) + '</td></tr>' +
@@ -2762,33 +2831,111 @@ var EHPCore = (function () {
       '<table class="rpt-visits"><thead><tr><th class="n">ครั้งที่</th><th class="n">วันเวลา</th><th>เจ้าหน้าที่</th><th>ผู้รับคำแนะนำ</th><th class="n">หัวข้อ</th><th>คำแนะนำอื่น / ข้อเสนอแนะ</th></tr></thead>' +
       '<tbody>' + visitRows + '</tbody></table>' +
       '<h2>3. เอกสารใน Google Drive</h2>' +
-      (meta.drive
-        ? '<table><tbody>' + driveRow('รายงานการติดตั้ง', 'install', Core.INSTALL_FILES) +
-          driveRow('ไฟล์ตอบกลับ Cleansing', 'cleansing', Core.CLEANSING_FILES) + '</tbody></table>'
-        : '<p>ไม่มีข้อมูลสถานะไฟล์ (ยังอ่านแท็บ “' + esc(Core.DRIVE_TAB) + '” ไม่ได้) — ตรวจในโฟลเดอร์ Google Drive โดยตรง</p>') +
+      '<table><tbody>' + driveRow('รายงานการติดตั้ง', 'install', Core.INSTALL_FILES) +
+      driveRow('ไฟล์ตอบกลับ Cleansing', 'cleansing', Core.CLEANSING_FILES) + '</tbody></table>' +
       '<div class="rpt-sign">' + sign('เจ้าหน้าที่ผู้ติดตั้ง / ให้คำแนะนำ') + sign('ผู้รับผิดชอบ ' + p.name) + '</div>' +
       '</article>';
   }
 
-  // Fill #printArea, print it alone, then clear it. The tab title becomes the suggested PDF file name.
+  // Fill #printArea, wait for its images, print it alone, then clear it. The tab title becomes the PDF file name.
+  // Loading = images are still coming (ignore repeat clicks). Some browsers (iOS Safari) never fire afterprint,
+  // so the previous print is also cleaned up when the next one starts.
+  var printLoading = false, printCleanup = null;
+  function runPrint(html, title, btn) {
+    if (printLoading) return;
+    if (printCleanup) printCleanup();
+    printLoading = true;
+    var area = $('printArea'), oldTitle = document.title, btnText = btn ? btn.textContent : '';
+    area.innerHTML = html;
+    var imgs = [].slice.call(area.querySelectorAll('img'));
+    var loaded = 0;
+    var progress = function () { if (btn) btn.textContent = 'กำลังโหลดรูป ' + loaded + '/' + imgs.length + '…'; };
+    if (btn) btn.disabled = true;
+    progress();
+    var waits = imgs.map(function (im) {
+      return new Promise(function (resolve) {
+        var finish = function () { loaded++; progress(); resolve(); };
+        // Google sometimes drops connections when many images load at once: retry twice, a new size busts the cache.
+        var tries = 0;
+        var fail = function () {
+          if (tries++ < 2) {
+            setTimeout(function () { im.src = im.src.replace(/=w\d+$/, '') + '=w' + (2000 - tries * 200); }, 1500 * tries);
+            return;
+          }
+          var note = document.createElement('p');
+          note.className = 'rpt-gap';
+          note.textContent = 'โหลดรูปไม่ได้: ' + im.alt + ' — เปิดจากโฟลเดอร์ Google Drive';
+          im.replaceWith(note);
+          finish();
+        };
+        if (im.complete && im.naturalWidth) finish();
+        else { im.addEventListener('load', finish, { once: true }); im.addEventListener('error', fail); }
+      });
+    });
+    var timeout = new Promise(function (resolve) { setTimeout(resolve, 120000); }); // print what has loaded after 2 minutes
+    Promise.race([Promise.all(waits), timeout]).then(function () {
+      if (btn) { btn.textContent = btnText; btn.disabled = false; }
+      document.title = title;
+      document.body.classList.add('print-report');
+      var done = printCleanup = function () {
+        window.removeEventListener('afterprint', done);
+        document.body.classList.remove('print-report');
+        area.innerHTML = '';
+        document.title = oldTitle;
+        printCleanup = null;
+      };
+      window.addEventListener('afterprint', done);
+      printLoading = false;
+      setTimeout(function () { window.print(); }, 50); // let the pages lay out before the dialog opens
+    });
+  }
+
+  // Installation images: a contents page (which sites lack files), then one image per A4 page,
+  // BF1 BF2 AT1 AT2 for every รพ.สต. in the order of the export list.
+  function imagesHtml(list, label) {
+    var rows = [], pages = [], now = Core.formatThaiDate(new Date());
+    list.forEach(function (r, i) {
+      var p = r.plan, f = Core.installFolder(state.driveIndex, p), files = f && f.files ? f.files : {};
+      var keys = Core.INSTALL_FILES.filter(function (k) { return files[k]; });
+      var missing = Core.INSTALL_FILES.filter(function (k) { return !files[k]; });
+      rows.push('<tr><td class="n">' + (i + 1) + '</td><td>' + esc(p.code) + '</td><td>' + esc(p.name) + '</td><td>' + esc(p.district) + '</td>' +
+        '<td>' + esc(p.staff) + '</td><td>' + esc(!f ? 'ยังไม่มีโฟลเดอร์' : missing.length ? 'ขาด ' + missing.join(' ') : 'ครบ 4 รูป') + '</td></tr>');
+      keys.forEach(function (k, n) {
+        var file = files[k];
+        var head = '<div class="rpt-imghead"><b>' + esc(p.code + ' ' + p.name) + '</b> · อ.' + esc(p.district) + ' · ' +
+          'รอบ ' + p.round + (p.pilot ? ' (นำร่อง)' : '') + ' · <b>' + esc(k) + '</b> (' + (n + 1) + '/' + keys.length + ')' +
+          ' · ลำดับ ' + (i + 1) + '/' + list.length + '</div>';
+        pages.push('<article class="rpt rpt-img">' + head + (file.image
+          ? '<img src="' + esc(Core.imageUrl(file.id)) + '" alt="' + esc(k + ' ' + p.code + ' ' + p.name) + '" referrerpolicy="no-referrer">'
+          : '<p class="rpt-gap">ไฟล์ ' + esc(file.name) + ' ไม่ใช่รูปภาพ — พิมพ์แยกจากโฟลเดอร์ Google Drive</p>') + '</article>');
+      });
+    });
+    var cover = '<article class="rpt">' +
+      '<header class="rpt-head"><div><div class="rpt-org">องค์การบริหารส่วนจังหวัดน่าน · ระบบ EHP On Cloud</div>' +
+      '<h1>รูปรายงานการติดตั้ง (BF1 BF2 AT1 AT2)</h1></div><div class="rpt-code">' + esc(label) + '</div></header>' +
+      '<div class="rpt-meta">' + esc('รูปจากโฟลเดอร์ Google Drive ณ ' + Core.formatThaiDate(state.driveIndex.updatedAt) + ' · พิมพ์เมื่อ ' + now +
+        ' · ' + list.length + ' แห่ง · ' + pages.length + ' รูป · 1 รูปต่อหน้า') + '</div>' +
+      '<table><thead><tr><th class="n">ที่</th><th>รหัส</th><th>รพ.สต.</th><th>อำเภอ</th><th>ผู้รับผิดชอบ</th><th>รูป</th></tr></thead><tbody>' +
+      rows.join('') + '</tbody></table></article>';
+    return cover + pages.join('');
+  }
+
+  function printImages(list, label, btn) {
+    if (!list.length) return;
+    if (!state.driveIndex) { showError('ยังโหลดรายการรูปจากโฟลเดอร์ Google Drive ไม่ได้ — กด “โหลดข้อมูลล่าสุด” แล้วลองอีกครั้ง'); return; }
+    track('export', 'print-images');
+    runPrint(imagesHtml(list, label), exportName('รูปรายงานการติดตั้ง ' + label, 'pdf').replace(/\.pdf$/, ''), btn);
+  }
+
   function printReports(list, label) {
     if (!list.length) return;
     var meta = { drive: state.drive, line: esc('ข้อมูลจาก Google Form ณ ' + Core.formatThaiDate(state.loadedAt) +
-      (state.drive && state.drive.updatedAt ? ' · สถานะไฟล์ Drive ณ ' + Core.formatThaiDate(state.drive.updatedAt) : '') +
+      (state.driveIndex && state.driveIndex.updatedAt ? ' · รูปใน Drive ณ ' + Core.formatThaiDate(state.driveIndex.updatedAt) : '') +
+      (state.drive && state.drive.updatedAt ? ' · สถานะ Cleansing ณ ' + Core.formatThaiDate(state.drive.updatedAt) : '') +
       ' · พิมพ์เมื่อ ' + Core.formatThaiDate(new Date()) + ' · มีชื่อบุคคล โปรดใช้อย่างระมัดระวัง') };
-    $('printArea').innerHTML = list.map(function (r, i) { return reportHtml(r, i + 1, list.length, meta); }).join('');
-    var title = document.title;
-    document.title = exportName('รายงานการติดตั้ง ' + label, 'pdf').replace(/\.pdf$/, '');
-    document.body.classList.add('print-report');
-    var done = function () {
-      window.removeEventListener('afterprint', done);
-      document.body.classList.remove('print-report');
-      $('printArea').innerHTML = '';
-      document.title = title;
-    };
-    window.addEventListener('afterprint', done);
     track('export', 'print');
-    setTimeout(function () { window.print(); }, 50); // let the pages lay out before the dialog opens
+    runPrint(list.map(function (r, i) { return reportHtml(r, i + 1, list.length, meta); }).join(''),
+      exportName('รายงานการติดตั้ง ' + label, 'pdf').replace(/\.pdf$/, ''));
   }
 
   function siteSheets(list) {
@@ -2807,8 +2954,8 @@ var EHPCore = (function () {
         r.visits.length, day(r.firstVisit), day(r.lastVisit), r.staff.join(', '), r.recipients.join(', '),
         r.done, r.total, pctNum(r.completeness), r.missing.join(', ')]
         .concat(r.topics.map(function (t) { return cellOf[t.status]; }),
-          [driveSummary(p.code, 'install').text], Core.INSTALL_FILES.map(function (f) { return driveFlag(p.code, 'install', f); }),
-          [driveSummary(p.code, 'cleansing').text], Core.CLEANSING_FILES.map(function (f) { return driveFlag(p.code, 'cleansing', f); })));
+          [driveSummary(p, 'install').text], Core.INSTALL_FILES.map(function (f) { return driveFlag(p, 'install', f); }),
+          [driveSummary(p, 'cleansing').text], Core.CLEANSING_FILES.map(function (f) { return driveFlag(p, 'cleansing', f); })));
       r.topics.forEach(function (t, k) {
         topics.push([round, p.district, p.code, p.name, k + 1, t.label, EX_STATUS[t.status] + (t.scope ? ' (' + t.scope + ')' : ''), day(t.first), t.by]);
       });
@@ -3034,11 +3181,15 @@ var EHPCore = (function () {
   ['exRound', 'exDistrict', 'exStaff', 'exPilots'].forEach(function (id) { $(id).addEventListener('change', renderExport); });
   $('exPrint').addEventListener('click', function () { printReports(state.exList || [], exScopeText(exScope())); });
   $('exExcel').addEventListener('click', function () { exportSitesExcel($('exExcel')); });
+  $('exPrintImages').addEventListener('click', function () { printImages(state.exList || [], exScopeText(exScope()), $('exPrintImages')); });
   $('exTable').addEventListener('click', function (e) {
-    var b = e.target.closest('[data-print]');
+    var b = e.target.closest('[data-print], [data-print-img]');
     if (!b) return;
-    var one = (state.exList || []).filter(function (x) { return x.plan.code === b.getAttribute('data-print'); });
-    if (one.length) printReports(one, one[0].plan.code + ' ' + one[0].plan.name);
+    var code = b.getAttribute('data-print') || b.getAttribute('data-print-img');
+    var one = (state.exList || []).filter(function (x) { return x.plan.code === code; });
+    if (!one.length) return;
+    var label = one[0].plan.code + ' ' + one[0].plan.name;
+    if (b.hasAttribute('data-print-img')) printImages(one, label, null); else printReports(one, label);
   });
   document.querySelectorAll('[data-export]').forEach(function (b) {
     b.addEventListener('click', function () { runExport(b.closest('.export-menu'), b.getAttribute('data-export')); });

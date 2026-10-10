@@ -400,3 +400,20 @@ test('siteReports keeps the Master plan order of อำเภอ within a round'
   const planOrder = [...new Set(Core.MASTER_PLAN.filter((p) => p.round === 1).map((p) => p.district))];
   assert.deepEqual(order, planOrder);
 });
+
+test('Drive image index: a planned site is found in its own round folder (pilot: นำร่อง), else in any round', () => {
+  const idx = Core.parseDriveIndex(JSON.stringify({ updatedAt: '2026-10-10T05:00:00Z', rounds: {
+    1: { sites: { '06448': { files: { BF1: { id: 'a', name: 'BF1.png', image: true } } } } },
+    pilot: { sites: { '06449': { files: {} } } },
+    2: { sites: { '06452': { files: {} } } }
+  } }));
+  assert.equal(idx.updatedAt.toISOString(), '2026-10-10T05:00:00.000Z');
+  const plan = (code) => Core.MASTER_PLAN.find((p) => p.code === code);
+  assert.equal(Core.installFolder(idx, plan('06448')).files.BF1.id, 'a');
+  assert.ok(Core.installFolder(idx, plan('06449')), 'pilot site in the นำร่อง folder');
+  assert.ok(Core.installFolder(idx, plan('06452')), 'round 1 site filed under another round folder');
+  assert.equal(Core.installFolder(idx, plan('06453')), null);
+  assert.equal(Core.installFolder(null, plan('06448')), null);
+  assert.equal(Core.parseDriveIndex('{}'), null);
+  assert.equal(Core.imageUrl('a b'), 'https://lh3.googleusercontent.com/d/a%20b=w2000');
+});

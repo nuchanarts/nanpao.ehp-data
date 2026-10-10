@@ -1,0 +1,39 @@
+# Index of the installation report images (BF1 BF2 AT1 AT2) in the team's public Google Drive folder.
+# The dashboard reads it to print every image of a round at once. No Google credentials are used.
+# Published to the "drive-index" branch (one commit, replaced each run) so the Pages branch stays untouched.
+name: Drive index
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: drive-index
+  cancel-in-progress: false
+
+jobs:
+  index:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node tools/drive-index.mjs "$RUNNER_TEMP/drive-index.json"
+      - name: Publish to the drive-index branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir "$RUNNER_TEMP/pub" && cd "$RUNNER_TEMP/pub"
+          git init -q -b drive-index
+          cp "$RUNNER_TEMP/drive-index.json" .
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add drive-index.json
+          git commit -qm "drive index $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push -qf "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" drive-index

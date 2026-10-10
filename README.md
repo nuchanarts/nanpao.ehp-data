@@ -16,16 +16,19 @@ Sheet ต้องแชร์แบบ “ทุกคนที่มีลิ�
 - **ชุดสี:** ฟ้า เขียว ม่วง ส้ม ชมพู เทา ใช้ได้ทั้งโหมดสว่างและมืด
 - **ส่งออก:** Excel / PNG / JPG ทุกเมนู และเฉพาะกล่องคำแนะนำในเมนูติดตามงาน
 - **เมนูส่งออกข้อมูล:** เลือกรอบ อำเภอ ผู้รับผิดชอบ แล้ว
+  - **พิมพ์รูปรายงานการติดตั้ง (BF1 BF2 AT1 AT2)** ทุก รพ.สต. ในครั้งเดียว 1 รูปต่อหน้า หน้าแรกเป็นสารบัญบอกแห่งที่ไฟล์ไม่ครบ
+    — รายการรูปมาจาก GitHub Action `.github/workflows/drive-index.yml` ที่อ่านโฟลเดอร์ Drive สาธารณะทุก 30 นาที (สั่งรันทันทีได้ที่แท็บ Actions → Drive index → Run workflow)
   - **พิมพ์รายงานราย รพ.สต.** 1 แห่งต่อหน้า A4 (บันทึกเป็น PDF ได้): ข้อมูลตามแผน, ผลการแนะนำ 15 หัวข้อพร้อมวันที่และผู้แนะนำ, ประวัติการเข้าแนะนำ, สถานะไฟล์ใน Drive, ช่องลงชื่อ
   - **Excel**: สรุปราย รพ.สต. · หัวข้อราย รพ.สต. · ประวัติการเข้าแนะนำทุกครั้ง
   - สถานะไฟล์ใน Drive ต้องติดตั้ง [`apps-script/bot/`](apps-script/bot/README.md) ในบอทแมวส้มก่อน
-- **พิมพ์รวมรูปรายงานการติดตั้งทั้งรอบ:** เมนู 🐱 แมวส้ม ใน Google Sheet (บอทรวมรูป BF1 BF2 AT1 AT2 ทุกแห่งเป็น PDF เดียว) — [`apps-script/bot/InstallPrint.gs`](apps-script/bot/README.md)
+- **(ทางเลือก) รวมรูปเป็น Google Doc/PDF ใน Drive:** เมนู 🐱 แมวส้ม ใน Google Sheet — [`apps-script/bot/InstallPrint.gs`](apps-script/bot/README.md) ต้องติดตั้งในบอทก่อน
 
 ## โครงสร้าง
 
 - `index.html` — หน้าเดียวครบ: `<script id="ehp-core">` คือ logic ทั้งหมด (แปลงลิงก์ Sheet, อ่าน CSV, หาคอลัมน์ตามชื่อหัวตาราง, จับคู่หัวข้อ Checklist, คำนวณสรุป) ไม่แตะ DOM; สคริปต์ถัดไปคือ UI เท่านั้น
 - `apps-script/Code.gs` — Apps Script ของทีม: ตรวจ Google ID token แล้วบันทึกการเข้าชมลง Google Sheet และคืนรายชื่อผู้กำลังดู
 - `apps-script/bot/DriveStatus.gs` — ไฟล์เสริมสำหรับบอทแมวส้ม: เขียนแท็บ "สถานะไฟล์ Drive" ให้เมนูส่งออกข้อมูล
+- `tools/drive-index.mjs` + `.github/workflows/drive-index.yml` — สร้างรายการรูปรายงานการติดตั้งจากโฟลเดอร์ Drive สาธารณะ ให้ปุ่มพิมพ์รูป
 - `apps-script/bot/InstallPrint.gs` — ไฟล์เสริมสำหรับบอทแมวส้ม: เมนูใน Google Sheet รวมรูปรายงานการติดตั้งทั้งรอบเป็น Google Doc + PDF
 - `tests/core.test.mjs` — unit test ของ `ehp-core` (`npm test`, ต้องมี Node 20+)
 - `tests/fixtures/` — หัวตารางจริงของฟอร์ม + ข้อมูลสมมติสำหรับทดสอบ (`node tests/fixtures/build-sample.mjs` เพื่อสร้างใหม่)
