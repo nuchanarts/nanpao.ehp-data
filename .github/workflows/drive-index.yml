@@ -5,7 +5,10 @@ name: Drive index
 
 on:
   schedule:
-    - cron: '*/30 * * * *'
+    # Off the hour: GitHub delays or drops scheduled runs at :00 and :30 when its queue is busy.
+    - cron: '7,37 * * * *'
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
