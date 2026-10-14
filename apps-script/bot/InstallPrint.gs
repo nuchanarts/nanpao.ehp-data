@@ -22,6 +22,7 @@ const PRINT_TIME_LIMIT_MS = 5 * 60 * 1000;                             // Apps S
 function onOpen() {
   const menu = SpreadsheetApp.getUi().createMenu('🐱 แมวส้ม');
   Object.keys(DRIVE_FOLDERS).forEach(r => menu.addItem(`พิมพ์รวมรายงานการติดตั้ง รอบ ${r}`, 'printInstallRound' + r));
+  if (typeof addCleansingMenu_ === 'function') addCleansingMenu_(menu);   // CleansingPrint.gs (ถ้าติดตั้งแล้ว)
   menu.addToUi();
 }
 function printInstallRound1() { printInstallRound_(1); }

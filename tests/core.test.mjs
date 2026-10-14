@@ -417,3 +417,60 @@ test('Drive image index: a planned site is found in its own round folder (pilot:
   assert.equal(Core.parseDriveIndex('{}'), null);
   assert.equal(Core.imageUrl('a b'), 'https://lh3.googleusercontent.com/d/a%20b=w2000');
 });
+
+test('cleansingStatus: C01–C03 per planned site from the bot tab, summed overall and per อำเภอ', () => {
+  const reports = Core.siteReports({ topics: T, records: [] }, { round: 1, pilots: false });
+  const [a, b, c] = reports.map((r) => r.plan.code);
+  const drive = Core.parseDriveStatus([
+    'รหัส,โฟลเดอร์รายงานติดตั้ง,BF1,BF2,AT1,AT2,โฟลเดอร์ Cleansing,รอบ (Cleansing),C01,C02,C03,อัปเดตเมื่อ',
+    `${a},มี,มี,มี,มี,มี,มี,1,มี,มี,มี,2026-10-10 09:15`,
+    `${b},มี,มี,มี,มี,มี,มี,1,มี,ไม่มี,มี,2026-10-10 09:15`,
+    `${c},มี,มี,มี,มี,มี,ไม่มี,,ไม่มี,ไม่มี,ไม่มี,2026-10-10 09:15`
+  ].join('\n'));
+  const s = Core.cleansingStatus(reports, drive);
+  assert.equal(s.rows.length, reports.length);
+  assert.equal(s.rows[0].status, 'complete');
+  assert.equal(s.rows[1].status, 'partial');
+  assert.deepEqual([...s.rows[1].missing], ['C02']);
+  assert.equal(s.rows[2].status, 'nofolder');
+  assert.equal(s.rows[3].status, 'nofolder', 'no row in the tab = no folder yet');
+  assert.equal(s.totals.complete, 1);
+  assert.equal(s.totals.partial, 1);
+  assert.equal(s.totals.nofolder, reports.length - 2);
+  assert.equal(s.totals.files.C01, 2);
+  assert.equal(s.totals.files.C02, 1);
+  const sumDistricts = s.districts.reduce((n, d) => n + d.sites, 0);
+  assert.equal(sumDistricts, reports.length);
+  assert.equal(s.districts[0].district, reports[0].plan.district, 'Master plan order of อำเภอ');
+
+  const none = Core.cleansingStatus(reports, null);
+  assert.ok(none.rows.every((r) => r.status === 'nodata' && r.missing.length === 0));
+  assert.equal(none.totals.nodata, reports.length);
+});
+
+test('cleansingFolderUrl links every round folder (0 = นำร่อง) and nothing else', () => {
+  for (const r of [0, 1, 2, 3, 4]) assert.match(Core.cleansingFolderUrl(r), /^https:\/\/drive\.google\.com\/drive\/folders\/[\w-]{20,}$/);
+  assert.equal(Core.cleansingFolderUrl(5), null);
+  const pilots = Core.MASTER_PLAN.filter((p) => p.pilot);
+  assert.ok(pilots.length > 0 && pilots.every((p) => p.round >= 1), 'pilot sites keep their Master plan round');
+});
+
+test('parseCleansingPdfs reads the bot tab by header text and only links files that are not public', () => {
+  const csv = [
+    'รอบ,ส่วน,จำนวนส่วน,ไฟล์,แห่ง,ครบ,หน้า,การแชร์,สร้างเมื่อ',
+    '1,1,2,1AbcdefghijklmnopqrstuvwxyZ0123,26,13,120,PRIVATE,2026-10-14 13:05',
+    '1,2,2,1BbcdefghijklmnopqrstuvwxyZ0123,26,13,80,PRIVATE,2026-10-14 13:05',
+    'pilot,1,1,1CbcdefghijklmnopqrstuvwxyZ0123,10,2,30,ANYONE_WITH_LINK,2026-10-14 12:05',
+    '2,1,1,not an id,20,0,1,PRIVATE,2026-10-14 12:05'
+  ].join('\n');
+  const d = Core.parseCleansingPdfs(csv);
+  assert.equal(d.rounds['1'].length, 2);
+  assert.equal(d.rounds['1'][1].part, 2);
+  assert.equal(d.rounds['1'][0].url, 'https://drive.google.com/file/d/1AbcdefghijklmnopqrstuvwxyZ0123/view');
+  assert.equal(d.rounds['1'][0].builtAt.getHours(), 13);
+  assert.equal(d.rounds.pilot[0].public, true);
+  assert.equal(d.rounds.pilot[0].url, null, 'a public file is never linked');
+  assert.equal(d.rounds['2'], undefined, 'rows without a Drive file ID are dropped');
+  assert.equal(Core.parseCleansingPdfs(header), null);
+  assert.match(Core.sheetTabUrl(Core.DEFAULT_SHEET_URL, Core.CLEANSING_PDF_TAB), /sheet=PDF%20Cleansing$/);
+});

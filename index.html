@@ -497,6 +497,11 @@ main { padding: 20px 28px 32px; }
 .rpt-gap { padding: 40px 16px; border: 1px dashed #999; text-align: center; }
 .rpt-meta { font-size: 8.5pt; color: #333; margin: -4px 0 8px; }
 .rpt-visits td:nth-child(3), .rpt-visits td:nth-child(4) { white-space: nowrap; }
+.rpt-cl table { font-size: 8.5pt; }
+#clKpis { margin: 12px 0 2px; }
+.cl-rounds { margin: 0 0 10px; }
+.cl-rounds a.btn { display: inline-flex; flex-direction: column; justify-content: center; min-height: 44px; text-decoration: none; line-height: 1.3; }
+.cl-rounds a.btn small { color: inherit; opacity: .8; font-size: .78rem; }
 </style>
 </head>
 <body>
@@ -535,6 +540,7 @@ main { padding: 20px 28px 32px; }
         <li><a href="#staff" data-view="staff"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4.5-6 8-6s7 2 8 6"/></svg><span>เจ้าหน้าที่ / รอบ</span></a></li>
         <li><a href="#recent" data-view="recent"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg><span>บันทึกล่าสุด</span></a></li>
         <li><a href="#export" data-view="export"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span>ส่งออกข้อมูล</span></a></li>
+        <li><a href="#cleansing" data-view="cleansing"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l5 5v13H6zM14 3v5h5M9.5 14.5l2 2 4-4"/></svg><span>Cleansing</span></a></li>
         <li id="viewersItem" hidden><a href="#viewers" data-view="viewers"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M16 4.5a3.5 3.5 0 0 1 0 7M18 14.8c1.9.7 3.1 2.4 3.5 5.2"/></svg><span>ผู้เข้าชม</span><b id="onlineBadge" class="menu-badge" hidden></b></a></li>
         <li><a href="#source" data-view="source"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v14H5zM5 10h14M10 10v9"/></svg><span>แหล่งข้อมูล</span><b id="warnBadge" class="menu-badge" hidden></b></a></li>
       </ul>
@@ -804,6 +810,60 @@ main { padding: 20px 28px 32px; }
               <li><a href="https://drive.google.com/drive/folders/1F6GbqiGF9QpqJjpC2ASiaEA10prKIt4o" target="_blank" rel="noopener noreferrer">รายงาน Cleansing ข้อมูลแยกรอบ (Google Drive)</a></li>
             </ul>
             <p class="note">สิทธิ์การเปิดโฟลเดอร์ขึ้นกับการแชร์ใน Google Drive · ไฟล์ Cleansing อาจมีข้อมูลผู้ป่วย ควรแชร์เฉพาะทีม</p>
+          </section>
+        </div>
+
+        <!-- Cleansing: which of C01–C03 each รพ.สต. has, from the bot's status tab. Presence only — the files may hold
+             patient data, so their names, links and content never reach this page (constitution V). -->
+        <div class="stack" data-panel="cleansing">
+          <section class="card" aria-labelledby="clHead">
+            <div class="card-head">
+              <h2 id="clHead">สรุปไฟล์ Cleansing ราย รพ.สต. (C01 C02 C03)</h2>
+              <span class="small muted" id="clCount" aria-live="polite"></span>
+            </div>
+            <div class="filters">
+              <label>รอบ (ตาม Master plan)<select id="clRound" autocomplete="off"></select></label>
+              <label>อำเภอ<select id="clDistrict" autocomplete="off"></select></label>
+              <label>ผู้รับผิดชอบตามแผน<select id="clStaff" autocomplete="off"></select></label>
+              <label class="ex-check"><span><input type="checkbox" id="clPilots" checked> รวม รพ.สต.นำร่อง</span></label>
+              <label class="ex-check"><span><input type="checkbox" id="clOnlyMissing"> เฉพาะแห่งที่ยังไม่ครบ</span></label>
+            </div>
+            <div id="clDrive" class="alert" role="status"></div>
+            <div class="kpis" id="clKpis"></div>
+            <div class="ex-actions">
+              <button type="button" class="btn-primary" id="clPrint">พิมพ์สรุป Cleansing</button>
+              <button type="button" id="clExcel">ดาวน์โหลด Excel</button>
+            </div>
+            <ul class="ex-help small muted">
+              <li><b>พิมพ์สรุป</b>: สรุปรายอำเภอ และตารางทุก รพ.สต. ว่ามีไฟล์ C01 C02 C03 ครบหรือขาดไฟล์ไหน · ในหน้าต่างพิมพ์เลือก “บันทึกเป็น PDF” เพื่อเก็บเป็นไฟล์</li>
+              <li><b>Excel</b>: สถานะ C01 C02 C03 ราย รพ.สต. · สรุปรายอำเภอ</li>
+              <li>C01 = Cleansing_Card (ประวัติผู้ป่วย) · C02 = Cleansing_Allergy (แพ้ยา) · C03 = Cleansing_Visit (ประวัติการรับบริการ)</li>
+            </ul>
+          </section>
+          <section class="card" aria-labelledby="clPdfHead">
+            <div class="card-head"><h2 id="clPdfHead">พิมพ์เอกสาร Cleansing ทั้งรอบในครั้งเดียว (C01 C02 C03)</h2></div>
+            <p style="margin-top:0">กดรอบที่ต้องการ → PDF รวมของรอบนั้นเปิดใน Google Drive → กดพิมพ์ · ในไฟล์มีสารบัญบอกแห่งที่ไฟล์ไม่ครบ แล้วตามด้วยเอกสารทุก รพ.สต. เรียงตามรายชื่อ (PDF และรูป 1 รูปต่อหน้า) · บอทแมวส้มสร้างใหม่เองเมื่อมีไฟล์ใหม่ (ตรวจทุกชั่วโมง)</p>
+            <div class="ex-actions cl-rounds" id="clRounds"></div>
+            <div id="clPdfNote" class="alert" role="status" hidden></div>
+            <p class="note">เปิดได้เฉพาะคนในทีมที่มีสิทธิ์ในโฟลเดอร์ Cleansing · ต้องการไฟล์ใหม่ทันที: Google Sheet ของฟอร์ม → เมนู 🐱 แมวส้ม → พิมพ์รวม Cleansing รอบ N</p>
+          </section>
+          <section class="card" aria-labelledby="clDistHead">
+            <div class="card-head"><h2 id="clDistHead">สรุปรายอำเภอ</h2></div>
+            <div class="table-scroll"><table id="clDistTable"></table></div>
+          </section>
+          <section class="card" aria-labelledby="clListHead">
+            <div class="card-head">
+              <h2 id="clListHead">รายการ รพ.สต.</h2>
+              <span class="small muted">“แนะนำ Cleansing Data” มาจาก Checklist ในฟอร์ม</span>
+            </div>
+            <div class="table-scroll"><table id="clTable"></table></div>
+          </section>
+          <section class="card" aria-labelledby="clMoreHead">
+            <div class="card-head"><h2 id="clMoreHead">โฟลเดอร์ต้นฉบับ</h2></div>
+            <ul class="ex-links">
+              <li><a href="https://drive.google.com/drive/folders/1F6GbqiGF9QpqJjpC2ASiaEA10prKIt4o" target="_blank" rel="noopener noreferrer">รายงาน Cleansing ข้อมูลแยกรอบ (Google Drive)</a></li>
+            </ul>
+            <p class="note">ไฟล์มีข้อมูลผู้ป่วย Dashboard จึงไม่แสดงไฟล์เอง ไฟล์อยู่ใน Google Drive ของทีมเท่านั้น · สิทธิ์การเปิดขึ้นกับการแชร์ใน Google Drive ต้องแชร์เฉพาะทีม</p>
           </section>
         </div>
       </div>
@@ -1462,11 +1522,12 @@ var EHPCore = (function () {
   var INSTALL_FILES = ['BF1', 'BF2', 'AT1', 'AT2'];
   var CLEANSING_FILES = ['C01', 'C02', 'C03'];
 
-  // CSV link of that tab. Google returns the first tab when the name is missing, so parseDriveStatus checks the header.
-  function driveStatusUrl(link) {
+  // CSV link of a named tab. Google returns the first tab when the name is missing, so each parser checks the header.
+  function sheetTabUrl(link, tab) {
     var id = String(link || '').match(/^https:\/\/docs\.google\.com\/spreadsheets\/d\/([\w-]+)/);
-    return id ? 'https://docs.google.com/spreadsheets/d/' + id[1] + '/gviz/tq?tqx=out:csv&sheet=' + encodeURIComponent(DRIVE_TAB) : null;
+    return id ? 'https://docs.google.com/spreadsheets/d/' + id[1] + '/gviz/tq?tqx=out:csv&sheet=' + encodeURIComponent(tab) : null;
   }
+  function driveStatusUrl(link) { return sheetTabUrl(link, DRIVE_TAB); }
 
   // "2026-10-10 14:05" (Bangkok time, as the bot writes it) → Date
   function parseStamp(s) {
@@ -1566,10 +1627,76 @@ var EHPCore = (function () {
   }
   function imageUrl(id) { return 'https://lh3.googleusercontent.com/d/' + encodeURIComponent(id) + '=w2000'; }
 
+  // Cleansing round folders in Drive ("รอบ N", pilot: "นำร่อง"), where the bot saves "พิมพ์รวม Cleansing …pdf".
+  // Folder links only (team decision 2026-10-10); access follows Drive sharing (constitution V).
+  var CLEANSING_ROUND_FOLDERS = {
+    0: '1NJ3ZuOht3emZDabwG2B2XkyUZg3FGaYf', 1: '1zwaWAFdO6W3dflx2lBtZtKuBJ6SMRZO0', 2: '1N97yzmICCdvKIbT80KdCmtDXO6DtwDOQ',
+    3: '1bW7FTBWul1XGLY8TqsSBYtcNDdA-OrtB', 4: '1D6JbYYHBALUIfBiertkZ4nSFYWgZ4PrL'
+  };
+  function cleansingFolderUrl(round) {
+    var id = CLEANSING_ROUND_FOLDERS[round];
+    return id ? 'https://drive.google.com/drive/folders/' + id : null;
+  }
+
+  // The bot's merged Cleansing PDF of each round (apps-script/bot/CleansingPrint.gs), one row per part.
+  // Team decision 2026-10-14: the menu may link these merged files so a round prints in one click, but only while
+  // Drive keeps them to the team — a file still shared with anyone is never linked (constitution V).
+  // → { updatedAt, rounds: { '1': [{ part, parts, url, sites, complete, pages, public, builtAt }], pilot: [...] } } or null.
+  var CLEANSING_PDF_TAB = 'PDF Cleansing';
+  function parseCleansingPdfs(text) {
+    var rows = parseTable(String(text || ''));
+    if (!rows.length) return null;
+    var head = rows[0].map(norm);
+    var col = function (name) { return head.indexOf(name); };
+    if (['รอบ', 'ส่วน', 'ไฟล์', 'การแชร์'].some(function (n) { return col(n) < 0; })) return null;
+    var num = function (row, name) { return Number(cell(row, col(name))) || 0; };
+    var rounds = {}, updatedAt = null;
+    rows.slice(1).forEach(function (row) {
+      var round = cell(row, col('รอบ')), id = cell(row, col('ไฟล์'));
+      if (!/^(\d|pilot)$/.test(round) || !/^[\w-]{20,}$/.test(id)) return;
+      var pub = /^ANYONE/.test(cell(row, col('การแชร์')));
+      var at = parseStamp(cell(row, col('สร้างเมื่อ')));
+      if (at && (!updatedAt || at > updatedAt)) updatedAt = at;
+      (rounds[round] = rounds[round] || []).push({
+        part: num(row, 'ส่วน') || 1, parts: num(row, 'จำนวนส่วน') || 1, sites: num(row, 'แห่ง'), complete: num(row, 'ครบ'),
+        pages: num(row, 'หน้า'), public: pub, builtAt: at,
+        url: pub ? null : 'https://drive.google.com/file/d/' + encodeURIComponent(id) + '/view'
+      });
+    });
+    Object.keys(rounds).forEach(function (k) { rounds[k].sort(function (a, b) { return a.part - b.part; }); });
+    return { updatedAt: updatedAt, rounds: rounds };
+  }
+
+  // Cleansing menu: which of C01–C03 each planned รพ.สต. has, from the bot's status tab only. The files may hold
+  // patient data, so this is presence alone — never names, links or content (constitution V).
+  // status: 'nodata' (tab not readable) · 'nofolder' · 'partial' · 'complete'. advised = the Cleansing Data topic's status.
+  function cleansingStatus(reports, drive) {
+    var zero = function () { return { sites: 0, complete: 0, partial: 0, nofolder: 0, nodata: 0 }; };
+    var totals = zero(), districts = {}, order = [];
+    totals.files = {};
+    totals.advised = 0;
+    CLEANSING_FILES.forEach(function (f) { totals.files[f] = 0; });
+    var rows = reports.map(function (r) {
+      var s = drive ? drive.sites[r.plan.code] : null, folder = !!(s && s.cleansingFolder), has = {};
+      CLEANSING_FILES.forEach(function (f) { has[f] = folder && !!s.cleansing[f]; if (has[f]) totals.files[f]++; });
+      var missing = drive ? CLEANSING_FILES.filter(function (f) { return !has[f]; }) : [];
+      var status = !drive ? 'nodata' : !folder ? 'nofolder' : missing.length ? 'partial' : 'complete';
+      var topic = r.topics.filter(function (t) { return t.label === 'Cleansing Data'; })[0];
+      if (topic && (topic.status === 'done' || topic.status === 'pilot')) totals.advised++;
+      var d = r.plan.district;
+      if (!districts[d]) { districts[d] = zero(); districts[d].district = d; order.push(d); }
+      [totals, districts[d]].forEach(function (t) { t.sites++; t[status]++; });
+      return { report: r, plan: r.plan, folder: folder, has: has, missing: missing, status: status, advised: topic ? topic.status : null };
+    });
+    order.sort(function (a, b) { return districtRank(a) - districtRank(b); });
+    return { rows: rows, totals: totals, districts: order.map(function (d) { return districts[d]; }) };
+  }
+
   return {
     TOTAL_HOSPITALS: TOTAL_HOSPITALS, planOverview: planOverview, nextRound: nextRound,
     DRIVE_INDEX_URL: DRIVE_INDEX_URL, parseDriveIndex: parseDriveIndex, installFolder: installFolder, imageUrl: imageUrl,
-    DRIVE_TAB: DRIVE_TAB, INSTALL_FILES: INSTALL_FILES, CLEANSING_FILES: CLEANSING_FILES,
+    cleansingStatus: cleansingStatus, cleansingFolderUrl: cleansingFolderUrl,
+    CLEANSING_PDF_TAB: CLEANSING_PDF_TAB, parseCleansingPdfs: parseCleansingPdfs, sheetTabUrl: sheetTabUrl, DRIVE_TAB: DRIVE_TAB, INSTALL_FILES: INSTALL_FILES, CLEANSING_FILES: CLEANSING_FILES,
     driveStatusUrl: driveStatusUrl, parseDriveStatus: parseDriveStatus, siteReports: siteReports, planRound: planRound, sameStaff: sameStaff, MASTER_PLAN: MASTER_PLAN, PLAN_ROUNDS: PLAN_ROUNDS, planFor: planFor, followUp: followUp, isLaterTopic: isLaterTopic, topicApplies: topicApplies, topicScope: topicScope, NO_ROUND: NO_ROUND, STANDARD_TOPICS: STANDARD_TOPICS,
     DEFAULT_SHEET_URL: DEFAULT_SHEET_URL, sheetCsvUrl: sheetCsvUrl, decodeJwt: decodeJwt,
     parseTable: parseTable, parseThaiDate: parseThaiDate, formatThaiDate: formatThaiDate,
@@ -1593,7 +1720,7 @@ var EHPCore = (function () {
   var AUTO_KEY = 'ehp-nan-dashboard:auto-refresh';
   var RECENT_PAGE = 15;
   var AUTO_REFRESH_MS = 60 * 1000;
-  var state = { ds: null, loadedAt: null, recentShown: RECENT_PAGE, loading: false, timer: null, view: 'overview', drive: null, driveChecked: false, driveIndex: null, driveIndexChecked: false, exList: [] };
+  var state = { ds: null, loadedAt: null, recentShown: RECENT_PAGE, loading: false, timer: null, view: 'overview', drive: null, driveChecked: false, driveIndex: null, driveIndexChecked: false, exList: [], clPdfs: null, clPdfsChecked: false };
   // Sign-in with Google + visit log (constitution V). Both empty = no sign-in, page works as before.
   var AUTH = {
     clientId: '',   // OAuth Client ID (Google Cloud Console → Credentials)
@@ -1601,7 +1728,7 @@ var EHPCore = (function () {
   };
   var AUTH_ON = !!(AUTH.clientId && AUTH.endpoint);
   var HEARTBEAT_MS = 60 * 1000;
-  var VIEWS = { overview: 'ภาพรวม', followup: 'ติดตามงาน', plan: 'แผนติดตั้ง', topics: 'รายหัวข้อ', hospitals: 'ราย รพ.สต.', staff: 'เจ้าหน้าที่ / รอบ', recent: 'บันทึกล่าสุด', export: 'ส่งออกข้อมูล', viewers: 'ผู้เข้าชม', source: 'แหล่งข้อมูล' };
+  var VIEWS = { overview: 'ภาพรวม', followup: 'ติดตามงาน', plan: 'แผนติดตั้ง', topics: 'รายหัวข้อ', hospitals: 'ราย รพ.สต.', staff: 'เจ้าหน้าที่ / รอบ', recent: 'บันทึกล่าสุด', export: 'ส่งออกข้อมูล', cleansing: 'Cleansing', viewers: 'ผู้เข้าชม', source: 'แหล่งข้อมูล' };
   var $ = function (id) { return document.getElementById(id); };
 
   // ---------- Language (constitution VII) ----------
@@ -1634,6 +1761,22 @@ var EHPCore = (function () {
     'โหลดรายการรูปจากโฟลเดอร์ Google Drive ไม่ได้ — ยังพิมพ์รูปรายงานการติดตั้งไม่ได้ ลองกด “โหลดข้อมูลล่าสุด”': 'Could not load the image list from Google Drive — installation images cannot be printed yet; try “Reload”', 'พิมพ์รูปรายงานการติดตั้ง (BF1 BF2 AT1 AT2) ทั้งรอบในครั้งเดียว': 'Print every installation image (BF1 BF2 AT1 AT2) of a round at once',
     ': เปิด Google Sheet → เมนู 🐱 แมวส้ม → พิมพ์รวมรายงานการติดตั้ง รอบ N · ได้ PDF เรียงทุก รพ.สต. 1 แห่งต่อหน้า เก็บไว้ในโฟลเดอร์ของรอบนั้น': ': open the Google Sheet → menu 🐱 แมวส้ม → พิมพ์รวมรายงานการติดตั้ง รอบ N · a PDF with every health centre, one per page, saved in that round folder', 'พิมพ์': 'Print', 'การแนะนำ': 'Advice', 'รายงานติดตั้ง': 'Install report',
     'ยังไม่มีโฟลเดอร์': 'No folder yet', 'ไม่มีข้อมูล': 'No data', 'ยังไม่เข้า': 'Not visited', 'ครบ (นำร่อง)': 'Complete (pilot)',
+    'สรุปไฟล์ Cleansing ราย รพ.สต. (C01 C02 C03)': 'Cleansing files by health centre (C01 C02 C03)', 'เฉพาะแห่งที่ยังไม่ครบ': 'Incomplete only',
+    'พิมพ์สรุป Cleansing': 'Print Cleansing summary', 'พิมพ์สรุป': 'Print summary', 'สรุปรายอำเภอ': 'By district', 'รายการ รพ.สต.': 'Health centres',
+    ': สรุปรายอำเภอ และตารางทุก รพ.สต. ว่ามีไฟล์ C01 C02 C03 ครบหรือขาดไฟล์ไหน · ในหน้าต่างพิมพ์เลือก “บันทึกเป็น PDF” เพื่อเก็บเป็นไฟล์': ': totals by district and a table of every health centre showing which of C01 C02 C03 it has · choose “Save as PDF” in the print dialog to keep a file',
+    ': สถานะ C01 C02 C03 ราย รพ.สต. · สรุปรายอำเภอ': ': C01 C02 C03 status by health centre · totals by district',
+    'C01 = Cleansing_Card (ประวัติผู้ป่วย) · C02 = Cleansing_Allergy (แพ้ยา) · C03 = Cleansing_Visit (ประวัติการรับบริการ)': 'C01 = Cleansing_Card (patient records) · C02 = Cleansing_Allergy (drug allergies) · C03 = Cleansing_Visit (visit history)',
+    '“แนะนำ Cleansing Data” มาจาก Checklist ในฟอร์ม': '“Cleansing Data advised” comes from the form Checklist', 'แนะนำ Cleansing Data': 'Cleansing Data advised',
+    'พิมพ์เอกสาร Cleansing ทั้งรอบในครั้งเดียว (C01 C02 C03)': 'Print a whole round of Cleansing documents at once (C01 C02 C03)',
+    'กดรอบที่ต้องการ → PDF รวมของรอบนั้นเปิดใน Google Drive → กดพิมพ์ · ในไฟล์มีสารบัญบอกแห่งที่ไฟล์ไม่ครบ แล้วตามด้วยเอกสารทุก รพ.สต. เรียงตามรายชื่อ (PDF และรูป 1 รูปต่อหน้า) · บอทแมวส้มสร้างใหม่เองเมื่อมีไฟล์ใหม่ (ตรวจทุกชั่วโมง)': 'Pick a round → its merged PDF opens in Google Drive → print · it starts with a contents page listing missing files, then every health centre in Master plan order (PDFs, and images one per page) · the แมวส้ม bot rebuilds it when new files arrive (checked hourly)',
+    'เปิดได้เฉพาะคนในทีมที่มีสิทธิ์ในโฟลเดอร์ Cleansing · ต้องการไฟล์ใหม่ทันที: Google Sheet ของฟอร์ม → เมนู 🐱 แมวส้ม → พิมพ์รวม Cleansing รอบ N': 'Only team members with access to the Cleansing folder can open it · need a fresh file now: form Google Sheet → menu 🐱 แมวส้ม → พิมพ์รวม Cleansing รอบ N',
+    'โฟลเดอร์ต้นฉบับ': 'Source folders',
+    'ไฟล์มีข้อมูลผู้ป่วย Dashboard จึงไม่แสดงไฟล์เอง ไฟล์อยู่ใน Google Drive ของทีมเท่านั้น · สิทธิ์การเปิดขึ้นกับการแชร์ใน Google Drive ต้องแชร์เฉพาะทีม': 'The files contain patient data, so the dashboard never shows them; they stay in the team Google Drive · access follows Drive sharing — team only',
+    'กำลังอ่านรายการ PDF รวม…': 'Reading the merged PDF list…', 'PDF รวมยังเปิดสาธารณะ': 'Merged PDF still public', 'ยังไม่มี PDF รวม': 'No merged PDF yet',
+    'ไฟล์ครบ 3 ไฟล์': 'All 3 files', 'มีโฟลเดอร์แต่ขาดบางไฟล์': 'Folder exists, some files missing', 'ยังไม่มีโฟลเดอร์ Cleansing ใน Drive': 'No Cleansing folder in Drive yet',
+    'แนะนำ Cleansing Data แล้ว': 'Cleansing Data advised', 'จาก Checklist ในฟอร์ม (รวมนำร่อง)': 'From the form Checklist (incl. pilot sites)',
+    'ครบ': 'Complete', 'สรุป': 'Status', 'ครบ 3/3': 'Complete 3/3', '✓ มี': '✓ Yes', '✗ ไม่มี': '✗ No',
+    'ทุกแห่งตามเงื่อนไขมีไฟล์ครบแล้ว': 'Every matching health centre has all files', 'กำลังอ่านสถานะไฟล์ Cleansing…': 'Reading Cleansing file status…',
     'ไม่มี รพ.สต. ตามเงื่อนไข': 'No health centres match', 'กำลังอ่านสถานะไฟล์ใน Google Drive…': 'Reading Google Drive file status…',
     ': 1 แห่งต่อหน้า (A4) เรียงตามรอบ อำเภอ และรหัส · ในหน้าต่างพิมพ์เลือก “บันทึกเป็น PDF” เพื่อเก็บเป็นไฟล์': ': one site per A4 page, by round, district and code · choose “Save as PDF” in the print dialog to keep a file',
     ': สรุปราย รพ.สต. · หัวข้อราย รพ.สต. (วันที่และผู้แนะนำครั้งแรก) · ประวัติการเข้าแนะนำทุกครั้ง': ': summary per health centre · topics per health centre (first date and advisor) · every visit',
@@ -1758,6 +1901,17 @@ var EHPCore = (function () {
     [/^ตรงเงื่อนไข (\d[\d,]*) แห่ง/, '$1 sites match'],
     [/ · มีบันทึกการเข้าแนะนำ (\d[\d,]*) แห่ง/g, ' · $1 with visit records'],
     [/ · รวมนำร่อง (\d[\d,]*) แห่ง/g, ' · incl. $1 pilots'],
+    [/ · แสดง (\d[\d,]*) แห่ง/g, ' · showing $1'],
+    [/^มีไฟล์ (C01 .+)$/, 'Files: $1'],
+    [/ · เฉพาะที่ยังไม่ครบ/g, ' · incomplete only'],
+    [/^พิมพ์ รอบที่ (\d)( ส่วน (\d+)\/(\d+))?$/, function (m, r, p, a, b) { return 'Print round ' + r + (p ? ' part ' + a + '/' + b : ''); }],
+    [/^พิมพ์ นำร่อง( ส่วน (\d+)\/(\d+))?$/, function (m, p, a, b) { return 'Print pilot sites' + (p ? ' part ' + a + '/' + b : ''); }],
+    [/^โฟลเดอร์ รอบที่ (\d)$/, 'Folder round $1'], [/^โฟลเดอร์ นำร่อง$/, 'Folder pilot sites'],
+    [/^ครบ (\d+)\/(\d+) แห่ง · (\d+) หน้า/, '$1/$2 complete · $3 pages'],
+    [/^(PDF รวมยังเปิดสาธารณะ|ยังไม่มี PDF รวม) · ครบ (\d+)\/(\d+) แห่ง$/, function (m, a, x, y) { return (a === 'ยังไม่มี PDF รวม' ? 'No merged PDF yet' : 'Merged PDF still public') + ' · ' + x + '/' + y + ' complete'; }],
+    [/^PDF รวมของ (.+) ยังเปิดให้ทุกคนที่มีลิงก์ Dashboard จึงไม่ลิงก์ไปที่ไฟล์ — ปรับการแชร์โฟลเดอร์ Cleansing เป็นเฉพาะทีม แล้วรอบอทอัปเดต \(ทุกชั่วโมง\)$/, 'The merged PDF of $1 is still open to anyone with the link, so the dashboard does not link it — restrict the Cleansing folder to the team, then wait for the bot (hourly)'],
+    [/^ยังไม่มีแท็บ “(.+)” — ปุ่มจะเปิดโฟลเดอร์ของรอบแทน จนกว่าบอทจะสร้าง PDF รวม \(ติดตั้ง CleansingPrint\.gs ดู (.+)\)$/, 'No “$1” tab yet — the buttons open the round folders until the bot makes the merged PDFs (install CleansingPrint.gs, see $2)'],
+    [/^ครบ (\d+)\/(\d+) แห่ง$/, '$1/$2 complete'],
     [/^รูปรายงานการติดตั้งจากโฟลเดอร์ Google Drive · ข้อมูล ณ /, 'Installation images from the Google Drive folder · as of '],
     [/ — เกิน 2 ชั่วโมง ระบบอัปเดตรายการรูปอาจหยุดทำงาน/, ' — over 2 hours old, the image list updater may have stopped'],
     [/^สถานะไฟล์ Cleansing จากบอทแมวส้ม · ข้อมูล ณ /, 'Cleansing file status from the แมวส้ม bot · as of '],
@@ -1978,6 +2132,7 @@ var EHPCore = (function () {
         showError('');
         buildFilters();
         loadDriveStatus();
+        loadCleansingPdfs();
         loadDriveIndex();
       })
       .catch(function (e) {
@@ -2029,7 +2184,7 @@ var EHPCore = (function () {
     var ds = state.ds;
     var has = !!ds;
     var onSource = state.view === 'source';
-    var ownScope = state.view === 'viewers' || state.view === 'export'; // these views do not use the global filters
+    var ownScope = state.view === 'viewers' || state.view === 'export' || state.view === 'cleansing'; // these views do not use the global filters
     $('exportMenu').hidden = !has || onSource || ownScope;
     document.querySelector('.filters-bar').hidden = ownScope;
     $('dashboard').hidden = !has || onSource;
@@ -2063,6 +2218,7 @@ var EHPCore = (function () {
     renderPlanAlert(ds, f);
     if (state.view === 'followup') renderFollowUp(ds, f);
     if (state.view === 'export') renderExport();
+    if (state.view === 'cleansing') renderCleansing();
   }
 
   // Overview banner: รพ.สต. past go-live with no visit yet, scoped like the Rollout plan view.
@@ -2662,7 +2818,23 @@ var EHPCore = (function () {
       .then(function (res) { if (!res.ok) throw new Error('HTTP ' + res.status); return res.text(); })
       .then(function (text) { state.drive = Core.parseDriveStatus(text); })
       .catch(function (e) { console.warn('[EHP dashboard] drive status not loaded', e); state.drive = null; })
-      .then(function () { state.driveChecked = true; if (state.view === 'export') renderExport(); });
+      .then(function () {
+        state.driveChecked = true;
+        if (state.view === 'export') renderExport();
+        if (state.view === 'cleansing') renderCleansing();
+      });
+  }
+
+  // The bot's merged Cleansing PDFs (tab "PDF Cleansing"). Missing tab → the round buttons open the round folders.
+  function loadCleansingPdfs() {
+    var url = Core.sheetTabUrl(sheetLink(), Core.CLEANSING_PDF_TAB);
+    var done = function () { state.clPdfsChecked = true; if (state.view === 'cleansing') renderCleansing(); };
+    if (!url) { state.clPdfs = null; done(); return; }
+    fetch(url, { cache: 'no-store', credentials: 'omit' })
+      .then(function (res) { if (!res.ok) throw new Error('HTTP ' + res.status); return res.text(); })
+      .then(function (text) { state.clPdfs = Core.parseCleansingPdfs(text); })
+      .catch(function (e) { console.warn('[EHP dashboard] cleansing PDFs not loaded', e); state.clPdfs = null; })
+      .then(done);
   }
 
   function loadDriveIndex() {
@@ -2673,8 +2845,10 @@ var EHPCore = (function () {
       .then(function () { state.driveIndexChecked = true; if (state.view === 'export') renderExport(); });
   }
 
-  function exScope() {
-    return { round: Number($('exRound').value) || 0, district: $('exDistrict').value, staff: $('exStaff').value, pilots: $('exPilots').checked };
+  // pre: 'ex' (Export menu) or 'cl' (Cleansing menu) — both use the same filter controls.
+  function exScope(pre) {
+    pre = pre || 'ex';
+    return { round: Number($(pre + 'Round').value) || 0, district: $(pre + 'District').value, staff: $(pre + 'Staff').value, pilots: $(pre + 'Pilots').checked };
   }
   function exScopeText(o) {
     var parts = [o.round ? Core.planRound(o.round).name : 'ทุกรอบ'];
@@ -2685,18 +2859,19 @@ var EHPCore = (function () {
   }
 
   // Round, district and staff choices come from the Master plan; districts follow the chosen round.
-  function fillExportFilters() {
-    var o = exScope();
+  function fillExportFilters(pre) {
+    pre = pre || 'ex';
+    var o = exScope(pre);
     var uniq = function (list) {
       return list.filter(function (x, i) { return list.indexOf(x) === i; }).sort(function (a, b) { return a.localeCompare(b, 'th'); });
     };
-    $('exRound').innerHTML = '<option value="">ทุกรอบ</option>' + [1, 2, 3, 4].map(function (r) {
+    $(pre + 'Round').innerHTML = '<option value="">ทุกรอบ</option>' + [1, 2, 3, 4].map(function (r) {
       var pr = Core.planRound(r);
       return '<option value="' + r + '"' + (o.round === r ? ' selected' : '') + '>' + esc(pr.name + ' (' + pr.goLive + ')') + '</option>';
     }).join('');
     var districts = uniq(Core.MASTER_PLAN.filter(function (p) { return !o.round || p.round === o.round; }).map(function (p) { return p.district; }));
-    fillSelect($('exDistrict'), 'ทุกอำเภอ', districts, districts.indexOf(o.district) >= 0 ? o.district : '');
-    fillSelect($('exStaff'), 'ทุกคน', uniq(Core.MASTER_PLAN.map(function (p) { return p.staff; })), o.staff);
+    fillSelect($(pre + 'District'), 'ทุกอำเภอ', districts, districts.indexOf(o.district) >= 0 ? o.district : '');
+    fillSelect($(pre + 'Staff'), 'ทุกคน', uniq(Core.MASTER_PLAN.map(function (p) { return p.staff; })), o.staff);
   }
 
   function driveSite(code) { return state.drive ? state.drive.sites[code] || null : null; }
@@ -2983,6 +3158,202 @@ var EHPCore = (function () {
       .finally(function () { btn.disabled = false; });
   }
 
+  // ---------- Cleansing menu: C01–C03 presence per รพ.สต. (bot status tab), summary print and Excel ----------
+  // Only "has / lacks" reaches this page; the PDFs stay in Drive and the bot merges them there (constitution V).
+  var CL_STATUS = { complete: 'ครบ 3/3', nofolder: 'ยังไม่มีโฟลเดอร์', nodata: 'ไม่มีข้อมูล' };
+  function clStatusText(r) {
+    return r.status === 'partial'
+      ? (Core.CLEANSING_FILES.length - r.missing.length) + '/' + Core.CLEANSING_FILES.length + ' · ขาด ' + r.missing.join(' ')
+      : CL_STATUS[r.status];
+  }
+  function clFlag(r, f) { return r.status === 'nodata' ? 'ไม่มีข้อมูล' : !r.folder ? 'ไม่มีโฟลเดอร์' : r.has[f] ? 'มี' : 'ไม่มี'; }
+  function clAdvised(r) { return r.advised ? EX_STATUS[r.advised] : '–'; }
+
+  // { all, rows, scope, label }: the whole scope (for the summaries) and the rows the list, print and Excel show.
+  function clData() {
+    var o = exScope('cl');
+    var all = Core.cleansingStatus(Core.siteReports(state.ds, o), state.drive);
+    var only = $('clOnlyMissing').checked;
+    var label = exScopeText(o) + (only ? ' · เฉพาะที่ยังไม่ครบ' : '');
+    return { all: all, rows: only ? all.rows.filter(function (r) { return r.status !== 'complete'; }) : all.rows, label: label };
+  }
+
+  function renderCleansing() {
+    if (!state.ds) return;
+    fillExportFilters('cl');
+    var d = clData(), t = d.all.totals, has = !!state.drive;
+    state.clData = d;
+    $('clCount').textContent = 'ตรงเงื่อนไข ' + fmt(t.sites) + ' แห่ง' + (d.rows.length !== t.sites ? ' · แสดง ' + fmt(d.rows.length) + ' แห่ง' : '');
+    $('clPrint').disabled = $('clExcel').disabled = !has || !d.rows.length;
+
+    var box = $('clDrive');
+    if (has) {
+      var at = state.drive.updatedAt, stale = !at || Date.now() - at.getTime() > DRIVE_STALE_MS;
+      box.className = 'alert ' + (stale ? 'alert-warn' : 'alert-info');
+      box.textContent = 'สถานะไฟล์ Cleansing จากบอทแมวส้ม · ข้อมูล ณ ' + (at ? Core.formatThaiDate(at) : 'ไม่ทราบเวลา') +
+        (stale ? ' — เกิน 1 ชั่วโมง บอทอาจหยุดทำงาน' : '');
+    } else {
+      box.className = 'alert alert-warn';
+      box.textContent = state.driveChecked
+        ? 'สถานะไฟล์ Cleansing: ไม่มีข้อมูล (ต้องติดตั้งแท็บ “' + Core.DRIVE_TAB + '” ในบอทแมวส้ม ดู apps-script/bot/README.md)'
+        : 'กำลังอ่านสถานะไฟล์ Cleansing…';
+    }
+
+    var n = function (x) { return has ? fmt(x) + '<small>/' + fmt(t.sites) + '</small>' : '–'; };
+    var ratio = function (x) { return has && t.sites ? x / t.sites : null; };
+    var files = Core.CLEANSING_FILES.map(function (f) { return f + ' ' + fmt(t.files[f]); }).join(' · ');
+    $('clKpis').innerHTML = kpi('ไฟล์ครบ 3 ไฟล์', n(t.complete), has ? 'มีไฟล์ ' + files : 'ไม่มีข้อมูล', ratio(t.complete), 'green') +
+      kpi('ยังไม่ครบ', n(t.partial), has ? 'มีโฟลเดอร์แต่ขาดบางไฟล์' : 'ไม่มีข้อมูล', ratio(t.partial), 'orange') +
+      kpi('ยังไม่มีโฟลเดอร์', n(t.nofolder), has ? 'ยังไม่มีโฟลเดอร์ Cleansing ใน Drive' : 'ไม่มีข้อมูล', ratio(t.nofolder), 'blue') +
+      kpi('แนะนำ Cleansing Data แล้ว', fmt(t.advised) + '<small>/' + fmt(t.sites) + '</small>', 'จาก Checklist ในฟอร์ม (รวมนำร่อง)', t.sites ? t.advised / t.sites : null, 'violet');
+
+    $('clDistTable').innerHTML = d.all.districts.length
+      ? '<thead><tr><th scope="col">อำเภอ</th><th class="n" scope="col">รพ.สต.</th><th class="n" scope="col">ครบ</th>' +
+        '<th class="n" scope="col">ยังไม่ครบ</th><th class="n" scope="col">ยังไม่มีโฟลเดอร์</th><th class="n" scope="col">ความครบ</th></tr></thead><tbody>' +
+        d.all.districts.map(function (x) {
+          var cnt = function (v) { return has ? fmt(v) : '–'; };
+          return '<tr><th scope="row" style="font-weight:500">' + esc(x.district) + '</th><td class="n">' + fmt(x.sites) + '</td>' +
+            '<td class="n">' + cnt(x.complete) + '</td><td class="n">' + cnt(x.partial) + '</td><td class="n">' + cnt(x.nofolder) + '</td>' +
+            '<td class="n">' + (has ? pct(x.complete / x.sites) : '–') + '</td></tr>';
+        }).join('') + '</tbody>'
+      : '<tbody><tr><td class="empty-state">ไม่มี รพ.สต. ตามเงื่อนไข</td></tr></tbody>';
+
+    renderCleansingPdfs(has);
+
+    var mark = function (v) { return v === 'มี' ? '<span class="ex-state ok">✓ มี</span>' : '<span class="ex-state">' + esc(v === 'ไม่มี' ? '✗ ไม่มี' : '–') + '</span>'; };
+    $('clTable').innerHTML = d.rows.length
+      ? '<thead><tr><th scope="col">รอบ</th><th scope="col">รพ.สต.</th><th scope="col">ผู้รับผิดชอบ</th>' +
+        Core.CLEANSING_FILES.map(function (f) { return '<th class="n" scope="col">' + f + '</th>'; }).join('') +
+        '<th scope="col">สรุป</th><th scope="col">แนะนำ Cleansing Data</th></tr></thead><tbody>' +
+        d.rows.map(function (r) {
+          var p = r.plan;
+          return '<tr><td>' + esc(Core.planRound(p.round).name) + '</td>' +
+            '<th scope="row" style="font-weight:500">' + esc(p.code + ' ' + p.name) +
+            '<div class="small muted">อ.' + esc(p.district) + ' · ' + esc(p.system) + (p.pilot ? ' · นำร่อง' : '') + '</div></th>' +
+            '<td>' + esc(p.staff) + '</td>' +
+            Core.CLEANSING_FILES.map(function (f) { return '<td class="n">' + mark(clFlag(r, f)) + '</td>'; }).join('') +
+            '<td><span class="ex-state' + (r.status === 'complete' ? ' ok' : '') + '">' + esc(clStatusText(r)) + '</span></td>' +
+            '<td>' + esc(clAdvised(r)) + '</td></tr>';
+        }).join('') + '</tbody>'
+      : '<tbody><tr><td class="empty-state">' + (t.sites ? 'ทุกแห่งตามเงื่อนไขมีไฟล์ครบแล้ว' : 'ไม่มี รพ.สต. ตามเงื่อนไข') + '</td></tr></tbody>';
+  }
+
+  // One button per round, Master plan order (pilot sites are filed under "นำร่อง", like the bot's PDF):
+  // the merged PDF itself when the bot has made one that Drive keeps to the team, else the round folder.
+  function renderCleansingPdfs(has) {
+    var everyRow = Core.cleansingStatus(Core.siteReports(state.ds, {}), state.drive).rows;
+    var picked = exScope('cl').round, pubRounds = [];
+    var link = function (href, primary, title, sub) {
+      return '<a class="btn' + (primary ? ' btn-primary' : '') + '" href="' + esc(href) + '" target="_blank" rel="noopener noreferrer">' +
+        '<span>' + esc(title) + '</span><small>' + esc(sub) + '</small></a>';
+    };
+    $('clRounds').innerHTML = [1, 2, 3, 4, 0].map(function (r) {
+      var name = r ? Core.planRound(r).name : 'นำร่อง', primary = !!r && r === picked;
+      var pdfs = state.clPdfs ? state.clPdfs.rounds[r ? String(r) : 'pilot'] || [] : [];
+      var open = pdfs.filter(function (p) { return p.url; });
+      if (open.length) {
+        return open.map(function (p) {
+          return link(p.url, primary, 'พิมพ์ ' + name + (p.parts > 1 ? ' ส่วน ' + p.part + '/' + p.parts : ''),
+            'ครบ ' + p.complete + '/' + p.sites + ' แห่ง · ' + p.pages + ' หน้า' + (p.builtAt ? ' · ' + Core.formatThaiDate(p.builtAt) : ''));
+        }).join('');
+      }
+      if (pdfs.length) pubRounds.push(name);
+      var rows = everyRow.filter(function (x) { return r ? x.plan.round === r && !x.plan.pilot : x.plan.pilot; });
+      var done = rows.filter(function (x) { return x.status === 'complete'; }).length;
+      return link(Core.cleansingFolderUrl(r), primary, 'โฟลเดอร์ ' + name,
+        (pdfs.length ? 'PDF รวมยังเปิดสาธารณะ' : 'ยังไม่มี PDF รวม') + (has ? ' · ครบ ' + done + '/' + rows.length + ' แห่ง' : ''));
+    }).join('');
+
+    var note = $('clPdfNote');
+    note.hidden = !pubRounds.length && !!state.clPdfs;
+    if (pubRounds.length) {
+      note.className = 'alert alert-warn';
+      note.textContent = 'PDF รวมของ ' + pubRounds.join(', ') + ' ยังเปิดให้ทุกคนที่มีลิงก์ Dashboard จึงไม่ลิงก์ไปที่ไฟล์ — ' +
+        'ปรับการแชร์โฟลเดอร์ Cleansing เป็นเฉพาะทีม แล้วรอบอทอัปเดต (ทุกชั่วโมง)';
+    } else if (!state.clPdfs) {
+      note.className = 'alert alert-info';
+      note.textContent = state.clPdfsChecked
+        ? 'ยังไม่มีแท็บ “' + Core.CLEANSING_PDF_TAB + '” — ปุ่มจะเปิดโฟลเดอร์ของรอบแทน จนกว่าบอทจะสร้าง PDF รวม (ติดตั้ง CleansingPrint.gs ดู apps-script/bot/README.md)'
+        : 'กำลังอ่านรายการ PDF รวม…';
+    }
+  }
+
+  // One printed summary (A4, always Thai): totals, per อำเภอ, then every รพ.สต. in the list.
+  function cleansingHtml(d) {
+    var t = d.all.totals, now = Core.formatThaiDate(new Date());
+    var sym = function (v) { return v === 'มี' ? '✓' : v === 'ไม่มี' ? '✗' : '–'; };
+    var sites = d.rows.map(function (r, i) {
+      var p = r.plan;
+      return '<tr class="' + (r.status === 'complete' ? '' : 'miss') + '"><td class="n">' + (i + 1) + '</td><td>' + esc(p.code) + '</td>' +
+        '<td>' + esc(p.name) + (p.pilot ? ' (นำร่อง)' : '') + '</td><td>' + esc(p.district) + '</td><td class="n">' + p.round + '</td><td>' + esc(p.staff) + '</td>' +
+        Core.CLEANSING_FILES.map(function (f) { return '<td class="n">' + sym(clFlag(r, f)) + '</td>'; }).join('') +
+        '<td>' + esc(clStatusText(r)) + '</td><td>' + esc(clAdvised(r)) + '</td></tr>';
+    }).join('');
+    var dists = d.all.districts.map(function (x) {
+      return '<tr><td>' + esc(x.district) + '</td><td class="n">' + x.sites + '</td><td class="n">' + x.complete + '</td>' +
+        '<td class="n">' + x.partial + '</td><td class="n">' + x.nofolder + '</td><td class="n">' + pct(x.complete / x.sites) + '</td></tr>';
+    }).join('');
+    var sign = function (role) {
+      return '<div><p>ลงชื่อ ...................................................</p><p>(...................................................)</p>' +
+        '<p>' + esc(role) + '</p><p>วันที่ ........../........../..........</p></div>';
+    };
+    return '<article class="rpt rpt-cl">' +
+      '<header class="rpt-head"><div><div class="rpt-org">องค์การบริหารส่วนจังหวัดน่าน · ระบบ EHP On Cloud · รพ.สต. ที่ถ่ายโอน 106 แห่ง</div>' +
+      '<h1>สรุปไฟล์ Cleansing ข้อมูล (C01 C02 C03) ราย รพ.สต.</h1></div><div class="rpt-code">' + esc(d.label) + '</div></header>' +
+      '<div class="rpt-meta">' + esc('สถานะไฟล์ใน Google Drive จากบอทแมวส้ม ณ ' + (state.drive.updatedAt ? Core.formatThaiDate(state.drive.updatedAt) : 'ไม่ทราบเวลา') +
+        ' · ข้อมูล Checklist จาก Google Form ณ ' + Core.formatThaiDate(state.loadedAt) + ' · พิมพ์เมื่อ ' + now +
+        ' · C01 Cleansing_Card · C02 Cleansing_Allergy · C03 Cleansing_Visit') + '</div>' +
+      '<h2>1. สรุป</h2><table><thead><tr><th class="n">รพ.สต.</th><th class="n">ครบ 3 ไฟล์</th><th class="n">ยังไม่ครบ</th><th class="n">ยังไม่มีโฟลเดอร์</th>' +
+      Core.CLEANSING_FILES.map(function (f) { return '<th class="n">มี ' + f + '</th>'; }).join('') + '<th class="n">แนะนำ Cleansing Data แล้ว</th></tr></thead>' +
+      '<tbody><tr><td class="n">' + t.sites + '</td><td class="n">' + t.complete + ' (' + pct(t.sites ? t.complete / t.sites : null) + ')</td>' +
+      '<td class="n">' + t.partial + '</td><td class="n">' + t.nofolder + '</td>' +
+      Core.CLEANSING_FILES.map(function (f) { return '<td class="n">' + t.files[f] + '</td>'; }).join('') + '<td class="n">' + t.advised + '</td></tr></tbody></table>' +
+      '<h2>2. สรุปรายอำเภอ</h2><table><thead><tr><th>อำเภอ</th><th class="n">รพ.สต.</th><th class="n">ครบ</th><th class="n">ยังไม่ครบ</th>' +
+      '<th class="n">ยังไม่มีโฟลเดอร์</th><th class="n">ความครบ</th></tr></thead><tbody>' + dists + '</tbody></table>' +
+      '<h2>3. ราย รพ.สต. (' + d.rows.length + ' แห่ง)</h2><table><thead><tr><th class="n">ที่</th><th>รหัส</th><th>รพ.สต.</th><th>อำเภอ</th><th class="n">รอบ</th>' +
+      '<th>ผู้รับผิดชอบ</th>' + Core.CLEANSING_FILES.map(function (f) { return '<th class="n">' + f + '</th>'; }).join('') +
+      '<th>สรุป</th><th>แนะนำ Cleansing Data</th></tr></thead><tbody>' + sites + '</tbody></table>' +
+      '<div class="rpt-sign">' + sign('ผู้จัดทำ') + sign('ผู้ตรวจสอบ') + '</div>' +
+      '</article>';
+  }
+
+  function printCleansing() {
+    var d = state.clData;
+    if (!d || !d.rows.length || !state.drive) return;
+    track('export', 'print-cleansing');
+    runPrint(cleansingHtml(d), exportName('สรุป Cleansing ' + d.label, 'pdf').replace(/\.pdf$/, ''));
+  }
+
+  function cleansingSheets(d) {
+    var sites = [['ลำดับ', 'รอบ', 'อำเภอ', 'รหัส', 'รพ.สต.', 'ระบบเดิม', 'นำร่อง', 'วันเปิดใช้งาน', 'ผู้รับผิดชอบตามแผน']
+      .concat(Core.CLEANSING_FILES, ['สรุป', 'แนะนำ Cleansing Data'])];
+    d.rows.forEach(function (r, i) {
+      var p = r.plan;
+      sites.push([i + 1, Core.planRound(p.round).name, p.district, p.code, p.name, p.system, p.pilot ? 'นำร่อง' : '', planDay(p), p.staff]
+        .concat(Core.CLEANSING_FILES.map(function (f) { return clFlag(r, f); }), [clStatusText(r), clAdvised(r)]));
+    });
+    var dists = [['อำเภอ', 'รพ.สต.', 'ครบ 3 ไฟล์', 'ยังไม่ครบ', 'ยังไม่มีโฟลเดอร์', 'ความครบ (%)']];
+    d.all.districts.concat([Object.assign({ district: 'รวม' }, d.all.totals)]).forEach(function (x) {
+      dists.push([x.district, x.sites, x.complete, x.partial, x.nofolder, pctNum(x.sites ? x.complete / x.sites : null)]);
+    });
+    return [{ name: 'Cleansing ราย รพ.สต.', rows: sites }, { name: 'สรุปรายอำเภอ', rows: dists }];
+  }
+
+  function exportCleansingExcel(btn) {
+    var d = state.clData;
+    if (!d || !d.rows.length || btn.disabled) return;
+    var target = { title: 'สรุป Cleansing ราย รพ.สต.', scope: d.label, sheets: function () { return cleansingSheets(d); },
+      info: [['สถานะไฟล์ Drive ณ', state.drive && state.drive.updatedAt ? Core.formatThaiDate(state.drive.updatedAt) : 'ไม่มีข้อมูล']] };
+    btn.disabled = true;
+    track('export', 'xlsx-cleansing');
+    exportExcel(target, exportName('สรุป Cleansing ' + d.label, 'xlsx'))
+      .catch(function (e) {
+        console.error('[EHP dashboard] export failed', e);
+        showError('ส่งออกไม่สำเร็จ — ตรวจสอบอินเทอร์เน็ต (ต้องโหลดตัวช่วยส่งออกจาก cdnjs) แล้วลองอีกครั้ง');
+      })
+      .finally(function () { btn.disabled = false; });
+  }
+
   // ---------- Sign-in and visit log ----------
   function device() {
     var ua = navigator.userAgent;
@@ -3179,6 +3550,9 @@ var EHPCore = (function () {
   });
   $('moreBtn').addEventListener('click', function () { state.recentShown += RECENT_PAGE; render(); });
   ['exRound', 'exDistrict', 'exStaff', 'exPilots'].forEach(function (id) { $(id).addEventListener('change', renderExport); });
+  ['clRound', 'clDistrict', 'clStaff', 'clPilots', 'clOnlyMissing'].forEach(function (id) { $(id).addEventListener('change', renderCleansing); });
+  $('clPrint').addEventListener('click', printCleansing);
+  $('clExcel').addEventListener('click', function () { exportCleansingExcel($('clExcel')); });
   $('exPrint').addEventListener('click', function () { printReports(state.exList || [], exScopeText(exScope())); });
   $('exExcel').addEventListener('click', function () { exportSitesExcel($('exExcel')); });
   $('exPrintImages').addEventListener('click', function () { printImages(state.exList || [], exScopeText(exScope()), $('exPrintImages')); });
