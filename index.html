@@ -500,8 +500,19 @@ main { padding: 20px 28px 32px; }
 .rpt-visits td:nth-child(3), .rpt-visits td:nth-child(4) { white-space: nowrap; }
 .rpt-cl table { font-size: 8.5pt; }
 #clKpis { margin: 12px 0 2px; }
-.cl-rounds { margin: 0 0 10px; }
-.cl-steps { margin: 0 0 12px; padding-left: 1.4em; line-height: 1.7; }
+.cl-flow { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 0 0 10px; }
+@media (max-width: 640px) { .cl-flow { grid-template-columns: 1fr; } }
+.cl-step { display: flex; align-items: center; gap: 12px; padding: 16px; min-height: 84px; border: 1px solid var(--border); border-radius: 12px;
+  background: var(--surface); color: var(--text); text-decoration: none; text-align: left; font: inherit; cursor: pointer; }
+.cl-step:hover { background: var(--surface-2); }
+.cl-step b { display: block; font-size: 1rem; }
+.cl-step small { display: block; color: var(--text-3); font-size: .82rem; margin-top: 2px; }
+.cl-num { flex: none; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--brand-grad); color: #fff; font-weight: 700; }
+.cl-drop { border: 2px dashed var(--accent); }
+.cl-drop.over, #clFlow.over .cl-drop { background: var(--k-blue-bg); }
+.cl-drop:disabled { opacity: .7; cursor: progress; }
+.cl-more { margin: 0 0 10px; }
+.cl-more a { color: var(--accent-ink); }
 .cl-book { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 10px 0; border-top: 1px solid var(--border); }
 .cl-book:first-child { border-top: 0; }
 .cl-book h3 { margin: 0; font-size: 1rem; flex: 1 1 220px; }
@@ -852,18 +863,19 @@ main { padding: 20px 28px 32px; }
           </section>
           <section class="card" aria-labelledby="clBookHead">
             <div class="card-head"><h2 id="clBookHead">ทำเล่มเอกสาร Cleansing พร้อมพิมพ์ แยกรอบ (C01 C02 C03)</h2></div>
-            <ol class="cl-steps">
-              <li>เปิดโฟลเดอร์ของรอบ → คลิกขวาที่โฟลเดอร์ → <b>ดาวน์โหลด</b> (Google Drive ให้ไฟล์ .zip)</li>
-              <li>กด <b>เลือกไฟล์ zip</b> แล้วเลือกไฟล์ที่ดาวน์โหลด — เลือกหลายรอบพร้อมกันได้</li>
-              <li>กด <b>เปิดเล่ม</b> แล้วสั่งพิมพ์ หรือ <b>ดาวน์โหลด PDF</b> เก็บไว้</li>
-            </ol>
-            <div class="ex-actions cl-rounds" id="clRounds"></div>
-            <div class="ex-actions">
-              <button type="button" class="btn-primary" id="clZipBtn">เลือกไฟล์ zip…</button>
-              <button type="button" id="clDirBtn">เลือกโฟลเดอร์ที่แตกไฟล์แล้ว…</button>
-              <input type="file" id="clZip" accept=".zip,application/zip" multiple hidden>
-              <input type="file" id="clDir" webkitdirectory multiple hidden>
+            <div class="cl-flow" id="clFlow">
+              <a class="cl-step" href="https://drive.google.com/drive/folders/1F6GbqiGF9QpqJjpC2ASiaEA10prKIt4o" target="_blank" rel="noopener noreferrer">
+                <span class="cl-num" aria-hidden="true">1</span>
+                <span><b>ดาวน์โหลดจาก Google Drive</b><small>คลิกขวาที่โฟลเดอร์รอบ (หรือทั้งโฟลเดอร์ Cleansing) → ดาวน์โหลด</small></span>
+              </a>
+              <button type="button" class="cl-step cl-drop" id="clZipBtn">
+                <span class="cl-num" aria-hidden="true">2</span>
+                <span><b>ลากไฟล์ zip มาวางที่นี่ หรือกดเพื่อเลือก</b><small>ได้เล่มพร้อมพิมพ์ของทุกรอบในไฟล์ทันที</small></span>
+              </button>
             </div>
+            <p class="small muted cl-more">แตกไฟล์ zip แล้ว? <button type="button" class="link" id="clDirBtn">เลือกโฟลเดอร์แทน</button> · โฟลเดอร์แยกรอบ: <span id="clRounds"></span></p>
+            <input type="file" id="clZip" accept=".zip,application/zip" multiple hidden>
+            <input type="file" id="clDir" webkitdirectory multiple hidden>
             <div id="clBookNote" class="alert" role="status" aria-live="polite" hidden></div>
             <div id="clBooks"></div>
             <p class="note">ทำในเบราว์เซอร์เครื่องนี้เท่านั้น ไม่มีการอัปโหลดไฟล์ · ในเล่มมี ปก · สารบัญพร้อมเลขหน้าและแห่งที่ขาดไฟล์ · C01 C02 C03 ทุก รพ.สต. เรียงตาม Master plan (PDF ทุกหน้า รูป 1 รูปต่อหน้า) · เลขหน้าทุกหน้า · เอกสารมีข้อมูลผู้ป่วย เก็บเฉพาะในทีม</p>
@@ -1869,13 +1881,13 @@ var EHPCore = (function () {
     '“แนะนำ Cleansing Data” มาจาก Checklist ในฟอร์ม': '“Cleansing Data advised” comes from the form Checklist', 'แนะนำ Cleansing Data': 'Cleansing Data advised',
     'โฟลเดอร์ต้นฉบับ': 'Source folders',
     'ทำเล่มเอกสาร Cleansing พร้อมพิมพ์ แยกรอบ (C01 C02 C03)': 'Printable Cleansing book per round (C01 C02 C03)',
-    'เปิดโฟลเดอร์ของรอบ → คลิกขวาที่โฟลเดอร์ → ': 'Open the round folder → right-click the folder → ', 'ดาวน์โหลด': 'Download',
-    ' (Google Drive ให้ไฟล์ .zip)': ' (Google Drive gives a .zip file)', 'กด ': 'Press ', 'เลือกไฟล์ zip': 'Choose zip files',
-    ' แล้วเลือกไฟล์ที่ดาวน์โหลด — เลือกหลายรอบพร้อมกันได้': ' and pick the downloaded files — several rounds at once is fine',
-    'เปิดเล่ม': 'Open book', ' แล้วสั่งพิมพ์ หรือ ': ' and print, or ', 'ดาวน์โหลด PDF': 'Download PDF', ' เก็บไว้': ' to keep',
-    'เลือกไฟล์ zip…': 'Choose zip files…', 'เลือกโฟลเดอร์ที่แตกไฟล์แล้ว…': 'Choose an extracted folder…', 'เปิดเล่ม / พิมพ์': 'Open book / print',
     'ทำในเบราว์เซอร์เครื่องนี้เท่านั้น ไม่มีการอัปโหลดไฟล์ · ในเล่มมี ปก · สารบัญพร้อมเลขหน้าและแห่งที่ขาดไฟล์ · C01 C02 C03 ทุก รพ.สต. เรียงตาม Master plan (PDF ทุกหน้า รูป 1 รูปต่อหน้า) · เลขหน้าทุกหน้า · เอกสารมีข้อมูลผู้ป่วย เก็บเฉพาะในทีม': 'Built in this browser only — nothing is uploaded · each book has a cover · contents with page numbers and missing files · C01 C02 C03 of every health centre in Master plan order (every PDF page, one image per page) · page numbers · it holds patient data, keep it within the team',
-    'กำลังอ่านไฟล์…': 'Reading files…',
+    'กำลังอ่านไฟล์…': 'Reading files…', 'เปิดเล่ม / พิมพ์': 'Open book / print', 'ดาวน์โหลด PDF': 'Download PDF',
+    'ดาวน์โหลดจาก Google Drive': 'Download from Google Drive',
+    'คลิกขวาที่โฟลเดอร์รอบ (หรือทั้งโฟลเดอร์ Cleansing) → ดาวน์โหลด': 'Right-click a round folder (or the whole Cleansing folder) → Download',
+    'ลากไฟล์ zip มาวางที่นี่ หรือกดเพื่อเลือก': 'Drop the zip file here, or click to choose', 'ได้เล่มพร้อมพิมพ์ของทุกรอบในไฟล์ทันที': 'Get a print-ready book for every round in it right away',
+    'แตกไฟล์ zip แล้ว? ': 'Already extracted? ', 'เลือกโฟลเดอร์แทน': 'Choose the folder instead', ' · โฟลเดอร์แยกรอบ: ': ' · Round folders: ',
+    'วางได้เฉพาะไฟล์ .zip — ถ้าแตกไฟล์แล้ว ให้กด “เลือกโฟลเดอร์แทน”': 'Only .zip files can be dropped — for an extracted folder, use “Choose the folder instead”',
     'ไม่พบไฟล์ Cleansing ในไฟล์ที่เลือก — ต้องเป็น zip ของโฟลเดอร์ “รอบ N” หรือ “นำร่อง” จาก Google Drive': 'No Cleansing files found — choose the zip of a “รอบ N” or “นำร่อง” folder from Google Drive',
     'ทำเล่มไม่สำเร็จ — ตรวจสอบอินเทอร์เน็ต (ต้องโหลดตัวช่วยทำ PDF จาก cdnjs / jsDelivr) แล้วลองอีกครั้ง': 'Could not build the book — check the internet (the PDF helper loads from cdnjs / jsDelivr) and try again',
     'ทำเล่มไม่สำเร็จ — ไฟล์อาจใหญ่เกินหรือเสีย ลองเลือกทีละรอบ': 'Could not build the book — the files may be too large or damaged; try one round at a time',
@@ -3343,9 +3355,9 @@ var EHPCore = (function () {
     var picked = exScope('cl').round;
     $('clRounds').innerHTML = [1, 2, 3, 4, 0].map(function (r) {
       var name = r ? Core.planRound(r).name : 'นำร่อง';
-      return '<a class="btn' + (r && r === picked ? ' btn-primary' : '') + '" href="' + esc(Core.cleansingFolderUrl(r)) +
-        '" target="_blank" rel="noopener noreferrer"><span>' + esc('โฟลเดอร์ ' + name) + '</span><small>Google Drive</small></a>';
-    }).join('');
+      return '<a href="' + esc(Core.cleansingFolderUrl(r)) + '" target="_blank" rel="noopener noreferrer">' +
+        (r && r === picked ? '<b>' + esc(name) + '</b>' : esc(name)) + '</a>';
+    }).join(' · ');
   }
 
   // ---------- Cleansing book: merge the round folders downloaded from Drive (.zip) in this browser ----------
@@ -3545,6 +3557,8 @@ var EHPCore = (function () {
       state.clLocal = Core.cleansingPresence(got.books);
       state.clLocalBooks = keys.map(clBookLabel);
       say('ok', 'ทำเล่มเสร็จ ' + keys.length + ' เล่ม — กด “เปิดเล่ม / พิมพ์” แล้วสั่งพิมพ์จากหน้าต่าง PDF');
+      var first = document.querySelector('#clBooks a.btn-primary');
+      if (first) { first.scrollIntoView({ block: 'center', behavior: 'smooth' }); first.focus({ preventScroll: true }); }
       track('export', 'cleansing-book');
       renderCleansing();
     } catch (e) {
@@ -3834,6 +3848,20 @@ var EHPCore = (function () {
   $('clExcel').addEventListener('click', function () { exportCleansingExcel($('clExcel')); });
   $('clZipBtn').addEventListener('click', function () { $('clZip').click(); });
   $('clDirBtn').addEventListener('click', function () { $('clDir').click(); });
+  (function () {
+    var zone = $('clFlow').closest('section'), flow = $('clFlow');
+    zone.addEventListener('dragover', function (e) { e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; flow.classList.add('over'); });
+    zone.addEventListener('dragleave', function (e) { if (!zone.contains(e.relatedTarget)) flow.classList.remove('over'); });
+    zone.addEventListener('drop', function (e) {
+      e.preventDefault();
+      flow.classList.remove('over');
+      var zips = Array.prototype.filter.call(e.dataTransfer.files, function (f) { return /\.zip$/i.test(f.name); });
+      if (zips.length) { makeCleansingBooks(zips); return; }
+      var note = $('clBookNote');
+      note.hidden = false; note.className = 'alert alert-warn';
+      note.textContent = 'วางได้เฉพาะไฟล์ .zip — ถ้าแตกไฟล์แล้ว ให้กด “เลือกโฟลเดอร์แทน”';
+    });
+  })();
   ['clZip', 'clDir'].forEach(function (id) { $(id).addEventListener('change', function () { makeCleansingBooks($(id).files); }); });
   $('exPrint').addEventListener('click', function () { printReports(state.exList || [], exScopeText(exScope())); });
   $('exExcel').addEventListener('click', function () { exportSitesExcel($('exExcel')); });
