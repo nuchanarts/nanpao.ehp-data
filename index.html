@@ -461,6 +461,7 @@ main { padding: 20px 28px 32px; }
 .ex-help { margin: 10px 0 12px; padding-left: 20px; display: grid; gap: 2px; }
 .ex-links { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
 .alert-info { background: var(--surface-2); color: var(--text-2); }
+.alert-ok { background: var(--done-bg); color: var(--done-ink); }
 #exDrive div + div { margin-top: 2px; }
 .ex-state { white-space: nowrap; }
 .ex-state.ok { color: var(--good); font-weight: 500; }
@@ -500,6 +501,14 @@ main { padding: 20px 28px 32px; }
 .rpt-cl table { font-size: 8.5pt; }
 #clKpis { margin: 12px 0 2px; }
 .cl-rounds { margin: 0 0 10px; }
+.cl-steps { margin: 0 0 12px; padding-left: 1.4em; line-height: 1.7; }
+.cl-book { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 10px 0; border-top: 1px solid var(--border); }
+.cl-book:first-child { border-top: 0; }
+.cl-book h3 { margin: 0; font-size: 1rem; flex: 1 1 220px; }
+.cl-book h3 small { display: block; font-weight: 400; color: var(--text-3); font-size: .82rem; }
+.cl-book a.btn { text-decoration: none; display: inline-flex; align-items: center; min-height: 40px; }
+.cl-book details { flex: 1 1 100%; font-size: .85rem; }
+.cl-book details ul { margin: 6px 0 0; padding-left: 1.2em; }
 .cl-rounds a.btn { display: inline-flex; flex-direction: column; justify-content: center; min-height: 44px; text-decoration: none; line-height: 1.3; }
 .cl-rounds a.btn small { color: inherit; opacity: .8; font-size: .78rem; }
 </style>
@@ -813,8 +822,9 @@ main { padding: 20px 28px 32px; }
           </section>
         </div>
 
-        <!-- Cleansing: which of C01–C03 each รพ.สต. has, from the bot's status tab. Presence only — the files may hold
-             patient data, so their names, links and content never reach this page (constitution V). -->
+        <!-- Cleansing: which of C01–C03 each รพ.สต. has, and a printable book per round built in the viewer's browser from
+             the round folders they download from Drive. The files hold patient data: nothing is uploaded or published,
+             and the page never links or indexes single files (constitution V). -->
         <div class="stack" data-panel="cleansing">
           <section class="card" aria-labelledby="clHead">
             <div class="card-head">
@@ -840,12 +850,23 @@ main { padding: 20px 28px 32px; }
               <li>C01 = Cleansing_Card (ประวัติผู้ป่วย) · C02 = Cleansing_Allergy (แพ้ยา) · C03 = Cleansing_Visit (ประวัติการรับบริการ)</li>
             </ul>
           </section>
-          <section class="card" aria-labelledby="clPdfHead">
-            <div class="card-head"><h2 id="clPdfHead">พิมพ์เอกสาร Cleansing ทั้งรอบในครั้งเดียว (C01 C02 C03)</h2></div>
-            <p style="margin-top:0">กดรอบที่ต้องการ → PDF รวมของรอบนั้นเปิดใน Google Drive → กดพิมพ์ · ในไฟล์มีสารบัญบอกแห่งที่ไฟล์ไม่ครบ แล้วตามด้วยเอกสารทุก รพ.สต. เรียงตามรายชื่อ (PDF และรูป 1 รูปต่อหน้า) · บอทแมวส้มสร้างใหม่เองเมื่อมีไฟล์ใหม่ (ตรวจทุกชั่วโมง)</p>
+          <section class="card" aria-labelledby="clBookHead">
+            <div class="card-head"><h2 id="clBookHead">ทำเล่มเอกสาร Cleansing พร้อมพิมพ์ แยกรอบ (C01 C02 C03)</h2></div>
+            <ol class="cl-steps">
+              <li>เปิดโฟลเดอร์ของรอบ → คลิกขวาที่โฟลเดอร์ → <b>ดาวน์โหลด</b> (Google Drive ให้ไฟล์ .zip)</li>
+              <li>กด <b>เลือกไฟล์ zip</b> แล้วเลือกไฟล์ที่ดาวน์โหลด — เลือกหลายรอบพร้อมกันได้</li>
+              <li>กด <b>เปิดเล่ม</b> แล้วสั่งพิมพ์ หรือ <b>ดาวน์โหลด PDF</b> เก็บไว้</li>
+            </ol>
             <div class="ex-actions cl-rounds" id="clRounds"></div>
-            <div id="clPdfNote" class="alert" role="status" hidden></div>
-            <p class="note">เปิดได้เฉพาะคนในทีมที่มีสิทธิ์ในโฟลเดอร์ Cleansing · ต้องการไฟล์ใหม่ทันที: Google Sheet ของฟอร์ม → เมนู 🐱 แมวส้ม → พิมพ์รวม Cleansing รอบ N</p>
+            <div class="ex-actions">
+              <button type="button" class="btn-primary" id="clZipBtn">เลือกไฟล์ zip…</button>
+              <button type="button" id="clDirBtn">เลือกโฟลเดอร์ที่แตกไฟล์แล้ว…</button>
+              <input type="file" id="clZip" accept=".zip,application/zip" multiple hidden>
+              <input type="file" id="clDir" webkitdirectory multiple hidden>
+            </div>
+            <div id="clBookNote" class="alert" role="status" aria-live="polite" hidden></div>
+            <div id="clBooks"></div>
+            <p class="note">ทำในเบราว์เซอร์เครื่องนี้เท่านั้น ไม่มีการอัปโหลดไฟล์ · ในเล่มมี ปก · สารบัญพร้อมเลขหน้าและแห่งที่ขาดไฟล์ · C01 C02 C03 ทุก รพ.สต. เรียงตาม Master plan (PDF ทุกหน้า รูป 1 รูปต่อหน้า) · เลขหน้าทุกหน้า · เอกสารมีข้อมูลผู้ป่วย เก็บเฉพาะในทีม</p>
           </section>
           <section class="card" aria-labelledby="clDistHead">
             <div class="card-head"><h2 id="clDistHead">สรุปรายอำเภอ</h2></div>
@@ -1627,8 +1648,8 @@ var EHPCore = (function () {
   }
   function imageUrl(id) { return 'https://lh3.googleusercontent.com/d/' + encodeURIComponent(id) + '=w2000'; }
 
-  // Cleansing round folders in Drive ("รอบ N", pilot: "นำร่อง"), where the bot saves "พิมพ์รวม Cleansing …pdf".
-  // Folder links only (team decision 2026-10-10); access follows Drive sharing (constitution V).
+  // Cleansing round folders in Drive ("รอบ N", pilot: "นำร่อง"), downloaded as .zip for the book.
+  // Folder links only (team decision 2026-10-10); access follows Drive sharing, team only (constitution V).
   var CLEANSING_ROUND_FOLDERS = {
     0: '1NJ3ZuOht3emZDabwG2B2XkyUZg3FGaYf', 1: '1zwaWAFdO6W3dflx2lBtZtKuBJ6SMRZO0', 2: '1N97yzmICCdvKIbT80KdCmtDXO6DtwDOQ',
     3: '1bW7FTBWul1XGLY8TqsSBYtcNDdA-OrtB', 4: '1D6JbYYHBALUIfBiertkZ4nSFYWgZ4PrL'
@@ -1638,36 +1659,114 @@ var EHPCore = (function () {
     return id ? 'https://drive.google.com/drive/folders/' + id : null;
   }
 
-  // The bot's merged Cleansing PDF of each round (apps-script/bot/CleansingPrint.gs), one row per part.
-  // Team decision 2026-10-14: the menu may link these merged files so a round prints in one click, but only while
-  // Drive keeps them to the team — a file still shared with anyone is never linked (constitution V).
-  // → { updatedAt, rounds: { '1': [{ part, parts, url, sites, complete, pages, public, builtAt }], pilot: [...] } } or null.
-  var CLEANSING_PDF_TAB = 'PDF Cleansing';
-  function parseCleansingPdfs(text) {
-    var rows = parseTable(String(text || ''));
-    if (!rows.length) return null;
-    var head = rows[0].map(norm);
-    var col = function (name) { return head.indexOf(name); };
-    if (['รอบ', 'ส่วน', 'ไฟล์', 'การแชร์'].some(function (n) { return col(n) < 0; })) return null;
-    var num = function (row, name) { return Number(cell(row, col(name))) || 0; };
-    var rounds = {}, updatedAt = null;
-    rows.slice(1).forEach(function (row) {
-      var round = cell(row, col('รอบ')), id = cell(row, col('ไฟล์'));
-      if (!/^(\d|pilot)$/.test(round) || !/^[\w-]{20,}$/.test(id)) return;
-      var pub = /^ANYONE/.test(cell(row, col('การแชร์')));
-      var at = parseStamp(cell(row, col('สร้างเมื่อ')));
-      if (at && (!updatedAt || at > updatedAt)) updatedAt = at;
-      (rounds[round] = rounds[round] || []).push({
-        part: num(row, 'ส่วน') || 1, parts: num(row, 'จำนวนส่วน') || 1, sites: num(row, 'แห่ง'), complete: num(row, 'ครบ'),
-        pages: num(row, 'หน้า'), public: pub, builtAt: at,
-        url: pub ? null : 'https://drive.google.com/file/d/' + encodeURIComponent(id) + '/view'
-      });
+  // Cleansing book: the viewer downloads round folders from Drive as .zip and picks them on the page; the browser
+  // merges C01 C02 C03 of every รพ.สต. into one PDF per round. Files never leave that computer (constitution V).
+  // Some sites name files in Thai: ข้อมูลเวชระเบียน (card) · ข้อมูลการแพ้ยา (allergy) · ข้อมูลจ่ายยา (visit).
+  var CLEANSING_PARTS = [
+    { key: 'C01', re: /C0?1\b|Cleansing_Card|บัตร|เวชระเบียน/i },
+    { key: 'C02', re: /C0?2\b|Cleansing_Allergy|แพ้ยา/i },
+    { key: 'C03', re: /C0?3\b|Cleansing_Visit|จ่ายยา|รับบริการ/i }
+  ];
+  function cleansingPartOf(fileName) {
+    var base = String(fileName || '').replace(/\.[^.]*$/, '');
+    for (var i = 0; i < CLEANSING_PARTS.length; i++) if (CLEANSING_PARTS[i].re.test(base)) return CLEANSING_PARTS[i].key;
+    return null;
+  }
+  function bareSiteName(s) {
+    return String(s).replace(/รพ\.?\s*สต\.?|สสช\.?|สอน\.?|\(.*?\)|\d{5}|[\s.\-]/g, '').replace(/^บ้าน/, '');
+  }
+  // Folder name → Master plan site: by 5-digit code ("(รอบ 1) 06457 รพ.สต.กองควาย"), else by name (pilot folders).
+  function cleansingSiteOf(folderName) {
+    var code = (String(folderName).match(/(?:^|\D)(\d{5})(?:\D|$)/) || [])[1];
+    if (code) return planFor(code) || { code: code, name: String(folderName).replace(/^\(.*?\)\s*\d{5}\s*/, ''), district: '', round: 0, pilot: false };
+    var n = bareSiteName(folderName);
+    if (n.length < 2) return null;
+    for (var i = 0; i < MASTER_PLAN.length; i++) if (bareSiteName(MASTER_PLAN[i].name) === n) return MASTER_PLAN[i];
+    return null;
+  }
+  // Book of a file: 'pilot' under "นำร่อง", else the round in "รอบ N" / "(รอบ N)", else the site's planned round.
+  function cleansingBookOf(path, site) {
+    var i, m;
+    for (i = 0; i < path.length; i++) if (/^\s*นำร่อง/.test(path[i])) return 'pilot';
+    for (i = 0; i < path.length; i++) {
+      m = path[i].match(/^\s*รอบ(?:ที่)?\s*(\d)(?!\d)/) || path[i].match(/\(รอบ(?:ที่)?\s*(\d)\)/);
+      if (m) return m[1];
+    }
+    return site && site.round ? String(site.round) : null;
+  }
+  // entries: [{ path: ['รอบ 1', '(รอบ 1) 06457 …', 'C01-Cleansing_Card.pdf'], … }] (other fields pass through)
+  // → { books: { '1': { code: { site, parts: { C01: [entry] … }, other: [file names] } }, pilot: … }, skipped: [paths] }
+  function cleansingCollect(entries) {
+    var books = {}, skipped = [];
+    entries.forEach(function (e) {
+      var path = e.path.map(function (s) { return String(s).normalize ? String(s).normalize('NFC') : String(s); });
+      var name = path[path.length - 1];
+      if (/^(พิมพ์รวม|Cleansing รอบ|Cleansing นำร่อง|~\$|\.)/.test(name)) return;
+      var site = null, folder = '';
+      for (var i = path.length - 2; i >= 0 && !site; i--) { site = cleansingSiteOf(path[i]); folder = path[i]; }
+      if (!site || /xxxxx|ทดสอบ/.test(folder)) return;
+      var key = cleansingBookOf(path, site);
+      if (!key) return;
+      var book = books[key] = books[key] || {};
+      var s = book[site.code] = book[site.code] || { site: site, parts: { C01: [], C02: [], C03: [] }, other: [] };
+      var part = cleansingPartOf(name);
+      if (part) s.parts[part].push(e);
+      else if (/\.(pdf|jpe?g|png)$/i.test(name)) s.other.push(name);
+      else if (!/\.(xlsx?|csv|docx?|txt|ini)$/i.test(name)) skipped.push(path.join('/'));
     });
-    Object.keys(rounds).forEach(function (k) { rounds[k].sort(function (a, b) { return a.part - b.part; }); });
-    return { updatedAt: updatedAt, rounds: rounds };
+    return { books: books, skipped: skipped };
+  }
+  // Rows of one book in Master plan order (round book: that round without pilot sites; 'pilot': pilot sites), then
+  // any other site found in the files. s = the collected site or null (no files).
+  function cleansingBookRows(key, sites) {
+    var rows = MASTER_PLAN.filter(function (p) { return key === 'pilot' ? p.pilot : String(p.round) === key && !p.pilot; })
+      .map(function (p) { return { plan: p, s: sites[p.code] || null }; });
+    Object.keys(sites).forEach(function (code) {
+      if (!rows.some(function (r) { return r.plan.code === code; })) rows.push({ plan: sites[code].site, s: sites[code] });
+    });
+    return rows;
+  }
+  // File type from its first bytes — Drive files are sometimes named .jpg but hold a PDF.
+  function fileKind(b) {
+    if (!b || b.length < 4) return null;
+    if (b[0] === 0x25 && b[1] === 0x50 && b[2] === 0x44 && b[3] === 0x46) return 'pdf';
+    if (b[0] === 0xff && b[1] === 0xd8) return 'jpg';
+    if (b[0] === 0x89 && b[1] === 0x50 && b[2] === 0x4e && b[3] === 0x47) return 'png';
+    return null;
+  }
+  // EXIF orientation of a JPEG (1 upright · 3 upside down · 6 turn clockwise · 8 turn anticlockwise); phones store
+  // photos sideways with this flag.
+  function jpegOrientation(b) {
+    var i = 2;
+    while (i + 9 < b.length && b[i] === 0xff) {
+      var marker = b[i + 1], len = (b[i + 2] << 8) | b[i + 3];
+      if (marker === 0xe1 && b[i + 4] === 0x45 && b[i + 5] === 0x78 && b[i + 6] === 0x69 && b[i + 7] === 0x66) {
+        var t = i + 10, le = b[t] === 0x49;
+        var u16 = function (o) { return le ? b[t + o] | (b[t + o + 1] << 8) : (b[t + o] << 8) | b[t + o + 1]; };
+        var u32 = function (o) { return le ? u16(o) + u16(o + 2) * 65536 : u16(o) * 65536 + u16(o + 2); };
+        var ifd = u32(4), n = u16(ifd);
+        for (var k = 0; k < n; k++) if (u16(ifd + 2 + k * 12) === 0x0112) return u16(ifd + 2 + k * 12 + 8);
+        return 1;
+      }
+      if (marker === 0xda) break;
+      i += 2 + len;
+    }
+    return 1;
   }
 
-  // Cleansing menu: which of C01–C03 each planned รพ.สต. has, from the bot's status tab only. The files may hold
+  // Presence per site from collected files, shaped like parseDriveStatus so the Cleansing menu can use it.
+  function cleansingPresence(books) {
+    var sites = {};
+    Object.keys(books).forEach(function (key) {
+      Object.keys(books[key]).forEach(function (code) {
+        var s = books[key][code], o = sites[code] = sites[code] || { cleansingFolder: true, cleansingRound: key, cleansing: {} };
+        CLEANSING_FILES.forEach(function (f) { o.cleansing[f] = o.cleansing[f] || s.parts[f].length > 0; });
+      });
+    });
+    return { updatedAt: new Date(), sites: sites };
+  }
+
+  // Cleansing menu: which of C01–C03 each planned รพ.สต. has (bot status tab, or the files picked for the book). The files hold
   // patient data, so this is presence alone — never names, links or content (constitution V).
   // status: 'nodata' (tab not readable) · 'nofolder' · 'partial' · 'complete'. advised = the Cleansing Data topic's status.
   function cleansingStatus(reports, drive) {
@@ -1696,7 +1795,8 @@ var EHPCore = (function () {
     TOTAL_HOSPITALS: TOTAL_HOSPITALS, planOverview: planOverview, nextRound: nextRound,
     DRIVE_INDEX_URL: DRIVE_INDEX_URL, parseDriveIndex: parseDriveIndex, installFolder: installFolder, imageUrl: imageUrl,
     cleansingStatus: cleansingStatus, cleansingFolderUrl: cleansingFolderUrl,
-    CLEANSING_PDF_TAB: CLEANSING_PDF_TAB, parseCleansingPdfs: parseCleansingPdfs, sheetTabUrl: sheetTabUrl, DRIVE_TAB: DRIVE_TAB, INSTALL_FILES: INSTALL_FILES, CLEANSING_FILES: CLEANSING_FILES,
+    CLEANSING_PARTS: CLEANSING_PARTS, cleansingPartOf: cleansingPartOf, cleansingSiteOf: cleansingSiteOf, cleansingBookOf: cleansingBookOf,
+    cleansingCollect: cleansingCollect, cleansingBookRows: cleansingBookRows, cleansingPresence: cleansingPresence, fileKind: fileKind, jpegOrientation: jpegOrientation, sheetTabUrl: sheetTabUrl, DRIVE_TAB: DRIVE_TAB, INSTALL_FILES: INSTALL_FILES, CLEANSING_FILES: CLEANSING_FILES,
     driveStatusUrl: driveStatusUrl, parseDriveStatus: parseDriveStatus, siteReports: siteReports, planRound: planRound, sameStaff: sameStaff, MASTER_PLAN: MASTER_PLAN, PLAN_ROUNDS: PLAN_ROUNDS, planFor: planFor, followUp: followUp, isLaterTopic: isLaterTopic, topicApplies: topicApplies, topicScope: topicScope, NO_ROUND: NO_ROUND, STANDARD_TOPICS: STANDARD_TOPICS,
     DEFAULT_SHEET_URL: DEFAULT_SHEET_URL, sheetCsvUrl: sheetCsvUrl, decodeJwt: decodeJwt,
     parseTable: parseTable, parseThaiDate: parseThaiDate, formatThaiDate: formatThaiDate,
@@ -1720,7 +1820,7 @@ var EHPCore = (function () {
   var AUTO_KEY = 'ehp-nan-dashboard:auto-refresh';
   var RECENT_PAGE = 15;
   var AUTO_REFRESH_MS = 60 * 1000;
-  var state = { ds: null, loadedAt: null, recentShown: RECENT_PAGE, loading: false, timer: null, view: 'overview', drive: null, driveChecked: false, driveIndex: null, driveIndexChecked: false, exList: [], clPdfs: null, clPdfsChecked: false };
+  var state = { ds: null, loadedAt: null, recentShown: RECENT_PAGE, loading: false, timer: null, view: 'overview', drive: null, driveChecked: false, driveIndex: null, driveIndexChecked: false, exList: [], clBooks: [], clLocal: null, clLocalBooks: [] };
   // Sign-in with Google + visit log (constitution V). Both empty = no sign-in, page works as before.
   var AUTH = {
     clientId: '',   // OAuth Client ID (Google Cloud Console → Credentials)
@@ -1767,12 +1867,20 @@ var EHPCore = (function () {
     ': สถานะ C01 C02 C03 ราย รพ.สต. · สรุปรายอำเภอ': ': C01 C02 C03 status by health centre · totals by district',
     'C01 = Cleansing_Card (ประวัติผู้ป่วย) · C02 = Cleansing_Allergy (แพ้ยา) · C03 = Cleansing_Visit (ประวัติการรับบริการ)': 'C01 = Cleansing_Card (patient records) · C02 = Cleansing_Allergy (drug allergies) · C03 = Cleansing_Visit (visit history)',
     '“แนะนำ Cleansing Data” มาจาก Checklist ในฟอร์ม': '“Cleansing Data advised” comes from the form Checklist', 'แนะนำ Cleansing Data': 'Cleansing Data advised',
-    'พิมพ์เอกสาร Cleansing ทั้งรอบในครั้งเดียว (C01 C02 C03)': 'Print a whole round of Cleansing documents at once (C01 C02 C03)',
-    'กดรอบที่ต้องการ → PDF รวมของรอบนั้นเปิดใน Google Drive → กดพิมพ์ · ในไฟล์มีสารบัญบอกแห่งที่ไฟล์ไม่ครบ แล้วตามด้วยเอกสารทุก รพ.สต. เรียงตามรายชื่อ (PDF และรูป 1 รูปต่อหน้า) · บอทแมวส้มสร้างใหม่เองเมื่อมีไฟล์ใหม่ (ตรวจทุกชั่วโมง)': 'Pick a round → its merged PDF opens in Google Drive → print · it starts with a contents page listing missing files, then every health centre in Master plan order (PDFs, and images one per page) · the แมวส้ม bot rebuilds it when new files arrive (checked hourly)',
-    'เปิดได้เฉพาะคนในทีมที่มีสิทธิ์ในโฟลเดอร์ Cleansing · ต้องการไฟล์ใหม่ทันที: Google Sheet ของฟอร์ม → เมนู 🐱 แมวส้ม → พิมพ์รวม Cleansing รอบ N': 'Only team members with access to the Cleansing folder can open it · need a fresh file now: form Google Sheet → menu 🐱 แมวส้ม → พิมพ์รวม Cleansing รอบ N',
     'โฟลเดอร์ต้นฉบับ': 'Source folders',
+    'ทำเล่มเอกสาร Cleansing พร้อมพิมพ์ แยกรอบ (C01 C02 C03)': 'Printable Cleansing book per round (C01 C02 C03)',
+    'เปิดโฟลเดอร์ของรอบ → คลิกขวาที่โฟลเดอร์ → ': 'Open the round folder → right-click the folder → ', 'ดาวน์โหลด': 'Download',
+    ' (Google Drive ให้ไฟล์ .zip)': ' (Google Drive gives a .zip file)', 'กด ': 'Press ', 'เลือกไฟล์ zip': 'Choose zip files',
+    ' แล้วเลือกไฟล์ที่ดาวน์โหลด — เลือกหลายรอบพร้อมกันได้': ' and pick the downloaded files — several rounds at once is fine',
+    'เปิดเล่ม': 'Open book', ' แล้วสั่งพิมพ์ หรือ ': ' and print, or ', 'ดาวน์โหลด PDF': 'Download PDF', ' เก็บไว้': ' to keep',
+    'เลือกไฟล์ zip…': 'Choose zip files…', 'เลือกโฟลเดอร์ที่แตกไฟล์แล้ว…': 'Choose an extracted folder…', 'เปิดเล่ม / พิมพ์': 'Open book / print',
+    'ทำในเบราว์เซอร์เครื่องนี้เท่านั้น ไม่มีการอัปโหลดไฟล์ · ในเล่มมี ปก · สารบัญพร้อมเลขหน้าและแห่งที่ขาดไฟล์ · C01 C02 C03 ทุก รพ.สต. เรียงตาม Master plan (PDF ทุกหน้า รูป 1 รูปต่อหน้า) · เลขหน้าทุกหน้า · เอกสารมีข้อมูลผู้ป่วย เก็บเฉพาะในทีม': 'Built in this browser only — nothing is uploaded · each book has a cover · contents with page numbers and missing files · C01 C02 C03 of every health centre in Master plan order (every PDF page, one image per page) · page numbers · it holds patient data, keep it within the team',
+    'กำลังอ่านไฟล์…': 'Reading files…',
+    'ไม่พบไฟล์ Cleansing ในไฟล์ที่เลือก — ต้องเป็น zip ของโฟลเดอร์ “รอบ N” หรือ “นำร่อง” จาก Google Drive': 'No Cleansing files found — choose the zip of a “รอบ N” or “นำร่อง” folder from Google Drive',
+    'ทำเล่มไม่สำเร็จ — ตรวจสอบอินเทอร์เน็ต (ต้องโหลดตัวช่วยทำ PDF จาก cdnjs / jsDelivr) แล้วลองอีกครั้ง': 'Could not build the book — check the internet (the PDF helper loads from cdnjs / jsDelivr) and try again',
+    'ทำเล่มไม่สำเร็จ — ไฟล์อาจใหญ่เกินหรือเสีย ลองเลือกทีละรอบ': 'Could not build the book — the files may be too large or damaged; try one round at a time',
+    'สถานะไฟล์ Cleansing: ยังไม่มีข้อมูล — เลือกไฟล์ zip ด้านล่างเพื่อทำเล่ม แล้วสถานะจะแสดงที่นี่': 'Cleansing file status: no data yet — choose the zip files below to build the books and the status shows here',
     'ไฟล์มีข้อมูลผู้ป่วย Dashboard จึงไม่แสดงไฟล์เอง ไฟล์อยู่ใน Google Drive ของทีมเท่านั้น · สิทธิ์การเปิดขึ้นกับการแชร์ใน Google Drive ต้องแชร์เฉพาะทีม': 'The files contain patient data, so the dashboard never shows them; they stay in the team Google Drive · access follows Drive sharing — team only',
-    'กำลังอ่านรายการ PDF รวม…': 'Reading the merged PDF list…', 'PDF รวมยังเปิดสาธารณะ': 'Merged PDF still public', 'ยังไม่มี PDF รวม': 'No merged PDF yet',
     'ไฟล์ครบ 3 ไฟล์': 'All 3 files', 'มีโฟลเดอร์แต่ขาดบางไฟล์': 'Folder exists, some files missing', 'ยังไม่มีโฟลเดอร์ Cleansing ใน Drive': 'No Cleansing folder in Drive yet',
     'แนะนำ Cleansing Data แล้ว': 'Cleansing Data advised', 'จาก Checklist ในฟอร์ม (รวมนำร่อง)': 'From the form Checklist (incl. pilot sites)',
     'ครบ': 'Complete', 'สรุป': 'Status', 'ครบ 3/3': 'Complete 3/3', '✓ มี': '✓ Yes', '✗ ไม่มี': '✗ No',
@@ -1904,18 +2012,16 @@ var EHPCore = (function () {
     [/ · แสดง (\d[\d,]*) แห่ง/g, ' · showing $1'],
     [/^มีไฟล์ (C01 .+)$/, 'Files: $1'],
     [/ · เฉพาะที่ยังไม่ครบ/g, ' · incomplete only'],
-    [/^พิมพ์ รอบที่ (\d)( ส่วน (\d+)\/(\d+))?$/, function (m, r, p, a, b) { return 'Print round ' + r + (p ? ' part ' + a + '/' + b : ''); }],
-    [/^พิมพ์ นำร่อง( ส่วน (\d+)\/(\d+))?$/, function (m, p, a, b) { return 'Print pilot sites' + (p ? ' part ' + a + '/' + b : ''); }],
+    [/^กำลังทำเล่ม (รอบที่ (\d)|นำร่อง) · รพ\.สต\. (\d+)\/(\d+)…$/, function (m, l, r, a, b) { return 'Building ' + (r ? 'round ' + r : 'pilot sites') + ' · health centre ' + a + '/' + b + '…'; }],
+    [/^ทำเล่มเสร็จ (\d+) เล่ม — .*$/, '$1 book(s) ready — press “Open book / print” and print from the PDF window'],
+    [/^(\d+) หน้า · ครบ (\d+)\/(\d+) แห่ง$/, '$1 pages · $2/$3 complete'], [/^หมายเหตุ (\d+) แห่ง$/, 'Notes: $1 health centres'],
+    [/^Cleansing รอบที่ (\d)$/, 'Cleansing round $1'], [/^Cleansing นำร่อง$/, 'Cleansing pilot sites'],
+    [/^สถานะไฟล์ Cleansing จากไฟล์ที่เลือกทำเล่ม: (.+) · รอบอื่นยังไม่ได้เลือก$/, function (m, l) { return 'Cleansing file status from the files picked for the books: ' + l.replace(/รอบที่ /g, 'round ').replace('นำร่อง', 'pilot sites') + ' · other rounds not picked'; }],
     [/^โฟลเดอร์ รอบที่ (\d)$/, 'Folder round $1'], [/^โฟลเดอร์ นำร่อง$/, 'Folder pilot sites'],
-    [/^ครบ (\d+)\/(\d+) แห่ง · (\d+) หน้า/, '$1/$2 complete · $3 pages'],
-    [/^(PDF รวมยังเปิดสาธารณะ|ยังไม่มี PDF รวม) · ครบ (\d+)\/(\d+) แห่ง$/, function (m, a, x, y) { return (a === 'ยังไม่มี PDF รวม' ? 'No merged PDF yet' : 'Merged PDF still public') + ' · ' + x + '/' + y + ' complete'; }],
-    [/^PDF รวมของ (.+) ยังเปิดให้ทุกคนที่มีลิงก์ Dashboard จึงไม่ลิงก์ไปที่ไฟล์ — ปรับการแชร์โฟลเดอร์ Cleansing เป็นเฉพาะทีม แล้วรอบอทอัปเดต \(ทุกชั่วโมง\)$/, 'The merged PDF of $1 is still open to anyone with the link, so the dashboard does not link it — restrict the Cleansing folder to the team, then wait for the bot (hourly)'],
-    [/^ยังไม่มีแท็บ “(.+)” — ปุ่มจะเปิดโฟลเดอร์ของรอบแทน จนกว่าบอทจะสร้าง PDF รวม \(ติดตั้ง CleansingPrint\.gs ดู (.+)\)$/, 'No “$1” tab yet — the buttons open the round folders until the bot makes the merged PDFs (install CleansingPrint.gs, see $2)'],
     [/^ครบ (\d+)\/(\d+) แห่ง$/, '$1/$2 complete'],
     [/^รูปรายงานการติดตั้งจากโฟลเดอร์ Google Drive · ข้อมูล ณ /, 'Installation images from the Google Drive folder · as of '],
     [/ — เกิน 2 ชั่วโมง ระบบอัปเดตรายการรูปอาจหยุดทำงาน/, ' — over 2 hours old, the image list updater may have stopped'],
     [/^สถานะไฟล์ Cleansing จากบอทแมวส้ม · ข้อมูล ณ /, 'Cleansing file status from the แมวส้ม bot · as of '],
-    [/^สถานะไฟล์ Cleansing: ไม่มีข้อมูล \(ต้องติดตั้งแท็บ “(.+)” ในบอทแมวส้ม ดู (.+)\)$/, 'Cleansing file status: no data (install the “$1” tab in the แมวส้ม bot, see $2)'],
     [/^กำลังโหลดรูป (\d+)\/(\d+)…$/, 'Loading images $1/$2…'],
     [/ — เกิน 1 ชั่วโมง บอทอาจหยุดทำงาน/, ' — over an hour old, the bot may have stopped'],
     [/^ยังอ่านแท็บ “(.+)” ใน Google Sheet ไม่ได้ — รายงานจะแสดงสถานะไฟล์ Drive ว่า “ไม่มีข้อมูล” \(วิธีเปิดใช้: (.+)\)$/, 'Cannot read the “$1” tab in the Google Sheet — reports show Drive file status as “No data” (set-up: $2)'],
@@ -2132,7 +2238,6 @@ var EHPCore = (function () {
         showError('');
         buildFilters();
         loadDriveStatus();
-        loadCleansingPdfs();
         loadDriveIndex();
       })
       .catch(function (e) {
@@ -2600,7 +2705,11 @@ var EHPCore = (function () {
     xlsx: { src: 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
       sri: 'sha384-vtjasyidUo0kW94K5MXDXntzOJpQgBKXmE7e2Ga4LG0skTTLeBi97eFAXsqewJjw', global: 'XLSX' },
     image: { src: 'https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js',
-      sri: 'sha384-YAj4cGTKsNinHUzylwDJDDZEpC6gnqNubmrp9eerckq7+gwWjABe5s2plXl3uUKb', global: 'htmlToImage' }
+      sri: 'sha384-YAj4cGTKsNinHUzylwDJDDZEpC6gnqNubmrp9eerckq7+gwWjABe5s2plXl3uUKb', global: 'htmlToImage' },
+    pdf: { src: 'https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js',
+      sri: 'sha384-weMABwrltA6jWR8DDe9Jp5blk+tZQh7ugpCsF3JwSA53WZM9/14PjS5LAJNHNjAI', global: 'PDFLib' },
+    zip: { src: 'https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.js',
+      sri: 'sha384-DT0Ls0mO7JmjTnT+oBuMhEJzYJO1zUqzuuMXNdnOmOQRIpN2BgSjvBV/j50NngIT', global: 'fflate' }
   };
   var libLoads = {};
   // Libraries load only when someone exports, so the dashboard itself stays light.
@@ -2823,18 +2932,6 @@ var EHPCore = (function () {
         if (state.view === 'export') renderExport();
         if (state.view === 'cleansing') renderCleansing();
       });
-  }
-
-  // The bot's merged Cleansing PDFs (tab "PDF Cleansing"). Missing tab → the round buttons open the round folders.
-  function loadCleansingPdfs() {
-    var url = Core.sheetTabUrl(sheetLink(), Core.CLEANSING_PDF_TAB);
-    var done = function () { state.clPdfsChecked = true; if (state.view === 'cleansing') renderCleansing(); };
-    if (!url) { state.clPdfs = null; done(); return; }
-    fetch(url, { cache: 'no-store', credentials: 'omit' })
-      .then(function (res) { if (!res.ok) throw new Error('HTTP ' + res.status); return res.text(); })
-      .then(function (text) { state.clPdfs = Core.parseCleansingPdfs(text); })
-      .catch(function (e) { console.warn('[EHP dashboard] cleansing PDFs not loaded', e); state.clPdfs = null; })
-      .then(done);
   }
 
   function loadDriveIndex() {
@@ -3158,8 +3255,8 @@ var EHPCore = (function () {
       .finally(function () { btn.disabled = false; });
   }
 
-  // ---------- Cleansing menu: C01–C03 presence per รพ.สต. (bot status tab), summary print and Excel ----------
-  // Only "has / lacks" reaches this page; the PDFs stay in Drive and the bot merges them there (constitution V).
+  // ---------- Cleansing menu: C01–C03 presence per รพ.สต., summary print and Excel ----------
+  // The summary shows only "has / lacks"; the documents themselves appear only in the book built in this browser (constitution V).
   var CL_STATUS = { complete: 'ครบ 3/3', nofolder: 'ยังไม่มีโฟลเดอร์', nodata: 'ไม่มีข้อมูล' };
   function clStatusText(r) {
     return r.status === 'partial'
@@ -3172,7 +3269,7 @@ var EHPCore = (function () {
   // { all, rows, scope, label }: the whole scope (for the summaries) and the rows the list, print and Excel show.
   function clData() {
     var o = exScope('cl');
-    var all = Core.cleansingStatus(Core.siteReports(state.ds, o), state.drive);
+    var all = Core.cleansingStatus(Core.siteReports(state.ds, o), state.drive || state.clLocal);
     var only = $('clOnlyMissing').checked;
     var label = exScopeText(o) + (only ? ' · เฉพาะที่ยังไม่ครบ' : '');
     return { all: all, rows: only ? all.rows.filter(function (r) { return r.status !== 'complete'; }) : all.rows, label: label };
@@ -3181,13 +3278,16 @@ var EHPCore = (function () {
   function renderCleansing() {
     if (!state.ds) return;
     fillExportFilters('cl');
-    var d = clData(), t = d.all.totals, has = !!state.drive;
+    var d = clData(), t = d.all.totals, has = !!(state.drive || state.clLocal);
     state.clData = d;
     $('clCount').textContent = 'ตรงเงื่อนไข ' + fmt(t.sites) + ' แห่ง' + (d.rows.length !== t.sites ? ' · แสดง ' + fmt(d.rows.length) + ' แห่ง' : '');
     $('clPrint').disabled = $('clExcel').disabled = !has || !d.rows.length;
 
     var box = $('clDrive');
-    if (has) {
+    if (!state.drive && state.clLocal) {
+      box.className = 'alert alert-info';
+      box.textContent = 'สถานะไฟล์ Cleansing จากไฟล์ที่เลือกทำเล่ม: ' + state.clLocalBooks.join(', ') + ' · รอบอื่นยังไม่ได้เลือก';
+    } else if (has) {
       var at = state.drive.updatedAt, stale = !at || Date.now() - at.getTime() > DRIVE_STALE_MS;
       box.className = 'alert ' + (stale ? 'alert-warn' : 'alert-info');
       box.textContent = 'สถานะไฟล์ Cleansing จากบอทแมวส้ม · ข้อมูล ณ ' + (at ? Core.formatThaiDate(at) : 'ไม่ทราบเวลา') +
@@ -3195,7 +3295,7 @@ var EHPCore = (function () {
     } else {
       box.className = 'alert alert-warn';
       box.textContent = state.driveChecked
-        ? 'สถานะไฟล์ Cleansing: ไม่มีข้อมูล (ต้องติดตั้งแท็บ “' + Core.DRIVE_TAB + '” ในบอทแมวส้ม ดู apps-script/bot/README.md)'
+        ? 'สถานะไฟล์ Cleansing: ยังไม่มีข้อมูล — เลือกไฟล์ zip ด้านล่างเพื่อทำเล่ม แล้วสถานะจะแสดงที่นี่'
         : 'กำลังอ่านสถานะไฟล์ Cleansing…';
     }
 
@@ -3218,7 +3318,7 @@ var EHPCore = (function () {
         }).join('') + '</tbody>'
       : '<tbody><tr><td class="empty-state">ไม่มี รพ.สต. ตามเงื่อนไข</td></tr></tbody>';
 
-    renderCleansingPdfs(has);
+    renderClRounds();
 
     var mark = function (v) { return v === 'มี' ? '<span class="ex-state ok">✓ มี</span>' : '<span class="ex-state">' + esc(v === 'ไม่มี' ? '✗ ไม่มี' : '–') + '</span>'; };
     $('clTable').innerHTML = d.rows.length
@@ -3238,43 +3338,222 @@ var EHPCore = (function () {
       : '<tbody><tr><td class="empty-state">' + (t.sites ? 'ทุกแห่งตามเงื่อนไขมีไฟล์ครบแล้ว' : 'ไม่มี รพ.สต. ตามเงื่อนไข') + '</td></tr></tbody>';
   }
 
-  // One button per round, Master plan order (pilot sites are filed under "นำร่อง", like the bot's PDF):
-  // the merged PDF itself when the bot has made one that Drive keeps to the team, else the round folder.
-  function renderCleansingPdfs(has) {
-    var everyRow = Core.cleansingStatus(Core.siteReports(state.ds, {}), state.drive).rows;
-    var picked = exScope('cl').round, pubRounds = [];
-    var link = function (href, primary, title, sub) {
-      return '<a class="btn' + (primary ? ' btn-primary' : '') + '" href="' + esc(href) + '" target="_blank" rel="noopener noreferrer">' +
-        '<span>' + esc(title) + '</span><small>' + esc(sub) + '</small></a>';
-    };
+  // Round folder links (step 1 of the book): Master plan order, pilot sites filed under "นำร่อง".
+  function renderClRounds() {
+    var picked = exScope('cl').round;
     $('clRounds').innerHTML = [1, 2, 3, 4, 0].map(function (r) {
-      var name = r ? Core.planRound(r).name : 'นำร่อง', primary = !!r && r === picked;
-      var pdfs = state.clPdfs ? state.clPdfs.rounds[r ? String(r) : 'pilot'] || [] : [];
-      var open = pdfs.filter(function (p) { return p.url; });
-      if (open.length) {
-        return open.map(function (p) {
-          return link(p.url, primary, 'พิมพ์ ' + name + (p.parts > 1 ? ' ส่วน ' + p.part + '/' + p.parts : ''),
-            'ครบ ' + p.complete + '/' + p.sites + ' แห่ง · ' + p.pages + ' หน้า' + (p.builtAt ? ' · ' + Core.formatThaiDate(p.builtAt) : ''));
-        }).join('');
-      }
-      if (pdfs.length) pubRounds.push(name);
-      var rows = everyRow.filter(function (x) { return r ? x.plan.round === r && !x.plan.pilot : x.plan.pilot; });
-      var done = rows.filter(function (x) { return x.status === 'complete'; }).length;
-      return link(Core.cleansingFolderUrl(r), primary, 'โฟลเดอร์ ' + name,
-        (pdfs.length ? 'PDF รวมยังเปิดสาธารณะ' : 'ยังไม่มี PDF รวม') + (has ? ' · ครบ ' + done + '/' + rows.length + ' แห่ง' : ''));
+      var name = r ? Core.planRound(r).name : 'นำร่อง';
+      return '<a class="btn' + (r && r === picked ? ' btn-primary' : '') + '" href="' + esc(Core.cleansingFolderUrl(r)) +
+        '" target="_blank" rel="noopener noreferrer"><span>' + esc('โฟลเดอร์ ' + name) + '</span><small>Google Drive</small></a>';
     }).join('');
+  }
 
-    var note = $('clPdfNote');
-    note.hidden = !pubRounds.length && !!state.clPdfs;
-    if (pubRounds.length) {
-      note.className = 'alert alert-warn';
-      note.textContent = 'PDF รวมของ ' + pubRounds.join(', ') + ' ยังเปิดให้ทุกคนที่มีลิงก์ Dashboard จึงไม่ลิงก์ไปที่ไฟล์ — ' +
-        'ปรับการแชร์โฟลเดอร์ Cleansing เป็นเฉพาะทีม แล้วรอบอทอัปเดต (ทุกชั่วโมง)';
-    } else if (!state.clPdfs) {
-      note.className = 'alert alert-info';
-      note.textContent = state.clPdfsChecked
-        ? 'ยังไม่มีแท็บ “' + Core.CLEANSING_PDF_TAB + '” — ปุ่มจะเปิดโฟลเดอร์ของรอบแทน จนกว่าบอทจะสร้าง PDF รวม (ติดตั้ง CleansingPrint.gs ดู apps-script/bot/README.md)'
-        : 'กำลังอ่านรายการ PDF รวม…';
+  // ---------- Cleansing book: merge the round folders downloaded from Drive (.zip) in this browser ----------
+  // One PDF per round: cover · contents (page numbers, missing files) · C01 C02 C03 of every รพ.สต. in Master plan
+  // order · page numbers. Nothing is uploaded; the PDF lives in a blob URL on this page (constitution V).
+  var BOOK = { a4: [595.28, 841.89], margin: 24, tocRows: 34, px: 2.5 };
+  function clBookLabel(key) { return key === 'pilot' ? 'นำร่อง' : 'รอบที่ ' + key; }
+
+  function clEntries(files) {
+    var out = [];
+    return files.reduce(function (chain, f) {
+      return chain.then(function () {
+        if (!/\.zip$/i.test(f.name)) { out.push({ path: (f.webkitRelativePath || f.name).split('/'), file: f }); return; }
+        return Promise.all([loadLib('zip'), f.arrayBuffer()]).then(function (x) {
+          var data = x[0].unzipSync(new Uint8Array(x[1]));
+          Object.keys(data).forEach(function (name) {
+            if (!/\/$/.test(name)) out.push({ path: [f.name.replace(/\.zip$/i, '')].concat(name.split('/')), bytes: data[name] });
+          });
+        });
+      });
+    }, Promise.resolve()).then(function () { return out; });
+  }
+  async function clBytes(e) { return e.bytes || (e.bytes = new Uint8Array(await e.file.arrayBuffer())); }
+
+  // PDF pages are copied as they are; a JPG/PNG goes upright and fitted on its own A4 page (landscape when wide).
+  async function clAppend(doc, P, f) {
+    if (f.kind === 'pdf') {
+      var src = await P.PDFDocument.load(f.bytes, { ignoreEncryption: true });
+      (await doc.copyPages(src, src.getPageIndices())).forEach(function (p) { doc.addPage(p); });
+      return;
+    }
+    var img = f.kind === 'jpg' ? await doc.embedJpg(f.bytes) : await doc.embedPng(f.bytes);
+    var turn = f.kind === 'jpg' ? Core.jpegOrientation(f.bytes) : 1, side = turn === 6 || turn === 8;
+    var iw = side ? img.height : img.width, ih = side ? img.width : img.height;
+    var pw = iw > ih ? BOOK.a4[1] : BOOK.a4[0], ph = iw > ih ? BOOK.a4[0] : BOOK.a4[1];
+    var k = Math.min((pw - 2 * BOOK.margin) / iw, (ph - 2 * BOOK.margin) / ih);
+    var dw = iw * k, dh = ih * k, X = (pw - dw) / 2, Y = (ph - dh) / 2, W = side ? dh : dw, H = side ? dw : dh;
+    var page = doc.addPage([pw, ph]);
+    // pdf-lib turns the image around its lower-left corner, so each orientation starts from a different corner.
+    var at = turn === 6 ? { x: X, y: Y + dh, r: -90 } : turn === 8 ? { x: X + dw, y: Y, r: 90 }
+      : turn === 3 ? { x: X + dw, y: Y + dh, r: 180 } : { x: X, y: Y, r: 0 };
+    page.drawImage(img, { x: at.x, y: at.y, width: W, height: H, rotate: P.degrees(at.r) });
+  }
+
+  // Cover and contents are drawn on a canvas with the page's Thai font, then placed in the PDF as images.
+  function clCanvasPage(draw) {
+    var c = document.createElement('canvas');
+    c.width = Math.round(BOOK.a4[0] * BOOK.px); c.height = Math.round(BOOK.a4[1] * BOOK.px);
+    var g = c.getContext('2d');
+    g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.scale(BOOK.px, BOOK.px);
+    draw(g, getComputedStyle(document.body).fontFamily);
+    return new Promise(function (resolve, reject) {
+      c.toBlob(function (b) { if (b) b.arrayBuffer().then(function (x) { resolve(new Uint8Array(x)); }); else reject(new Error('canvas')); }, 'image/png');
+    });
+  }
+  function clFit(g, text, width) {
+    text = String(text);
+    if (g.measureText(text).width <= width) return text;
+    while (text.length > 1 && g.measureText(text + '…').width > width) text = text.slice(0, -1);
+    return text + '…';
+  }
+  function clCover(book) {
+    return clCanvasPage(function (g, font) {
+      var w = BOOK.a4[0];
+      var line = function (text, y, size, bold, color) {
+        g.font = (bold ? '700 ' : '400 ') + size + 'px ' + font; g.fillStyle = color || '#111'; g.textAlign = 'center';
+        g.fillText(clFit(g, text, w - 4 * BOOK.margin), w / 2, y);
+      };
+      var districts = [];
+      book.rows.forEach(function (r) { if (r.district && districts.indexOf(r.district) < 0) districts.push(r.district); });
+      line('รายงานการตรวจสอบและปรับปรุงข้อมูล (Cleansing)', 280, 20, true);
+      line('ระบบ EHP On Cloud', 310, 16, true);
+      line(book.label, 365, 30, true);
+      line('C01 Cleansing Card · C02 Cleansing Allergy · C03 Cleansing Visit', 405, 11);
+      line(book.rows.length + ' แห่ง · ไฟล์ครบ ' + book.complete + ' แห่ง', 432, 12);
+      if (districts.length) line('อำเภอ ' + districts.join(' · '), 454, 11);
+      line('องค์การบริหารส่วนจังหวัดน่าน', 645, 16, true);
+      line('ข้อมูล ณ วันที่ ' + Core.formatThaiDate(new Date()), 668, 11);
+      line('เอกสารมีข้อมูลผู้ป่วย — ใช้ภายในเท่านั้น', 790, 9, false, '#9b1c1c');
+    });
+  }
+  function clToc(book, index, count) {
+    return clCanvasPage(function (g, font) {
+      var m = BOOK.margin, w = BOOK.a4[0], grey = '#666', red = '#b91c1c';
+      var cols = [m + 6, m + 32, m + 78, m + 248, m + 326, m + 366, m + 406, m + 446];
+      var text = function (s, x, y, size, bold, color, max) {
+        g.font = (bold ? '700 ' : '400 ') + size + 'px ' + font; g.fillStyle = color || '#111'; g.textAlign = 'left';
+        g.fillText(max ? clFit(g, s, max) : s, x, y);
+      };
+      var rule = function (y, color, width) { g.strokeStyle = color; g.lineWidth = width; g.beginPath(); g.moveTo(m, y); g.lineTo(w - m, y); g.stroke(); };
+      text('สารบัญ เอกสาร Cleansing ' + book.label + (count > 1 ? '  (' + (index + 1) + '/' + count + ')' : ''), m + 6, m + 22, 15, true);
+      text(book.rows.length + ' แห่ง · ไฟล์ครบ C01–C03 ' + book.complete + ' แห่ง · ขาด ' + (book.rows.length - book.complete) +
+        ' แห่ง · ทำเมื่อ ' + Core.formatThaiDate(new Date()), m + 6, m + 40, 9.5, false, grey);
+      var y = m + 64;
+      ['ที่', 'รหัส', 'รพ.สต.', 'อำเภอ', 'C01', 'C02', 'C03', 'หมายเหตุ'].forEach(function (h, i) { text(h, cols[i], y, 9.5, true); });
+      rule(y + 5, '#333', 0.6);
+      book.rows.slice(index * BOOK.tocRows, (index + 1) * BOOK.tocRows).forEach(function (r, i) {
+        y += 20;
+        [index * BOOK.tocRows + i + 1, r.code, r.name, r.district].forEach(function (c, j) {
+          text(String(c || ''), cols[j], y, 9.5, false, '#111', cols[j + 1] - cols[j] - 4);
+        });
+        Core.CLEANSING_FILES.forEach(function (f, j) { text(r.pages[f] ? String(r.pages[f]) : '–', cols[4 + j], y, 9.5, false, r.pages[f] ? '#111' : red); });
+        text(r.notes.join(' · '), cols[7], y, 7.5, false, red, w - m - cols[7]);
+        rule(y + 7, '#ccc', 0.3);
+      });
+      text('ตัวเลขในช่อง C01–C03 = หน้าที่เริ่มในเล่มนี้ · – = ไม่มีไฟล์ · เอกสารมีข้อมูลผู้ป่วย เก็บรักษาตามระเบียบ', m + 6, BOOK.a4[1] - m, 8, false, grey);
+    });
+  }
+
+  async function clBuildBook(key, sites, P, progress) {
+    var doc = await P.PDFDocument.create(), book = { key: key, label: clBookLabel(key), rows: [], complete: 0 };
+    var list = Core.cleansingBookRows(key, sites);
+    for (var n = 0; n < list.length; n++) {
+      var p = list[n].plan, s = list[n].s, row = { code: p.code, name: p.name, district: p.district || '', pages: {}, notes: [] };
+      book.rows.push(row);
+      progress(book.label, n + 1, list.length);
+      if (!s) { row.notes.push('ไม่มีโฟลเดอร์ / ยังไม่มีไฟล์'); continue; }
+      for (var j = 0; j < Core.CLEANSING_FILES.length; j++) {
+        var part = Core.CLEANSING_FILES[j], files = [];
+        for (var e = 0; e < s.parts[part].length; e++) {
+          var entry = s.parts[part][e], bytes = await clBytes(entry);
+          files.push({ name: entry.path[entry.path.length - 1], bytes: bytes, kind: Core.fileKind(bytes) });
+        }
+        // Prefer PDFs when a part has both a PDF and photos of the same form; otherwise every photo (multi-page forms).
+        var pdfs = files.filter(function (f) { return f.kind === 'pdf'; });
+        var use = (pdfs.length ? pdfs : files.filter(function (f) { return f.kind; }))
+          .sort(function (a, b) { return a.name.localeCompare(b.name); });
+        if (!use.length) { if (files.length) row.notes.push(part + ' เปิดไม่ได้'); continue; }
+        row.pages[part] = doc.getPageCount() + 1;
+        for (var u = 0; u < use.length; u++) {
+          try { await clAppend(doc, P, use[u]); } catch (err) {
+            console.warn('[EHP dashboard] cleansing file skipped', err);
+            row.notes.push(part + ' ' + use[u].name + ' เปิดไม่ได้');
+          }
+        }
+        if (use.length > 1) row.notes.push(part + ' ' + use.length + ' ไฟล์');
+      }
+      var lack = Core.CLEANSING_FILES.filter(function (f) { return !row.pages[f]; });
+      if (lack.length) row.notes.unshift('ขาด ' + lack.join(' ')); else book.complete++;
+      if (s.other.length) row.notes.push('ไม่ได้รวม: ' + s.other.join(', '));
+    }
+    var tocPages = Math.ceil(Math.max(book.rows.length, 1) / BOOK.tocRows), front = 1 + tocPages;
+    book.rows.forEach(function (r) { Object.keys(r.pages).forEach(function (f) { r.pages[f] += front; }); });
+    var images = [await clCover(book)];
+    for (var t = 0; t < tocPages; t++) images.push(await clToc(book, t, tocPages));
+    for (var i = 0; i < images.length; i++) {
+      var png = await doc.embedPng(images[i]);
+      doc.insertPage(i, BOOK.a4).drawImage(png, { x: 0, y: 0, width: BOOK.a4[0], height: BOOK.a4[1] });
+    }
+    var font = await doc.embedFont(P.StandardFonts.Helvetica), total = doc.getPageCount();
+    doc.getPages().forEach(function (pg, k) {
+      if (!k) return;
+      var label = 'Cleansing ' + (key === 'pilot' ? 'pilot' : 'round ' + key) + '  -  ' + (k + 1) + ' / ' + total;
+      pg.drawText(label, { x: pg.getWidth() - BOOK.margin - font.widthOfTextAtSize(label, 7), y: 8, size: 7, font: font, color: P.rgb(0.45, 0.45, 0.45) });
+    });
+    doc.setTitle('Cleansing ' + book.label);
+    var out = await doc.save();
+    book.pages = total;
+    book.url = URL.createObjectURL(new Blob([out], { type: 'application/pdf' }));
+    return book;
+  }
+
+  function renderClBooks() {
+    $('clBooks').innerHTML = (state.clBooks || []).map(function (b) {
+      var noted = b.rows.filter(function (r) { return r.notes.length; });
+      return '<div class="cl-book"><h3>' + esc('Cleansing ' + b.label) +
+        '<small>' + esc(b.pages + ' หน้า · ครบ ' + b.complete + '/' + b.rows.length + ' แห่ง') + '</small></h3>' +
+        '<a class="btn btn-primary" href="' + b.url + '" target="_blank" rel="noopener">เปิดเล่ม / พิมพ์</a>' +
+        '<a class="btn" href="' + b.url + '" download="' + esc('Cleansing ' + b.label + '.pdf') + '">ดาวน์โหลด PDF</a>' +
+        (noted.length ? '<details><summary>' + esc('หมายเหตุ ' + noted.length + ' แห่ง') + '</summary><ul>' +
+          noted.map(function (r) { return '<li>' + esc(r.code + ' ' + r.name + ': ' + r.notes.join(' · ')) + '</li>'; }).join('') +
+          '</ul></details>' : '') + '</div>';
+    }).join('');
+  }
+
+  async function makeCleansingBooks(fileList) {
+    var files = Array.prototype.slice.call(fileList || []);
+    if (!files.length) return;
+    var note = $('clBookNote');
+    var say = function (kind, text) { note.hidden = false; note.className = 'alert alert-' + kind; note.textContent = text; };
+    $('clZipBtn').disabled = $('clDirBtn').disabled = true;
+    try {
+      say('info', 'กำลังอ่านไฟล์…');
+      var P = await loadLib('pdf');
+      var got = Core.cleansingCollect(await clEntries(files));
+      var keys = Object.keys(got.books).sort(function (a, b) { return (a === 'pilot') - (b === 'pilot') || a.localeCompare(b); });
+      if (!keys.length) { say('warn', 'ไม่พบไฟล์ Cleansing ในไฟล์ที่เลือก — ต้องเป็น zip ของโฟลเดอร์ “รอบ N” หรือ “นำร่อง” จาก Google Drive'); return; }
+      state.clBooks.forEach(function (b) { URL.revokeObjectURL(b.url); });
+      state.clBooks = [];
+      renderClBooks();
+      for (var i = 0; i < keys.length; i++) {
+        state.clBooks.push(await clBuildBook(keys[i], got.books[keys[i]], P, function (label, n, total) {
+          say('info', 'กำลังทำเล่ม ' + label + ' · รพ.สต. ' + n + '/' + total + '…');
+        }));
+        renderClBooks();
+      }
+      state.clLocal = Core.cleansingPresence(got.books);
+      state.clLocalBooks = keys.map(clBookLabel);
+      say('ok', 'ทำเล่มเสร็จ ' + keys.length + ' เล่ม — กด “เปิดเล่ม / พิมพ์” แล้วสั่งพิมพ์จากหน้าต่าง PDF');
+      track('export', 'cleansing-book');
+      renderCleansing();
+    } catch (e) {
+      console.error('[EHP dashboard] cleansing book failed', e);
+      say('warn', /^load /.test(e.message) ? 'ทำเล่มไม่สำเร็จ — ตรวจสอบอินเทอร์เน็ต (ต้องโหลดตัวช่วยทำ PDF จาก cdnjs / jsDelivr) แล้วลองอีกครั้ง'
+        : 'ทำเล่มไม่สำเร็จ — ไฟล์อาจใหญ่เกินหรือเสีย ลองเลือกทีละรอบ');
+    } finally {
+      $('clZipBtn').disabled = $('clDirBtn').disabled = false;
+      $('clZip').value = $('clDir').value = '';
     }
   }
 
@@ -3553,6 +3832,9 @@ var EHPCore = (function () {
   ['clRound', 'clDistrict', 'clStaff', 'clPilots', 'clOnlyMissing'].forEach(function (id) { $(id).addEventListener('change', renderCleansing); });
   $('clPrint').addEventListener('click', printCleansing);
   $('clExcel').addEventListener('click', function () { exportCleansingExcel($('clExcel')); });
+  $('clZipBtn').addEventListener('click', function () { $('clZip').click(); });
+  $('clDirBtn').addEventListener('click', function () { $('clDir').click(); });
+  ['clZip', 'clDir'].forEach(function (id) { $(id).addEventListener('change', function () { makeCleansingBooks($(id).files); }); });
   $('exPrint').addEventListener('click', function () { printReports(state.exList || [], exScopeText(exScope())); });
   $('exExcel').addEventListener('click', function () { exportSitesExcel($('exExcel')); });
   $('exPrintImages').addEventListener('click', function () { printImages(state.exList || [], exScopeText(exScope()), $('exPrintImages')); });

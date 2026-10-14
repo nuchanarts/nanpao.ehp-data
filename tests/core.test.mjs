@@ -455,22 +455,71 @@ test('cleansingFolderUrl links every round folder (0 = นำร่อง) and n
   assert.ok(pilots.length > 0 && pilots.every((p) => p.round >= 1), 'pilot sites keep their Master plan round');
 });
 
-test('parseCleansingPdfs reads the bot tab by header text and only links files that are not public', () => {
-  const csv = [
-    'รอบ,ส่วน,จำนวนส่วน,ไฟล์,แห่ง,ครบ,หน้า,การแชร์,สร้างเมื่อ',
-    '1,1,2,1AbcdefghijklmnopqrstuvwxyZ0123,26,13,120,PRIVATE,2026-10-14 13:05',
-    '1,2,2,1BbcdefghijklmnopqrstuvwxyZ0123,26,13,80,PRIVATE,2026-10-14 13:05',
-    'pilot,1,1,1CbcdefghijklmnopqrstuvwxyZ0123,10,2,30,ANYONE_WITH_LINK,2026-10-14 12:05',
-    '2,1,1,not an id,20,0,1,PRIVATE,2026-10-14 12:05'
-  ].join('\n');
-  const d = Core.parseCleansingPdfs(csv);
-  assert.equal(d.rounds['1'].length, 2);
-  assert.equal(d.rounds['1'][1].part, 2);
-  assert.equal(d.rounds['1'][0].url, 'https://drive.google.com/file/d/1AbcdefghijklmnopqrstuvwxyZ0123/view');
-  assert.equal(d.rounds['1'][0].builtAt.getHours(), 13);
-  assert.equal(d.rounds.pilot[0].public, true);
-  assert.equal(d.rounds.pilot[0].url, null, 'a public file is never linked');
-  assert.equal(d.rounds['2'], undefined, 'rows without a Drive file ID are dropped');
-  assert.equal(Core.parseCleansingPdfs(header), null);
-  assert.match(Core.sheetTabUrl(Core.DEFAULT_SHEET_URL, Core.CLEANSING_PDF_TAB), /sheet=PDF%20Cleansing$/);
+
+test('Cleansing book: file names map to C01–C03, Thai names included', () => {
+  assert.equal(Core.cleansingPartOf('C01-Cleansing_Card.pdf'), 'C01');
+  assert.equal(Core.cleansingPartOf('C02-Cleansing_Allergy.jpg'), 'C02');
+  assert.equal(Core.cleansingPartOf('C03-Cleansing_Visit.jpg'), 'C03');
+  assert.equal(Core.cleansingPartOf('06448_ข้อมูลเวชระเบียน.pdf'), 'C01');
+  assert.equal(Core.cleansingPartOf('06448_ข้อมูลการแพ้ยา.pdf'), 'C02');
+  assert.equal(Core.cleansingPartOf('06448_ข้อมูลจ่ายยา.pdf'), 'C03');
+  assert.equal(Core.cleansingPartOf('รวม 2 ใบ ไม่มีประวัติแพ้ยา'), 'C02');
+  assert.equal(Core.cleansingPartOf('รพ.สต.สะเนียน.pdf'), null);
+  assert.equal(Core.cleansingPartOf('C010.pdf'), null);
+});
+
+test('Cleansing book: folders find their site by code or name, and files their round book', () => {
+  assert.equal(Core.cleansingSiteOf('(รอบ 1) 06457 รพ.สต.กองควาย').code, '06457');
+  assert.equal(Core.cleansingSiteOf('(รอบ 2)  06517 รพ.สต.น้ำปั้ว').code, '06517');
+  assert.equal(Core.cleansingSiteOf('รพ.สต.ไชยวัฒนา').code, '06494', 'pilot folders have no code');
+  assert.equal(Core.cleansingSiteOf('รอบ 1'), null);
+  const site = Core.planFor('06457');
+  assert.equal(Core.cleansingBookOf(['รอบ 1-20261014T123035Z-1-001', 'รอบ 1', '(รอบ 1) 06457 x', 'a.pdf'], site), '1');
+  assert.equal(Core.cleansingBookOf(['นำร่อง-2026', 'นำร่อง', 'รพ.สต.ไชยวัฒนา', 'a.pdf'], site), 'pilot');
+  assert.equal(Core.cleansingBookOf(['x', '(รอบที่ 1) 10395 y', 'a.pdf'], site), '1');
+  assert.equal(Core.cleansingBookOf(['x', 'y', 'a.pdf'], site), String(site.round));
+});
+
+test('cleansingCollect groups files per book and site, skips test folders and keeps other files by name only', () => {
+  const e = (...path) => ({ path });
+  const got = Core.cleansingCollect([
+    e('รอบ 1', '(รอบ 1) 06457 รพ.สต.กองควาย', 'C01-Cleansing_Card.pdf'),
+    e('รอบ 1', '(รอบ 1) 06457 รพ.สต.กองควาย', 'C03-Cleansing_Visit.jpg'),
+    e('รอบ 1', '(รอบ 1) 06467 รพ.สต.สะเนียน', 'รพ.สต.สะเนียน.pdf'),
+    e('รอบ 1', '(รอบ 1) 06467 รพ.สต.สะเนียน', 'พิมพ์รวม Cleansing รอบ 1.pdf'),
+    e('รอบ 1', '(รอบ x) xxxxx รพ.สต.ทดสอบ', 'C01-Cleansing_Card.pdf'),
+    e('รอบ 2', '(รอบ 2) 06543 รพ.สต.ปิงหลวง', 'รพ.สต.ปิงหลวง_CleansingData_.xlsx')
+  ]);
+  assert.equal(Object.keys(got.books).join(), '1,2');
+  assert.equal(got.books['2']['06543'].parts.C01.length, 0, 'a folder with only the Excel sheet counts as a folder without files');
+  const s = got.books['1']['06457'];
+  assert.equal(s.parts.C01.length, 1);
+  assert.equal(s.parts.C02.length, 0);
+  assert.equal(s.parts.C03.length, 1);
+  assert.equal(JSON.stringify(got.books['1']['06467'].other), JSON.stringify(['รพ.สต.สะเนียน.pdf']));
+  assert.equal(got.skipped.length, 0);
+
+  const rows = Core.cleansingBookRows('1', got.books['1']);
+  const plan1 = Core.MASTER_PLAN.filter((p) => p.round === 1 && !p.pilot);
+  assert.equal(rows.length, plan1.length, 'every planned site of the round is listed, with or without files');
+  assert.equal(rows.map((r) => r.plan.code).join(), plan1.map((p) => p.code).join(), 'Master plan order');
+  assert.equal(rows.find((r) => r.plan.code === '06448').s, null);
+
+  const presence = Core.cleansingPresence(got.books);
+  assert.equal(JSON.stringify(presence.sites['06457'].cleansing), JSON.stringify({ C01: true, C02: false, C03: true }));
+  assert.equal(Core.cleansingStatus(Core.siteReports(Core.loadDataset(sample), { round: 1 }), presence)
+    .rows.find((r) => r.plan.code === '06457').status, 'partial');
+});
+
+test('fileKind reads the first bytes, and jpegOrientation the EXIF flag', () => {
+  assert.equal(Core.fileKind(new Uint8Array([0x25, 0x50, 0x44, 0x46, 0x2d])), 'pdf');
+  assert.equal(Core.fileKind(new Uint8Array([0xff, 0xd8, 0xff, 0xe0])), 'jpg');
+  assert.equal(Core.fileKind(new Uint8Array([0x89, 0x50, 0x4e, 0x47])), 'png');
+  assert.equal(Core.fileKind(new Uint8Array([0x50, 0x4b, 0x03, 0x04])), null);
+  // SOI · APP1 "Exif" · TIFF little-endian · IFD with one entry: Orientation (0x0112) = 6
+  const tiff = [0x49, 0x49, 0x2a, 0x00, 0x08, 0x00, 0x00, 0x00, 0x01, 0x00, 0x12, 0x01, 0x03, 0x00, 0x01, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0, 0, 0, 0];
+  const app1 = [0x45, 0x78, 0x69, 0x66, 0x00, 0x00].concat(tiff);
+  const jpg = new Uint8Array([0xff, 0xd8, 0xff, 0xe1, 0x00, app1.length + 2].concat(app1, [0xff, 0xda, 0x00, 0x02]));
+  assert.equal(Core.jpegOrientation(jpg), 6);
+  assert.equal(Core.jpegOrientation(new Uint8Array([0xff, 0xd8, 0xff, 0xda, 0x00, 0x02, 0, 0, 0, 0, 0, 0])), 1);
 });
