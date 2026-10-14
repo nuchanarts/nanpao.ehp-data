@@ -25,6 +25,9 @@ Sheet ต้องแชร์แบบ “ทุกคนที่มีลิ�
   พร้อมพิมพ์สรุป (A4) และ Excel — แสดงเฉพาะ มี/ไม่มี จากแท็บ "สถานะไฟล์ Drive" ไม่แสดงไฟล์เพราะมีข้อมูลผู้ป่วย
   - **พิมพ์เอกสาร C01–C03 ทั้งรอบในครั้งเดียว:** ปุ่ม "พิมพ์ รอบที่ N" เปิด PDF รวมทั้งรอบ (สารบัญ + PDF และรูปของทุก รพ.สต. เรียงตามรายชื่อ)
     ที่ [`apps-script/bot/CleansingPrint.gs`](apps-script/bot/README.md) สร้างใน Drive ทุกชั่วโมง — ลิงก์เฉพาะไฟล์ที่แชร์เฉพาะทีม (แท็บ "PDF Cleansing")
+- **รวมเล่ม Cleansing ในเครื่อง (ไม่ต้องมีบอท):** ดาวน์โหลดโฟลเดอร์ "รอบ 1" … "รอบ 4" / "นำร่อง" จาก Drive เป็น zip ลง Downloads แล้วรัน `npm i` (ครั้งแรก) และ `npm run cleansing`
+  ได้ `Downloads/Cleansing-พิมพ์/Cleansing รอบที่ N.pdf` ต่อรอบ: ปก · สารบัญพร้อมเลขหน้าและแห่งที่ขาดไฟล์ · C01 C02 C03 ทุก รพ.สต. เรียงตาม Master plan · เลขหน้าทุกหน้า
+  — ไฟล์มีข้อมูลผู้ป่วย เก็บในเครื่องทีม ห้าม commit หรือเผยแพร่
 - **(ทางเลือก) รวมรูปเป็น Google Doc/PDF ใน Drive:** เมนู 🐱 แมวส้ม ใน Google Sheet — [`apps-script/bot/InstallPrint.gs`](apps-script/bot/README.md) ต้องติดตั้งในบอทก่อน
 
 ## โครงสร้าง
@@ -35,6 +38,7 @@ Sheet ต้องแชร์แบบ “ทุกคนที่มีลิ�
 - `tools/drive-index.mjs` + `.github/workflows/drive-index.yml` — สร้างรายการรูปรายงานการติดตั้งจากโฟลเดอร์ Drive สาธารณะ ให้ปุ่มพิมพ์รูป
 - `apps-script/bot/InstallPrint.gs` — ไฟล์เสริมสำหรับบอทแมวส้ม: เมนูใน Google Sheet รวมรูปรายงานการติดตั้งทั้งรอบเป็น Google Doc + PDF
 - `apps-script/bot/CleansingPrint.gs` — ไฟล์เสริมสำหรับบอทแมวส้ม: รวม PDF Cleansing C01 C02 C03 ทั้งรอบเป็นไฟล์เดียวในโฟลเดอร์ Drive ของรอบ
+- `tools/cleansing-print.mjs` — รวมเอกสาร Cleansing จาก zip ที่ดาวน์โหลดจาก Drive เป็น PDF รูปเล่มรายรอบ ทำงานในเครื่องเท่านั้น
 - `tests/core.test.mjs` — unit test ของ `ehp-core` (`npm test`, ต้องมี Node 20+)
 - `tests/fixtures/` — หัวตารางจริงของฟอร์ม + ข้อมูลสมมติสำหรับทดสอบ (`node tests/fixtures/build-sample.mjs` เพื่อสร้างใหม่)
 

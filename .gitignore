@@ -8,3 +8,6 @@
 *.csv
 *.tsv
 !tests/fixtures/*.csv
+
+# npm packages for tools/
+node_modules/
