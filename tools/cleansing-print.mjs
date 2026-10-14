@@ -16,9 +16,10 @@ import fontkit from '@pdf-lib/fontkit';
 const ROOT = new URL('../', import.meta.url);
 const DOWNLOADS = join(homedir(), 'Downloads');
 const PARTS = [
-  { key: 'C01', re: /C0?1\b|Cleansing_Card|บัตร/i },
+  // Some sites name files in Thai: ข้อมูลเวชระเบียน (card) · ข้อมูลการแพ้ยา (allergy) · ข้อมูลจ่ายยา (visit).
+  { key: 'C01', re: /C0?1\b|Cleansing_Card|บัตร|เวชระเบียน/i },
   { key: 'C02', re: /C0?2\b|Cleansing_Allergy|แพ้ยา/i },
-  { key: 'C03', re: /C0?3\b|Cleansing_Visit/i }
+  { key: 'C03', re: /C0?3\b|Cleansing_Visit|จ่ายยา|รับบริการ/i }
 ];
 const A4 = [595.28, 841.89];
 const MARGIN = 24;
