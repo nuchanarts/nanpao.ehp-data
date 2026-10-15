@@ -514,6 +514,10 @@ main { padding: 20px 28px 32px; }
 .cl-drop.over, #clFlow.over .cl-drop { background: var(--k-blue-bg); }
 .cl-drop:disabled { opacity: .7; cursor: progress; }
 .cl-more { margin: 0 0 10px; }
+.fx-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 12px 0 10px; }
+.fx-bar .fx-page { min-width: 92px; text-align: center; }
+.fx-stage { overflow: auto; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-2); padding: 8px; }
+#fxCanvas { display: block; margin: 0 auto; max-width: 100%; background: #fff; cursor: crosshair; touch-action: none; }
 .cl-more a { color: var(--accent-ink); }
 .cl-book { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 10px 0; border-top: 1px solid var(--border); }
 .cl-book:first-child { border-top: 0; }
@@ -563,6 +567,7 @@ main { padding: 20px 28px 32px; }
         <li><a href="#recent" data-view="recent"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg><span>บันทึกล่าสุด</span></a></li>
         <li><a href="#export" data-view="export"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span>ส่งออกข้อมูล</span></a></li>
         <li><a href="#cleansing" data-view="cleansing"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l5 5v13H6zM14 3v5h5M9.5 14.5l2 2 4-4"/></svg><span>Cleansing</span></a></li>
+        <li><a href="#pdffix" data-view="pdffix"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l5 5v13H6zM14 3v5h5M9 13h7v4H9z"/></svg><span>แก้ไฟล์ PDF</span></a></li>
         <li id="viewersItem" hidden><a href="#viewers" data-view="viewers"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M16 4.5a3.5 3.5 0 0 1 0 7M18 14.8c1.9.7 3.1 2.4 3.5 5.2"/></svg><span>ผู้เข้าชม</span><b id="onlineBadge" class="menu-badge" hidden></b></a></li>
         <li><a href="#source" data-view="source"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v14H5zM5 10h14M10 10v9"/></svg><span>แหล่งข้อมูล</span><b id="warnBadge" class="menu-badge" hidden></b></a></li>
       </ul>
@@ -899,6 +904,40 @@ main { padding: 20px 28px 32px; }
               <li><a href="https://drive.google.com/drive/folders/1F6GbqiGF9QpqJjpC2ASiaEA10prKIt4o" target="_blank" rel="noopener noreferrer">รายงาน Cleansing ข้อมูลแยกรอบ (Google Drive)</a></li>
             </ul>
             <p class="note">ไฟล์มีข้อมูลผู้ป่วย Dashboard จึงไม่แสดงไฟล์เอง ไฟล์อยู่ใน Google Drive ของทีมเท่านั้น · สิทธิ์การเปิดขึ้นกับการแชร์ใน Google Drive ต้องแชร์เฉพาะทีม</p>
+          </section>
+        </div>
+
+        <!-- Fix a scanned PDF: drag white boxes over words that should not be there (e.g. a doubled word in a form
+             heading), then save a new PDF. Runs in this browser only; the file is never uploaded. -->
+        <div class="stack" data-panel="pdffix">
+          <section class="card" aria-labelledby="fxHead">
+            <div class="card-head"><h2 id="fxHead">แก้ไฟล์ PDF สแกน — ปิดคำที่เกิน</h2></div>
+            <div class="cl-flow" id="fxFlow">
+              <button type="button" class="cl-step cl-drop" id="fxPick">
+                <span class="cl-num" aria-hidden="true">1</span>
+                <span><b>ลากไฟล์ PDF มาวางที่นี่ หรือกดเพื่อเลือก</b><small>ไฟล์สแกนก็ได้ · เปิดในเบราว์เซอร์นี้ ไม่มีการอัปโหลด</small></span>
+              </button>
+              <div class="cl-step">
+                <span class="cl-num" aria-hidden="true">2</span>
+                <span><b>ลากกรอบทับคำที่ไม่ต้องการ แล้วดาวน์โหลด</b><small>กรอบเป็นสีขาว ติ๊ก “กรอบใหม่ใช้กับทุกหน้า” ถ้าคำอยู่ตำแหน่งเดิมทุกหน้า</small></span>
+              </div>
+            </div>
+            <input type="file" id="fxFile" accept=".pdf,application/pdf" hidden>
+            <div id="fxNote" class="alert" role="status" aria-live="polite" hidden></div>
+            <div id="fxEditor" hidden>
+              <div class="fx-bar">
+                <button type="button" id="fxPrev">‹ ก่อนหน้า</button>
+                <span class="fx-page small" id="fxPageText" aria-live="polite"></span>
+                <button type="button" id="fxNext">ถัดไป ›</button>
+                <label class="ex-check"><span><input type="checkbox" id="fxAll"> กรอบใหม่ใช้กับทุกหน้า</span></label>
+                <button type="button" id="fxUndo">ยกเลิกกรอบล่าสุด</button>
+                <button type="button" id="fxClear">ล้างกรอบหน้านี้</button>
+                <button type="button" class="btn-primary" id="fxSave">ดาวน์โหลด PDF ที่แก้แล้ว</button>
+                <span class="small muted" id="fxCount"></span>
+              </div>
+              <div class="fx-stage" id="fxStage"><canvas id="fxCanvas" aria-label="หน้า PDF — ลากเพื่อวางกรอบสีขาว"></canvas></div>
+            </div>
+            <p class="note">เส้นประสีแดงแสดงตำแหน่งกรอบบนจอเท่านั้น ไม่ติดไปในไฟล์ · หน้าเดิมทุกหน้าคมชัดเท่าต้นฉบับ · เอกสารที่ลงนามแล้ว ควรแก้เฉพาะคำพิมพ์ผิดในแบบฟอร์ม ไม่แก้ข้อมูลหรือลายมือชื่อ</p>
           </section>
         </div>
       </div>
@@ -1842,7 +1881,7 @@ var EHPCore = (function () {
   };
   var AUTH_ON = !!(AUTH.clientId && AUTH.endpoint);
   var HEARTBEAT_MS = 60 * 1000;
-  var VIEWS = { overview: 'ภาพรวม', followup: 'ติดตามงาน', plan: 'แผนติดตั้ง', topics: 'รายหัวข้อ', hospitals: 'ราย รพ.สต.', staff: 'เจ้าหน้าที่ / รอบ', recent: 'บันทึกล่าสุด', export: 'ส่งออกข้อมูล', cleansing: 'Cleansing', viewers: 'ผู้เข้าชม', source: 'แหล่งข้อมูล' };
+  var VIEWS = { overview: 'ภาพรวม', followup: 'ติดตามงาน', plan: 'แผนติดตั้ง', topics: 'รายหัวข้อ', hospitals: 'ราย รพ.สต.', staff: 'เจ้าหน้าที่ / รอบ', recent: 'บันทึกล่าสุด', export: 'ส่งออกข้อมูล', cleansing: 'Cleansing', pdffix: 'แก้ไฟล์ PDF', viewers: 'ผู้เข้าชม', source: 'แหล่งข้อมูล' };
   var $ = function (id) { return document.getElementById(id); };
 
   // ---------- Language (constitution VII) ----------
@@ -2303,7 +2342,7 @@ var EHPCore = (function () {
     var ds = state.ds;
     var has = !!ds;
     var onSource = state.view === 'source';
-    var ownScope = state.view === 'viewers' || state.view === 'export' || state.view === 'cleansing'; // these views do not use the global filters
+    var ownScope = state.view === 'viewers' || state.view === 'export' || state.view === 'cleansing' || state.view === 'pdffix'; // these views do not use the global filters
     $('exportMenu').hidden = !has || onSource || ownScope;
     document.querySelector('.filters-bar').hidden = ownScope;
     $('dashboard').hidden = !has || onSource;
@@ -2722,6 +2761,8 @@ var EHPCore = (function () {
       sri: 'sha384-YAj4cGTKsNinHUzylwDJDDZEpC6gnqNubmrp9eerckq7+gwWjABe5s2plXl3uUKb', global: 'htmlToImage' },
     pdf: { src: 'https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js',
       sri: 'sha384-weMABwrltA6jWR8DDe9Jp5blk+tZQh7ugpCsF3JwSA53WZM9/14PjS5LAJNHNjAI', global: 'PDFLib' },
+    pdfjs: { src: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
+      sri: 'sha384-/1qUCSGwTur9vjf/z9lmu/eCUYbpOTgSjmpbMQZ1/CtX2v/WcAIKqRv+U1DUCG6e', global: 'pdfjsLib' },
     zip: { src: 'https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.js',
       sri: 'sha384-DT0Ls0mO7JmjTnT+oBuMhEJzYJO1zUqzuuMXNdnOmOQRIpN2BgSjvBV/j50NngIT', global: 'fflate' }
   };
@@ -3572,6 +3613,141 @@ var EHPCore = (function () {
       $('clZip').value = $('clDir').value = '';
     }
   }
+
+  // ---------- Fix a scanned PDF: white boxes over words that should not be there ----------
+  // pdf.js only draws the preview; pdf-lib paints the boxes onto the original pages, so the scan keeps its quality.
+  // Boxes are kept as fractions of the page as shown (page 0 = every page) and mapped to PDF points when saving.
+  var PDFJS_WORKER = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  var fx = { boxes: [] };
+  function fxNote(text, warn) {
+    var n = $('fxNote');
+    n.hidden = !text; n.className = 'alert ' + (warn ? 'alert-warn' : 'alert-info'); n.textContent = text || '';
+  }
+  function fxBoxesOn(n) { return fx.boxes.filter(function (b) { return b.page === 0 || b.page === n; }); }
+
+  async function fxOpen(file) {
+    if (!file) return;
+    if (!/\.pdf$/i.test(file.name) && file.type !== 'application/pdf') { fxNote('เลือกได้เฉพาะไฟล์ .pdf', true); return; }
+    fxNote('กำลังเปิดไฟล์…');
+    try {
+      var lib = await loadLib('pdfjs');
+      lib.GlobalWorkerOptions.workerSrc = PDFJS_WORKER;
+      var bytes = new Uint8Array(await file.arrayBuffer());
+      var doc = await lib.getDocument({ data: bytes.slice() }).promise; // pdf.js keeps the buffer it is given
+      if (fx.doc) fx.doc.destroy();
+      fx = { file: file, bytes: bytes, doc: doc, page: 1, boxes: [], drag: null, img: null, seq: 0 };
+      fxNote('');
+      $('fxEditor').hidden = false;
+      await fxRender();
+      track('export', 'pdffix');
+    } catch (e) {
+      fxNote('เปิดไฟล์นี้ไม่ได้ — ไฟล์อาจเสีย มีรหัสผ่าน หรือโหลดตัวอ่าน PDF ไม่ได้ (ลองใหม่อีกครั้ง)', true);
+    }
+  }
+
+  async function fxRender() {
+    var seq = ++fx.seq, page = await fx.doc.getPage(fx.page);
+    var dpr = window.devicePixelRatio || 1, base = page.getViewport({ scale: 1 });
+    var fit = Math.min(2, Math.max(0.4, (($('fxStage').clientWidth || 800) - 16) / base.width));
+    var vp = page.getViewport({ scale: fit * dpr });
+    var img = document.createElement('canvas');
+    img.width = Math.round(vp.width); img.height = Math.round(vp.height);
+    await page.render({ canvasContext: img.getContext('2d'), viewport: vp }).promise;
+    if (seq !== fx.seq) return; // a newer page was asked for while this one rendered
+    var c = $('fxCanvas');
+    c.width = img.width; c.height = img.height; c.style.width = (img.width / dpr) + 'px';
+    fx.img = img;
+    fxDraw();
+    $('fxPageText').textContent = 'หน้า ' + fx.page + ' / ' + fx.doc.numPages;
+    $('fxPrev').disabled = fx.page <= 1;
+    $('fxNext').disabled = fx.page >= fx.doc.numPages;
+  }
+
+  function fxDraw() {
+    var c = $('fxCanvas'), g = c.getContext('2d'), lw = Math.max(1.5, c.width / 500);
+    g.drawImage(fx.img, 0, 0);
+    fxBoxesOn(fx.page).concat(fx.drag ? [fx.drag] : []).forEach(function (b) {
+      var x = b.x * c.width, y = b.y * c.height, w = b.w * c.width, h = b.h * c.height;
+      g.fillStyle = '#fff'; g.fillRect(x, y, w, h);
+      g.setLineDash([lw * 3, lw * 2]); g.lineWidth = lw; g.strokeStyle = '#dc2626'; g.strokeRect(x, y, w, h); g.setLineDash([]);
+    });
+    var here = fxBoxesOn(fx.page).length;
+    $('fxCount').textContent = fx.boxes.length ? 'หน้านี้ ' + here + ' กรอบ · ทั้งไฟล์ ' + fx.boxes.length + ' กรอบ' : 'ยังไม่มีกรอบ';
+    $('fxSave').disabled = !fx.boxes.length;
+    $('fxUndo').disabled = !fx.boxes.length;
+    $('fxClear').disabled = !here;
+  }
+
+  function fxPoint(e) {
+    var r = $('fxCanvas').getBoundingClientRect();
+    return { x: Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)), y: Math.min(1, Math.max(0, (e.clientY - r.top) / r.height)) };
+  }
+
+  async function fxSave() {
+    var btn = $('fxSave'), label = btn.textContent;
+    btn.disabled = true; btn.textContent = 'กำลังทำไฟล์…';
+    try {
+      var P = await loadLib('pdf');
+      var out = await P.PDFDocument.load(fx.bytes, { ignoreEncryption: true });
+      for (var n = 1; n <= fx.doc.numPages; n++) {
+        var boxes = fxBoxesOn(n);
+        if (!boxes.length) continue;
+        var vp = (await fx.doc.getPage(n)).getViewport({ scale: 1 }), pg = out.getPage(n - 1);
+        boxes.forEach(function (b) {
+          // convertToPdfPoint undoes the page's rotation and crop offset, so the box lands where it was drawn.
+          var a = vp.convertToPdfPoint(b.x * vp.width, b.y * vp.height);
+          var z = vp.convertToPdfPoint((b.x + b.w) * vp.width, (b.y + b.h) * vp.height);
+          pg.drawRectangle({ x: Math.min(a[0], z[0]), y: Math.min(a[1], z[1]), width: Math.abs(z[0] - a[0]), height: Math.abs(z[1] - a[1]), color: P.rgb(1, 1, 1) });
+        });
+      }
+      var url = URL.createObjectURL(new Blob([await out.save()], { type: 'application/pdf' }));
+      var a = document.createElement('a');
+      a.href = url; a.download = fx.file.name.replace(/\.pdf$/i, '') + '_แก้ไข.pdf';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
+      fxNote('ดาวน์โหลดแล้ว: ' + a.download + ' · ' + fx.boxes.length + ' กรอบ');
+    } catch (e) {
+      fxNote('ทำไฟล์ไม่สำเร็จ — ลองใหม่อีกครั้ง', true);
+    }
+    btn.textContent = label; btn.disabled = !fx.boxes.length;
+  }
+
+  $('fxPick').addEventListener('click', function () { $('fxFile').click(); });
+  $('fxFile').addEventListener('change', function () { fxOpen($('fxFile').files[0]); $('fxFile').value = ''; });
+  (function () {
+    var zone = $('fxFlow').closest('section'), flow = $('fxFlow');
+    zone.addEventListener('dragover', function (e) { e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; flow.classList.add('over'); });
+    zone.addEventListener('dragleave', function (e) { if (!zone.contains(e.relatedTarget)) flow.classList.remove('over'); });
+    zone.addEventListener('drop', function (e) { e.preventDefault(); flow.classList.remove('over'); fxOpen(e.dataTransfer.files[0]); });
+  })();
+  $('fxPrev').addEventListener('click', function () { if (fx.page > 1) { fx.page--; fxRender(); } });
+  $('fxNext').addEventListener('click', function () { if (fx.page < fx.doc.numPages) { fx.page++; fxRender(); } });
+  $('fxUndo').addEventListener('click', function () { fx.boxes.pop(); fxDraw(); });
+  $('fxClear').addEventListener('click', function () {
+    fx.boxes = fx.boxes.filter(function (b) { return b.page !== fx.page && b.page !== 0; });
+    fxDraw();
+  });
+  $('fxSave').addEventListener('click', fxSave);
+  $('fxCanvas').addEventListener('pointerdown', function (e) {
+    if (!fx.img) return;
+    e.preventDefault();
+    this.setPointerCapture(e.pointerId);
+    fx.start = fxPoint(e);
+    fx.drag = { x: fx.start.x, y: fx.start.y, w: 0, h: 0 };
+  });
+  $('fxCanvas').addEventListener('pointermove', function (e) {
+    if (!fx.drag) return;
+    var p = fxPoint(e), s = fx.start;
+    fx.drag = { x: Math.min(s.x, p.x), y: Math.min(s.y, p.y), w: Math.abs(p.x - s.x), h: Math.abs(p.y - s.y) };
+    fxDraw();
+  });
+  $('fxCanvas').addEventListener('pointerup', function () {
+    var d = fx.drag;
+    fx.drag = null;
+    if (d && d.w > 0.003 && d.h > 0.003) fx.boxes.push({ page: $('fxAll').checked ? 0 : fx.page, x: d.x, y: d.y, w: d.w, h: d.h });
+    if (fx.img) fxDraw();
+  });
+  window.addEventListener('resize', function () { if (fx.doc && state.view === 'pdffix') fxRender(); });
 
   // One printed summary (A4, always Thai): totals, per อำเภอ, then every รพ.สต. in the list.
   function cleansingHtml(d) {
