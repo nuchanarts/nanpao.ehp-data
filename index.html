@@ -3438,8 +3438,7 @@ var EHPCore = (function () {
       line('C01 Cleansing Card · C02 Cleansing Allergy · C03 Cleansing Visit', 405, 11);
       line(book.rows.length + ' แห่ง · ไฟล์ครบ ' + book.complete + ' แห่ง', 432, 12);
       if (districts.length) line('อำเภอ ' + districts.join(' · '), 454, 11);
-      line('ข้อมูล ณ วันที่ ' + Core.formatThaiDate(new Date()), 668, 11);
-      line('เอกสารมีข้อมูลผู้ป่วย — ใช้ภายในเท่านั้น', 790, 9, false, '#9b1c1c');
+      line('ข้อมูล ณ วันที่ ' + Core.formatThaiDate(new Date()), districts.length ? 476 : 454, 11);
     });
   }
   function clToc(book, index, count) {
