@@ -3178,14 +3178,16 @@ var EHPCore = (function () {
 
   // Installation images: a contents page (which sites lack files), then one image per A4 page,
   // BF1 BF2 AT1 AT2 for every รพ.สต. in the order of the export list.
-  function imagesHtml(list, label) {
+  function imagesHtml(list) {
     var rows = [], pages = [], now = Core.formatThaiDate(new Date());
     list.forEach(function (r, i) {
       var p = r.plan, f = Core.installFolder(state.driveIndex, p), files = f && f.files ? f.files : {};
       var keys = Core.INSTALL_FILES.filter(function (k) { return files[k]; });
       var missing = Core.INSTALL_FILES.filter(function (k) { return !files[k]; });
+      var notImage = keys.filter(function (k) { return !files[k].image; });
       rows.push('<tr><td class="n">' + (i + 1) + '</td><td>' + esc(p.code) + '</td><td>' + esc(p.name) + '</td><td>' + esc(p.district) + '</td>' +
-        '<td>' + esc(p.staff) + '</td><td>' + esc(!f ? 'ยังไม่มีโฟลเดอร์' : missing.length ? 'ขาด ' + missing.join(' ') : 'ครบ 4 รูป') + '</td></tr>');
+        '<td>' + esc(p.staff) + '</td><td>' + esc(!f ? 'ยังไม่มีโฟลเดอร์' : missing.length ? 'ขาด ' + missing.join(' ') :
+          notImage.length ? 'ไม่ใช่รูปภาพ ' + notImage.join(' ') : 'ดำเนินการแล้ว') + '</td></tr>');
       keys.forEach(function (k, n) {
         var file = files[k];
         var head = '<div class="rpt-imghead"><b>' + esc(p.code + ' ' + p.name) + '</b> · อ.' + esc(p.district) + ' · ' +
@@ -3198,10 +3200,10 @@ var EHPCore = (function () {
     });
     var cover = '<article class="rpt">' +
       '<header class="rpt-head"><div><div class="rpt-org">องค์การบริหารส่วนจังหวัดน่าน · ระบบ EHP On Cloud</div>' +
-      '<h1>รูปรายงานการติดตั้ง (BF1 BF2 AT1 AT2)</h1></div><div class="rpt-code">' + esc(label) + '</div></header>' +
+      '<h1>รูปรายงานการติดตั้ง</h1></div></header>' +
       '<div class="rpt-meta">' + esc('รูปจากโฟลเดอร์ Google Drive ณ ' + Core.formatThaiDate(state.driveIndex.updatedAt) + ' · พิมพ์เมื่อ ' + now +
         ' · ' + list.length + ' แห่ง · ' + pages.length + ' รูป · 1 รูปต่อหน้า') + '</div>' +
-      '<table><thead><tr><th class="n">ที่</th><th>รหัส</th><th>รพ.สต.</th><th>อำเภอ</th><th>ผู้รับผิดชอบ</th><th>รูป</th></tr></thead><tbody>' +
+      '<table><thead><tr><th class="n">ที่</th><th>รหัส</th><th>รพ.สต.</th><th>อำเภอ</th><th>ผู้รับผิดชอบ</th><th>สถานะ</th></tr></thead><tbody>' +
       rows.join('') + '</tbody></table></article>';
     return cover + pages.join('');
   }
@@ -3210,7 +3212,7 @@ var EHPCore = (function () {
     if (!list.length) return;
     if (!state.driveIndex) { showError('ยังโหลดรายการรูปจากโฟลเดอร์ Google Drive ไม่ได้ — กด “โหลดข้อมูลล่าสุด” แล้วลองอีกครั้ง'); return; }
     track('export', 'print-images');
-    runPrint(imagesHtml(list, label), exportName('รูปรายงานการติดตั้ง ' + label, 'pdf').replace(/\.pdf$/, ''), btn);
+    runPrint(imagesHtml(list), exportName('รูปรายงานการติดตั้ง ' + label, 'pdf').replace(/\.pdf$/, ''), btn);
   }
 
   function printReports(list, label) {
