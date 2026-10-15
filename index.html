@@ -472,7 +472,8 @@ main { padding: 20px 28px 32px; }
   body.print-report > *:not(#printArea) { display: none !important; }
   body.print-report #printArea { display: block; }
 }
-@page { size: A4; margin: 12mm; }
+/* A page-margin box of our own turns off the browser's date/title header and URL footer */
+@page { size: A4; margin: 12mm; @bottom-right { content: counter(page) " / " counter(pages); font: 8pt Tahoma, sans-serif; color: #555; } }
 .rpt { font: 10.5pt/1.45 "IBM Plex Sans Thai", "Noto Sans Thai", Tahoma, sans-serif; color: #000; background: #fff; break-after: page; page-break-after: always; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 .rpt:last-child { break-after: auto; page-break-after: auto; }
 .rpt-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; border-bottom: 2px solid #000; padding-bottom: 6px; margin-bottom: 10px; }
