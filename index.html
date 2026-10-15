@@ -3633,7 +3633,8 @@ var EHPCore = (function () {
       var lib = await loadLib('pdfjs');
       lib.GlobalWorkerOptions.workerSrc = PDFJS_WORKER;
       var bytes = new Uint8Array(await file.arrayBuffer());
-      var doc = await lib.getDocument({ data: bytes.slice() }).promise; // pdf.js keeps the buffer it is given
+      // pdf.js keeps the buffer it is given; isEvalSupported off closes CVE-2024-4367 (script in a crafted font) in 3.x
+      var doc = await lib.getDocument({ data: bytes.slice(), isEvalSupported: false }).promise;
       if (fx.doc) fx.doc.destroy();
       fx = { file: file, bytes: bytes, doc: doc, page: 1, boxes: [], drag: null, img: null, seq: 0 };
       fxNote('');
