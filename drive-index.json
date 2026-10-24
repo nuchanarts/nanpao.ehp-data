@@ -1,0 +1,2792 @@
+{
+ "updatedAt": "2026-10-24T13:16:51.021Z",
+ "root": "1sdauK6xls7iJqJcXRZ4_U_q2mMy_ZOHg",
+ "rounds": {
+  "1": {
+   "folder": "1i7QfYtSaTIAX6xJf736LnNwbIQZQjgRn",
+   "title": "รอบ 1",
+   "sites": {
+    "10374": {
+     "folder": "1AEJ2VkZwx6tjyrorKCrc14b0imc3n0DK",
+     "title": "(รอบ 1) 10374 รพ.สต.บ้านดงป่าสัก",
+     "files": {
+      "AT1": {
+       "id": "1LsE9et458dQWwB2ecrT_AU6IppqDmUms",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1Xzg-IwoFTLP3UmkvEyciYUlLbGfS4kDx",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1Ps1ca-VWKj8UYMR_plWTtrvVZlrX1hmj",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1dZJRZbLUddex9zZiFEPlYDrAkvfMxIGm",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "10375": {
+     "folder": "1J5MwPU4cWyKJrYb2IKaXyNsLCr9ISCgY",
+     "title": "(รอบ 1) 10375 สสช.น้ำปูน",
+     "files": {
+      "AT1": {
+       "id": "1zZDab6bjQ0uh7x2bJBtN_d-k7GnpRBc3",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1l34S7D_IZkzeETznmUZQUi6p__qP6EsP",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1J8Tl8Glc4OJz0RfegIGIBwcxBQdf5MSW",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1wda6OYBJpKAjDJIadfdpbGVj-n7S4_t0",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "10376": {
+     "folder": "1ewE_6oicmQ_HZCKQUmKvCmpr4kBdbma_",
+     "title": "(รอบ 1) 10376 รพ.สต.บ้านร่มเกล้า",
+     "files": {
+      "AT1": {
+       "id": "1ZopVBV8lIEIZvQle0vQi7fQ_M3TaxnhH",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1VmNSh15jnnAFULny8b-YSrVm-1H0AudE",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1ROgWIxyk74G0jAV3wJ3hWCTUB7RXTYg8",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1dkNuxdO1cyZI_owLZnkZUVONRrYFtBGH",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "10395": {
+     "folder": "1M5TIQZE_llW-aOf9BOl0uc87wB0Lz32j",
+     "title": "(รอบ 1) 10395 รพ.สต.บ้านราษฎร์-รัฐพัฒนา",
+     "files": {
+      "AT1": {
+       "id": "1wwL91kcNSIWHgCgWsFTq_zgY7Oyu-Brf",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1BJNAd0wdM818o0pEUQJ5iYod3iTbZrN9",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1x2zcG0aYky1gJ82Ch0ptZkd89dhUCgZ2",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "11R1k2pszRKWk-IIL9zjUI9mPR95XvB_k",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "10396": {
+     "folder": "1_e8vUCi4qHREJk2s7CnOitNMJ2F8O2TK",
+     "title": "(รอบ 1) 10396 สสช.บ้านปางช้าง",
+     "files": {
+      "AT1": {
+       "id": "1jBz4-au5xyAwVwpvLbnJXozC9LNTOJTn",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1gF6DJb-QIKcf5i5rhJktPg7-ffMHeGtg",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1CmGC-riadrPuo1jzE6ETCxSgiBz9shVD",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "19AAXEaUIgtx5aBg63nVJkGwP2JkMTF_i",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "14360": {
+     "folder": "1knf8w-wWT3wiUnj7hovOu0qnJZB4Zh4f",
+     "title": "(รอบ 1) 14360 รพ.สต.บ้านปางค่า",
+     "files": {
+      "AT1": {
+       "id": "17_2Bln5TydkMyXvN3BAhOLl72B7nwHow",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1zN5NSlB7X9_MGn6NF0nSC48lcfpP8sJ_",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1VGV-8GIF1TLj8AgAXjSvaE6l4pvhfknD",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1vpMr5DdRU7G6g75pFJDf3q7PX2juuFE4",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06448": {
+     "folder": "1j6ujzV4dSKHz3rD7oGGCdF4lEz1drrSE",
+     "title": "(รอบ 1) 06448 รพ.สต.บ่อ",
+     "files": {
+      "AT1": {
+       "id": "1DGEYFwy9a4R2jcKdpAhMRyfwR6RMauFj",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1Bwa_MaGoQol5TVgyRzM0Dlt2GE_btpaV",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1-H4pQ-9Nv4JBCC0lRFvWdikdzbygkjLM",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1FChqhvcBALIbebOeqtwh3RMLy9GgOs0f",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06452": {
+     "folder": "1QHu55DniRdawucYZZWgbwXpklb1osLtN",
+     "title": "(รอบ 1) 06452 รพ.สต.เรือง",
+     "files": {
+      "AT1": {
+       "id": "1s4HPmHq7u0pcfMTkXGZ4rrpWoEFOTvbm",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1KWXBkTBBUb_eCpUrlCeDrfL0kOBvlUMv",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "11ELBJ1AjBhNlXJ25VmDpxBcgEgsQ4MIY",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1JCe_Lfy9XsIGUSCXJODhPKK5CvYLcVvj",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06453": {
+     "folder": "13vWUEUZhipY-EGwQ5Uix2eflydsIwXi8",
+     "title": "(รอบ 1) 06453 รพ.สต.นาซาว",
+     "files": {
+      "AT1": {
+       "id": "1kC8ss4P3HkglcovqDnQKdtj5ykmMAqrU",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1T3dKCcIILc5qC3fm--1DyCrkbObhPxp3",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1UrE9-NxHjVKpCSv2mXSgsoCH2HbOdl-c",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1axQZMAoe9YzGri_36naXIyZLp_EMJex0",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06454": {
+     "folder": "1FNFXGfLQlFfEkaavWkERMS2mEBDzodhf",
+     "title": "(รอบ 1) 06454 รพ.สต.บ้านดู่ใต้",
+     "files": {
+      "AT1": {
+       "id": "115aL2hM2bMnOHm1ugp-_in0zOBSYR6xi",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1voKCgcL9eIekMHNAE4FKZWyJkY6MMkWc",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1QtSRoK1g5zWPaUjc1HuGXKVWXyfcFhcp",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1g7jqCu7pn44QTh5HAiQDsnZycTyQoyj0",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06455": {
+     "folder": "1Hx-GS3gEeyAQ2ik8bsBX8rJ48PDGER1s",
+     "title": "(รอบ 1) 06455 รพ.สต.บ้านดอนมูล ต.ดู่ใต้",
+     "files": {
+      "AT1": {
+       "id": "1NFwDJ9OQ2QLD8eVjonUcE4oZ5EFblaDW",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1z1pqU7jxN-W9fEv60kRI5h2AzfqKWkq8",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1isqFrqGXWoyDhR-dbRmvp902EyRW1-Sa",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "12cT1Tt7egvQYNKnLR3jsQSwWasHtaM9d",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06457": {
+     "folder": "1mUe_juQDoT5STFNKeliP7Dy2WVcfAltH",
+     "title": "(รอบ 1) 06457 รพ.สต.กองควาย",
+     "files": {
+      "AT1": {
+       "id": "166AkmT3WY6-6gK68eZIqPT6U2JJKTTN0",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1IlMlZ1HNOcBuHezsoCs5dSfPQPvbkLOP",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "174rvyzarsw5a4jR6MXEwHENGFuNWsYiT",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "16JT1J6tq6t0479snToA6pAZkhxcWF1YA",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06458": {
+     "folder": "12c4zwDWTFu3zdsFi4idD8RDd1WH2T1D4",
+     "title": "(รอบ 1) 06458 รพ.สต.ฝายแก้ว",
+     "files": {
+      "AT1": {
+       "id": "1H9I6Fv_njPeeOvE2nUgbxz7H1O13oRC2",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1FzSGkYbYGR3RgCjOkL6hOMSwIiSxGj75",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1KLG4jvZCaZ2kr7h6cJa0GLOTmdP7cxoF",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1640qj1y24JGwNwy2Ce-yiWXoV8Ba3reW",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06459": {
+     "folder": "1eeZwpQQrTPigfWueWmIaA5-fTxv9djx_",
+     "title": "(รอบ 1) 06459 รพ.สต.บ้านบุปผาราม",
+     "files": {
+      "AT1": {
+       "id": "12cooDMSzATuOq-udnpkAcc5_M7ynHv2d",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1slfhypSztS2GSnzv2RNMoLdumVDZtxkU",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1P-h_6SXYIEAkKA6Mu0NmkwE2HFZp2li_",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1oZz7tDbsZDPB5Ud4-xegHeN_1Ds1eIi6",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06461": {
+     "folder": "1l_YpB2CMv-vVTpxLejbQiJuySxSdujev",
+     "title": "(รอบ 1) 06461 รพ.สต.ท่าน้าว",
+     "files": {
+      "AT1": {
+       "id": "1zFNQ34BizRvyPeV2gjHimiNYSFjVPz9R",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "14tN9q7Zj--bvWqhzhNkitBJuXA3BH3ct",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1Rgl2pgCfanWgIfr7wVpfLuBx4mh49ZEH",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1f8nnBlCl9bgfhrSmfjTWBvw5-eoDpvzc",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06466": {
+     "folder": "19EeO4Mwyzp46Ba-kv3dVRqKx-V9CzIDY",
+     "title": "(รอบ 1) 06466 รพ.สต.บ่อสวก",
+     "files": {
+      "AT1": {
+       "id": "1ox_tx81fdfBxxGSO6lASoqi74xEEavSB",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1Wc29wtEsPMcUKCzXBD-lSAUb_gJ3wOQN",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1FhkIDGv3OcYkgA9oMp745zqWOuGspUWk",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1mpxQuHKEbwa-O9eAikmbGrK9NsZoiHTo",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06467": {
+     "folder": "1SnVRLO-jrsXS3f16IqN3UkGlrQVVnMkw",
+     "title": "(รอบ 1) 06467 รพ.สต.สะเนียน",
+     "files": {
+      "AT1": {
+       "id": "15cwA8xgwxMBYbYVHpiLbbKge26jS2_Fx",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1R6iX8gNKFV9fCfdN4Ahri1AnDkdGBodg",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1zxYGR5wdSIqaTeT-FDxdeIg1uQaRtPdm",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1OBBoh0ahwy_JqFddFpXYHVGH4KbYSrC0",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06469": {
+     "folder": "1XyLf-ZHT0KxMUGBWMxo3tzLCf8CpKV1r",
+     "title": "(รอบ 1) 06469 รพ.สต.บ้านละเบ้ายา",
+     "files": {
+      "AT1": {
+       "id": "15nbUBEeQiUwOt7P8bp7Hp1C72hWwUe3g",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1VCLDUhgOrs_qFUTqGdIFUhiCla6cSTQp",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1xJ1E2MSjOwqDlg-CHvMDumx-Wb2FQ_yT",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "158BGee2yocw5svNCoxsQHj9MHwQkLbIg",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06471": {
+     "folder": "1Nh7u8eUxY5TA4rA52KrkFZaJslSI3sBl",
+     "title": "(รอบ 1) 06471 รพ.สต.แม่จริม",
+     "files": {
+      "AT1": {
+       "id": "1fhyRbCqfVJkMmjrNrA5_jPE1sAHWUEem",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1ydeL2d3vc5uQPXZT-1vQ4iMerUQQVkHt",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "13WZmN3HV16NqL33C7SUULkmAlGdULSwD",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1spEVrmiRQUe5RwttxmxumM7ltU2o0yc7",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06472": {
+     "folder": "1BXZN4vf6T-_7Ii79q3mwnKT5UUHLBQnR",
+     "title": "(รอบ 1) 06472 รพ.สต.บ้านตอง",
+     "files": {
+      "AT1": {
+       "id": "1ydITZC6Mhl79NS91YSu1XZj90S3MmS35",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "18rwOSC1R3jU2p8Z-98Yo4hgFhXHPDstk",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1etzi705Y0iaPKPc9tAEVFvsuac27j6W7",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1mLH-OndzisbjpbAHnsbz2m9_zqwbpq2v",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06473": {
+     "folder": "1eRHCqyIEqDOaLeGRl43x6AbJ2979KOCl",
+     "title": "(รอบ 1) 06473 รพ.สต.หมอเมือง",
+     "files": {
+      "AT1": {
+       "id": "1MjHfZXQJNq6kW9dd9jDpzaoqsPwgGshr",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1XegdRfiVFed4_mXDbW5T2ifAmqMxaNXz",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1rfFh2P8AVhvmgCrmUFvuIKn4weIQRLlf",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1xgyoZNhh8NEu4w6TguYl46-PxTiJaG6A",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06474": {
+     "folder": "1Pe0vl1s9ok5Vul--oQ3vnLQouTz6MeK6",
+     "title": "(รอบ 1) 06474 รพ.สต.น้ำพาง",
+     "files": {
+      "AT1": {
+       "id": "1Gp4MGRP5uvShJp1U8K_TrAN7xEVeBHaw",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1Jna8NkT8gLz7xBkANFUaXhHzLtZkDqmz",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1bC1ApbBydp6itiKyeAvMTN0jYbha_5LV",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1ePH1B1uwYah5gJUn3hoZxxP5lbr1zX-l",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06475": {
+     "folder": "13jnOXh2JlqZQUReCKpBoD3UY0APR554x",
+     "title": "(รอบ 1) 06475 รพ.สต.น้ำตวง",
+     "files": {
+      "AT1": {
+       "id": "1O6ifQYLWea8L58X9X29h8ilrUK700g7Z",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "135YB4xWYaPbE09RkPMsWpqcq2Nu6-zsX",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1fQc98S5mxKhf6uEWEmA_uhi1kCC0TIUq",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1BLoiWeA2SPdVWbCa6Y0BWwFtPHQlKNjV",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06476": {
+     "folder": "1STgpxIYGp6nRA5chAVYFJbW_mwK8UJXz",
+     "title": "(รอบ 1) 06476 รพ.สต.น้ำปาย",
+     "files": {
+      "AT1": {
+       "id": "12csrA1ugSP3qHVP0B3wU7S_28hnIK99g",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1Kh-LsUGXQAhCTqnEenfuDB3KNSRIpL70",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1h_Izh3kN1RBZ01qXd0nTKkWrc76ke1lO",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1IwkivCu4CqVD1nQcVzz_axixjJQk6tVO",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06544": {
+     "folder": "1WXbstFEv0s4JzBDZrd-F17TRrzSTa_ge",
+     "title": "(รอบ 1) 06544 รพ.สต.ป่าแลวหลวง",
+     "files": {
+      "AT1": {
+       "id": "1oNgO4vQU9QQEcbc_j_Amv_aDt9PbbAnF",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1J111mbsJAjfljczKppzC1GDfCqaaCG-l",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "14ffDQdvULpAdvT_YhK2jzw0rhch12psC",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1s1lZfbOpk1RHy7mbCKPWFD2x2g4ksaqA",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06545": {
+     "folder": "1dVw8xB_PTlq2kv3TdpCvJFDwvQG42zD_",
+     "title": "(รอบ 1) 06545 รพ.สต.พงษ์",
+     "files": {
+      "AT1": {
+       "id": "1KcIthXpdAdScpp4p56tIsuxsqzgKfkSX",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1Y2LfagAES7J7z48AzQYipFruU2gOqk9y",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1lw-FofWln-uZDOHJ7LC93OqLlVs1N8R5",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "13gerZrpe825RRXaU3Y4P_V4VNXalajN0",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    }
+   }
+  },
+  "2": {
+   "folder": "1K_TRwcjxhi5gDYZLzu8ij4Kw-fRYXyUy",
+   "title": "รอบ 2",
+   "sites": {
+    "10384": {
+     "folder": "18R9wBi7r8o0vUuk58lyCtQr0OMzEbiX_",
+     "title": "(รอบ 2) 10384 สสช.บ้านสาลี",
+     "files": {
+      "AT1": {
+       "id": "1NeyBKJgw4oqo81P6yNOid99LF3osGL-L",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1A0-5J78ocvZA4-MPVl9hUaFfgUoc2d9l",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1Hd24EII-RFF7Um69p4AkM9aGX6MU6zR3",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1MGVXtM6K2S5f1rERE6xnUs_GzqkpgPcw",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "10388": {
+     "folder": "1X_QFBstmPOeC8yYwJK0Hal1lOcZr8WMo",
+     "title": "(รอบ 2) 10388 สสช.ห้วยหยวก",
+     "files": {
+      "AT1": {
+       "id": "1dOJW2y40jWpFWkZFnYSKARuCymyWQCDi",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "16FX48gEpk-SgNWuN-q0_Xdw8sYv6cqSq",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "11F_gU7AfGB3tgYGEUCWnl7ATSOxqb53v",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1MrR71wcSWdTkRwMmtmFw1t5xPwlm_ZoK",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "14013": {
+     "folder": "1mr99jPbkncPupblxFOyuGGfrxg8Vw7Nd",
+     "title": "(รอบ 2) 14013 รพ.สต.บ้านทรายทอง",
+     "files": {
+      "AT1": {
+       "id": "1DQTUe_fHukM9R0kAoUcdGPs5yGXmUZEo",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1GIT8Oo-V38GeGJoNNt7w4NLPz21runG2",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1pD5X5YiVnpXWDz0iPS2EMGEyZaLOdoJk",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1mkmqa-25foOo2j8X08vulp-RikSzCSSC",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "14014": {
+     "folder": "1-bmDkpJtIJ0WT2sJzWfhp2RuLYUMvjAz",
+     "title": "(รอบ 2) 14014 รพ.สต บ้านศรีนาชื่น",
+     "files": {
+      "AT1": {
+       "id": "1H6TofGPsRQ91MTZHCz4hyqpBp-5cjYtp",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1GxzwJQaBwGNGxQFwRvsxHYmcEUjSQzor",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "17eHFa1zri8DM6tA6MM8BYY-KwhzIotT5",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1GHrZtHx1bq3StkwMjK659Dh9l6PL6WAO",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "14361": {
+     "folder": "1wKBDaZzRHlZu6_hk9Itrm1Fb0dBPvshH",
+     "title": "(รอบ 2) 14361 รพ.สต.ห้วยไฟ",
+     "files": {
+      "AT1": {
+       "id": "1O2xbexukY_TUafuP3Bvyexwsvn8lK7sP",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1aOjCSwMX00R2Fkf80bVTN8PNic2OUnNF",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1h5zFYuZCo8mR7m9Fx6b2lK4PeF2Efugs",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1vRiIkNWYTilzl89k_tsF8D43qmb1Pm33",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06478": {
+     "folder": "1yW0L1Vk9VQ3a1Q3I_kQaMtOfSo2Wi4T-",
+     "title": "(รอบ 2) 06478 รพ.สต.บ้านฟ้า",
+     "files": {
+      "AT1": {
+       "id": "1N0WcxK7xoZyh91hpC1fhVwYXJN9s61bS",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1JNybisGUElPeNzM1ntO_1BAzkroh4UDL",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "11HXvhk1spKexOKP8Ebr1ddwE0HD2oHdE",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1J1mS6rgE_24YPwPrxHqUCpgzpFlhox92",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06480": {
+     "folder": "1bjcBHhWSUHGI_S-Xc8nACsp6e-i4_GHg",
+     "title": "(รอบ 2) 06480 รพ.สต.สวด",
+     "files": {
+      "AT1": {
+       "id": "1weE1Thx_RctpavX2Z3QZIK7Lw6Kg5hXh",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1Mjs-Oo5kCUQAXGett9xxqPZpb5m6Zcnc",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1lMPjK0rhK6IkT3KR_gPlcpYNAxjs6fTY",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1ZejO44gUgzM-aWrjt4DyIZBeDkHMry2u",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "06481": {
+     "folder": "1Ja_dnUk-Fu62wGKF3xjONuiFk8yVh8JK",
+     "title": "(รอบ 2) 06481 รพ.สต.บ้านพี้ใต้",
+     "files": {
+      "AT1": {
+       "id": "1T02jWlvzGdCoeccR2u8vP94KOCMozKdj",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1lAlKKJ_Z4mNBGf0TUvOigQZAzlzm6mmY",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1uisJgu-pwZCkJT9onpsD6fndVmYXh9et",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1CBM0bocSSF2b7gWpmZ_goIUXUH2nDZgf",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "06484": {
+     "folder": "1fiH52HeK6DdjnNgkVSMiTew4X3gfqiup",
+     "title": "(รอบ 2) 06484 สอน.เฉลิมพระเกียรติฯ",
+     "files": {
+      "AT1": {
+       "id": "1Dl5r2cjmGZaKXfLs9UtNjS2kzs5l02HP",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1QPZFPOlNZW0E7uZ1-Had1sVZstzac2G0",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1yTAWnlCEM1RnlaBMq0pScqBEC6P9rXmK",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1diLoRl08r3jq9g2EbfI28rtgKxfr51-k",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06510": {
+     "folder": "19y1mj0efOS73birMOruHg9LRgnMJH2ds",
+     "title": "(รอบ 2) 06510 รพ.สต.ขึ่ง",
+     "files": {
+      "AT1": {
+       "id": "1z53TKo2PsiPBsX-2sixMaNI2MUsRPXaU",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1_r7FfQu0epwY2G5mo6OQFTco8xzswXha",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1KYSlQVVZuEdP9eOTqYJiuhYjAD26Fz3I",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1CwlGtNuCgjsigkRq8IV-AJc_w_nfPW3-",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06511": {
+     "folder": "1GrV72rrUemdLvkb4o-p1rsc_O-np8D5x",
+     "title": "(รอบ 2) 06511 รพ.สต.ต.ไหล่น่าน",
+     "files": {
+      "AT1": {
+       "id": "1fuxqjrGVJqObN2qbVkM5fAzmnmwtdg6R",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1abvR3Fel7rLOPAPVDjkOolYFRVhJaVBY",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1btlVjJVCPC2_yiSQ1xrgUzvHn7Xa9HvC",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1Ja3JRoA8_HgEGB5qfp6t24eJz00NXEE4",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06512": {
+     "folder": "167SDP1yoGF1GUYdKpzQO6OYWNciWlzW7",
+     "title": "(รอบ 2) 06512 รพ.สต.ตาลชุม",
+     "files": {
+      "AT1": {
+       "id": "1i5Szt0AOpOFlC-vC0D1x754vAUDjXvSd",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1HP2Bk4Q52L4QyRqVPhvRTpQfDd101Skk",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1EeUeDFv6DL7SifpDdLgtIQOV4ps39euf",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "11pnYDCt6J6Ql6lD-KMoRKn5Ym11BXqvF",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06513": {
+     "folder": "1MvkCmI39Q7HefxEgZys7dvkenvgbE2Ox",
+     "title": "(รอบ 2) 06513 รพ.สต.นาเหลือง",
+     "files": {
+      "AT1": {
+       "id": "13Ec-uuS-5M3Xic90StDXb_6mL0E20MHV",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1czznlToDVJMa-Aq15hZk1UOObqRDlrdX",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1xMq-eb5r58UrSMmL4AnWI3sKbDZj0vzA",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1WbGvFetzK3KjWxYXiJm9TR2A81nvjdhv",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06515": {
+     "folder": "18EjDY4xsItN27vhOc2FTB_wtoQbZ1w3h",
+     "title": "(รอบ 2) 06515 รพ.สต บ้านสันรุ่งเรือง",
+     "files": {
+      "AT1": {
+       "id": "1_B0IUeC4e200FLL-NRktc208GPFFw5uc",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1lWn_RHVHLv1eUZFbn-S9RPR921y70IZ9",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1WUze2f-QsrVW70tT8ZOufBTRwlI_1L2Q",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1pXW1my3SNnCrXfZEleQmFQvtYEZw_m9u",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06517": {
+     "folder": "1Ujj2m3WZZRy0eJqf3IeYJVzQYwR1zUbU",
+     "title": "(รอบ 2) 06517 รพ.สต.น้ำปั้ว",
+     "files": {
+      "AT1": {
+       "id": "17ldzdHgXxjLDIPtg3-CSRiIbMSkSmY2T",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1zX7KamJKUQrr60cNvtQJSbytn3Z9EdXV",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1FdVp5Aqon5MuoK8Yn0r6d98RaIt6oj5Z",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1Etyfg4uZ-HZOR3V8yf97o1LbYVfKL1ga",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06520": {
+     "folder": "1NtvliI5LB3upg74nsf8VSd6gbu2B1NkB",
+     "title": "(รอบ 2) 06520 รพ.สต.อ่ายนาไลย",
+     "files": {
+      "AT1": {
+       "id": "1QjOx4t0SD3j9z-WF7Q0Kw5ukFc1BlzoO",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1k3tlKViLzkNYJSx52UKCxTwGF8anT0DO",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1p4yLKnHS4Qx03Ww96c3v7yIUKO69rbNZ",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1ODRDNY8N04WO7V_pk3ZFT7IO0MnvTfVX",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06522": {
+     "folder": "13eGkmjQ8_0J2D83Le0KgDIqxsAxJzOok",
+     "title": "(รอบ 2) 06522 รพ.สต.ส้านนาหนองใหม่",
+     "files": {
+      "AT1": {
+       "id": "1Njfg9aTgEdCelz3Dnq5X7j8HwJ2TOrLq",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1Z2MlpkoItYSktPyo2ckJum8cb4uQjUuY",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "16J0j6Og722ufvVbB_vVzkXXQ7JmcxlF_",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1uKVKPtEYhJO9PgbwmSMd2c8SHzx1fCfD",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06523": {
+     "folder": "1-bbCaRckliSawMKRVx0WzzfytMT8qwVc",
+     "title": "(รอบ 2) 06523 รพ.สต.บ้านยาบนาเลิม",
+     "files": {
+      "AT1": {
+       "id": "1sOyp-yrm2dvThzyJiLRQxP0af7sNnCRY",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1RKa_0Q3mDvoGrczbfiE7Yk5tm-mMo8fl",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "13ksUggBJHeK-dyP8cDoywcPLC9st0usv",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1j9P1v5iaxvgzjIpmD81vydbw4g71SNeC",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06524": {
+     "folder": "1yKq-AJMtUKt1A8V8hCYMlEsjDIbe3Kfn",
+     "title": "(รอบ 2) 06524 รพ.สต.บ้านป่าแพะ",
+     "files": {
+      "AT1": {
+       "id": "1nwTMd7an85_IKxiqV_DBD4o82DznO0_l",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1Y_bn-vS9rkuvFr7XH0Cr4xnlOcyk3aEs",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1s7l7VuUwp6qEtm77CwZb4Jwh9EJaPutY",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1WsN_6uOZJPGfW5j601CfCZg5DJRzlW9e",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "06543": {
+     "folder": "1AYdP-pcTzVtxxxYiTLrQKWBroTSLcYs_",
+     "title": "(รอบ 2) 06543 รพ.สต.ปิงหลวง",
+     "files": {
+      "AT1": {
+       "id": "1_AGxmGpSw4wxCX0aCpSucJFKBnd8iEFr",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1gwsczq6ThcFLb-IqAgmsnuSDBo3p8xE5",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1lZe3gjW_eUp7wbj_BlkkHCJpxD2rxBCs",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1MfxA6E8I6jcryEUXwPERNF7yoZl0MFi_",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    }
+   }
+  },
+  "3": {
+   "folder": "1NaKcWtDSdqFxWmJJqPvEaL6I9T_KthoE",
+   "title": "รอบ 3",
+   "sites": {
+    "10381": {
+     "folder": "10oXOG_hriU4Q2b5LWq13tVMSQ0KGjzNM",
+     "title": "(รอบ 3) 10381 รพ.สต.สบขุ่น",
+     "files": {
+      "AT1": {
+       "id": "1WyEMHsT33R73Tl8F7e_y_7ZBMJ6Y3KBI",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1Jr1iJfcuihunduWUYAZe2Kv39QxCkR3E",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1lxfpibF40rTsBSTh0Mq2KIcY3zztMyHy",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1NTykQKq-9WX3us-F_KS0yIFL-TlReglC",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "10383": {
+     "folder": "181LyUU7hsRIKdJAXU-SLeAKPLq9OBZI2",
+     "title": "(รอบ 3) 10383 สสช.บ้านดอยติ้ว",
+     "files": {
+      "AT1": {
+       "id": "1bL7gWAL6JCANDh--kHO5Gm4XKTEVEUyJ",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1X7CdIwH06r53afk-AXujn3gAJSzJBIPT",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1ZX-20E_onPp0jYuuyZ8ThxstXgIa_dbr",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1OnpH7QqE2NTWyE2TmSPKqIvd5VIhJ_u1",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "10389": {
+     "folder": "1Rq5-J36JOekpG0mbjZkocJVp_YhLk9_P",
+     "title": "(รอบ 3) 10389 สสช.บ้านห้วยสะแตง",
+     "files": {
+      "AT1": {
+       "id": "1tAfGKHFEJAm6D2VsjbFjrU18QxHOyKwk",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "14VeUL8LaISyOUUz7xteGbgnR2si2ioH5",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1PgP42iCsfQY9aCPqLOXpTfGboR3Rsjz_",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1sk96yFCuEZAiGs8Lo8vLGe6mE3Bo1qpK",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "10390": {
+     "folder": "10gf9JYBFSyozQ-gsV5LX5cIy-NywRKjJ",
+     "title": "(รอบ 3) 10390 สสช.บ้านมณีพฤกษ์",
+     "files": {
+      "AT1": {
+       "id": "1kOXcknPRzDC5clGY-56db0RgprD1JcYI",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1_xhvzDM2HFZWEko74hr0G_u3iiaWysBR",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1JFzB86aScg4D1ockt8j8K7JNN61mYpMH",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1pQz8IJKWQ4V8SCxJipZdltQY1VqMFq9h",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "10391": {
+     "folder": "1PkU136kLxsUHzEIrK8U_p8XE08mhU7Od",
+     "title": "(รอบ 3) 10391 สสช.บ้านน้ำสอด",
+     "files": {
+      "AT1": {
+       "id": "1EHwqaeoSPfvLCH28r4zVF_Hv6BbJcVSs",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1M2koc9i9HHK1rrriTvCbIgdFq0gVwGHk",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1oVF9iNii0pi7SpITOZyB70W6a2JaZB8-",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1hEkDZhRGPhwcdTNepZ8vH1xMEcg6gdDA",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "10392": {
+     "folder": "1_EKOaxLqhqyIf_s5MoRHxXDkG1BqsY_J",
+     "title": "(รอบ 3) 10392 รพ.สต.บ้านปางแก",
+     "files": {
+      "AT1": {
+       "id": "18JGsOlYghDjGV_BiT6J9EMbej2ypWm8o",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1apIiPv6C7gSKW_TY5G637K6yEt1kfTBI",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1iqlB6FexIBn3DmsB35KpXYLZrnCfUR1P",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1468_ygoX_1XECNj4CvPmYM9F4wYF4vV_",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "10402": {
+     "folder": "1LlIW8L-7QwEN-tU7-rK-D4_a00a1uvrM",
+     "title": "(รอบ 3) 10402 สสช.ขุนน้ำพริก",
+     "files": {
+      "AT1": {
+       "id": "1lf5lJWNOLG8i7ksCOuDWB8z9k_ZGj26I",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1d-guAhsKv42rduiVHkPrCzMQg9X_b2IA",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1ct4TQQbtpSCsdhI_RgSqfQpnboXQwAb0",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1Zwxz8AiSD3lDAhieD6rPrIWaII2MwHHc",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "10403": {
+     "folder": "1IPNvGU76rMtePel09SsqfSyXF-BqvOvi",
+     "title": "(รอบ 3) 10403 สสช.ใหม่ชายแดน",
+     "files": {
+      "AT1": {
+       "id": "16LoSlkcBo2N95b8j0259JSLni4L5x0vr",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1PRL-REh_o3SknYZM57L7udxdPbEkCV8s",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "16ttA6d7Hjtg0WwyI9upExWgC-Gtkva-h",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1iEOstsvKdNR5Zs7so9RVTzI-B7Vj4SMT",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "10404": {
+     "folder": "1nVhUhoYG4v4P2hgaRYTOsPwWMj641mXv",
+     "title": "(รอบ 3) 10404 สสช.สะเกิน",
+     "files": {
+      "AT1": {
+       "id": "1QyV0Uo4OxecZKbRtX3CxeGWFH8hRr1h5",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "11J3-WewaBixDjJGNO90rF3rNsuA7AuJ_",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1sU_kPcp_M8Hrnwqv2yTBJWK-h0n8_z6x",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1Aj2HXD9IQ0B3GhNLd8tFf_0kX-UElEuA",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "14123": {
+     "folder": "1-SdpjMJOIlYPUvtOQT_00bcfrmQz4YKs",
+     "title": "(รอบ 3) 14123 รพ.สต.บ้านน้ำกิ",
+     "files": {
+      "AT1": {
+       "id": "1r205TAeoR3uA9D1kBM1uYMRvIPSj9LaZ",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1F2OERJ3wr7YyqoFFIbJ4MFWur08nSuZQ",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1qDbqpt8EpicQcw6tc1uXxMaAAn3uPjYl",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1YBLG5T55pj3vpbP-S6kT4dGlr2VvtEJl",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "14308": {
+     "folder": "1GZ9aGvdgI_ChM9uoRp2N-eHMXhcW-MzS",
+     "title": "(รอบ 3) 14308 รพ.สต.บ้านสบสาย",
+     "files": {
+      "AT1": {
+       "id": "1FeDidiz9w9NkHfXkODWQi1XJ4Mkp2w1J",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1pmeCK0JA5Ng8vxk6gxUSrJWnyS4zDiys",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1aMhFWsr_Nerx0CBjyQZ9A1v-A9FznvHq",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1wFGNl-gcCL-PIikhQuXl4LGRU-qFRjPd",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "14998": {
+     "folder": "1llNO7CLZSYiYWFkPbigFRC89ckvlgQv9",
+     "title": "(รอบ 3) 14998 รพ.สต.บ้านแหน",
+     "files": {
+      "AT1": {
+       "id": "19D1XpI6Cb6rawzp7pcdKVaFfFHO-V5Nd",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1_ksiv-AIMKiChvWGPa2eoWbLaA_bQ4CF",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1fPo5vUQAZHRdRtpQ5SAloIGcahhE27Ms",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1yV8JliuIssOoI8LC4PVxOY5UhCUjgyC5",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "06548": {
+     "folder": "1q9mp2mge1rnD-ONA1AkN9q_6U5KxAdAU",
+     "title": "(รอบ  3) 06548 รพ.สต.บ้านถ้าเวียงแก",
+     "files": {
+      "AT1": {
+       "id": "13C4dM7lU9jYvIn4lL7jdkkRuIhHeTSyG",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1_m2GXHRsn8BQxVaPQMwrENHZRRnA9ElM",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1mSs-31hlc8Q4LXxuHlTqj9I-zYy1R6aP",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1feyrJZGVGDH6sz15K71tEmj55se_6t1z",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06498": {
+     "folder": "1gEC6Vvfn20abQY2ZLY8pemaKKjmX6SUF",
+     "title": "(รอบ 3) 06498 รพ.สต.ริม",
+     "files": {
+      "AT1": {
+       "id": "1teXEMml3JV4F83NpIA5TH3CklZcGFJoT",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1yFvcuKTU0AraphGARAFz5O0NYqYY-1ea",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1AfetRbKCcwadGzjOhA68U73KnIE1V9KP",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1CpwTJieZSD1dbynvn_394OsDt--FVDiL",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "06499": {
+     "folder": "187Po2k7quiHtg7RYt23yKkjk8zYRGpNW",
+     "title": "(รอบ 3) 06499 รพ.สต.ป่าคา",
+     "files": {
+      "AT1": {
+       "id": "1fZNEj12U0-RgI8NvJz61LikvBkoa8Xb8",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1ug_wQcngCvIOnLiyqJlYeGRZtdYY3ytv",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1aFfYJuyKDkQ-C1jtezAZClUyB3usiqgk",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1qfaR3pkKFH9Ikf7gdRb230EgLB_RQ04A",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "06500": {
+     "folder": "1A_GuH_rb41rLsAWO6Xmdi7m4GMCONC-a",
+     "title": "(รอบ 3) 06500 รพ.สต.ผาตอ",
+     "files": {
+      "AT1": {
+       "id": "1Dr0bPGXXBkBXfJNfaxeMvWR6xLtg6QhB",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1OUPnoNpEv_6Wllw-Sp1p6Szni1WhTt2b",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1CVqkiKJ0p588XApHQnkhKQg_VpSfdn5y",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1xX5Un1alLGBL48JUmxWeu31XmvKZx3e-",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "06501": {
+     "folder": "1JyRajnWl1JCyu7Ro0KG-fcX3pxEx88FC",
+     "title": "(รอบ 3) 06501 รพ.สต.บ้านน้ำโมง",
+     "files": {
+      "AT1": {
+       "id": "131BjgDJbBGz9l2ngRpil2V2_jzmzAkmN",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1LJJ0nVj9E1G4Rj6Aqi38e1fY_gYjss36",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1zxFrYGlhDr8MtP5DHaU2Gyy61_7BTFx8",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1yFWaK4Q6h8pSUKa10sGjt4pIwcX6KrTN",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "06502": {
+     "folder": "1wuaufBK7t17AQzgcVwLHl2R2LE9_f59N",
+     "title": "(รอบ 3) 06502 รพ.สต.ยม",
+     "files": {
+      "AT1": {
+       "id": "1BBAeiGmSpVk096EMbZQe1T4zmPGj1hIz",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1Irx8eBi1aaXQhdPKyk-PeEVNQJy_1B5L",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1JvhAOQB5LrZYo-RLcqZkqwsPXjkRL5To",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1CopwkC2Pbzb9UU-VHpYqaCkxEDHsgA9s",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "06503": {
+     "folder": "1ydFojmW9Z7Bbk2ykDydtjS6lhkFLw2fK",
+     "title": "(รอบ 3) 06503 รพ.สต.บ้านพร้าว",
+     "files": {
+      "AT1": {
+       "id": "1a4l8cTkiDXsrjZLQAWClkHEi-QUndXHW",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1PMcoS1GmKGNIodAYx8suCEetbKC4kQQD",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1gf37fux74sCsboIT-WAnyqN0XYdEl7an",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1aJX319lrBf9LFD6M1072rCM-tdHRri1O",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "06504": {
+     "folder": "1vZ2j05H7andchHtUmBcd7TaVKgPaTvMG",
+     "title": "(รอบ 3) 06504 รพ.สต.ตาลชุม",
+     "files": {
+      "AT1": {
+       "id": "1a6ki0wWF8j41leZOfX4BIlKbmebSdT-J",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1FEkwS3nDNQhD8z46ypMsexwxJ-OezY1E",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "16kyM6G5G-eVROE-V76FcKxc8KcbcbbsR",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1CJoeohBCeMHKOB7fmeBFTGG1Uuwvk4qz",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "06505": {
+     "folder": "1EeLTlEwCidxNmhB5XcvOIeZqQUVUx2KL",
+     "title": "(รอบ 3) 06505 รพ.สต.บ้านดอนตัน",
+     "files": {
+      "AT1": {
+       "id": "1sZlAzGOhlXpYua_hn_GxgWPCCUwMvA4Z",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "19hoUpQmjtaPuuGp-yJqchLh9T3ofyvba",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1oBxhbfZEo0lQLTxNeaYrJwYNjE1ok5gG",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1HnAC3Tiai6xUEECB3SluRtyGbx2klDY4",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "06506": {
+     "folder": "1wNHhHooQf2pZdL_WFblc7txfpwCcCoBR",
+     "title": "(รอบ 3) 06506 รพ.สต.บ้านคั๊วะ",
+     "files": {
+      "AT1": {
+       "id": "1vB9ioH-LTk_dmUjeZcjb-FeYv1vMBNFd",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1C34qMXNeOtIGs3wP7KgS8XDcX7OpfxPe",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1fhoeXLk_mDym22ktnNUfCNdgEI6B40Gt",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1Aec6f-FzU4KYDgnA784veFs9d-PSqb_1",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "06507": {
+     "folder": "1PbX7OQzrK0n1sspdUT6KTiw4xl0pFXBa",
+     "title": "(รอบ 3) 06507 รพ.สต.จอมพระ",
+     "files": {
+      "AT1": {
+       "id": "16LaHdnwYCZadx5pHlEftNfmnAB1ZBbt-",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1SUA0eZ1EyJ5g5AMlBBqQzYG1yessERWp",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1fzt1hjEADgkUEj-tZWGJKd4ycP1lLXHm",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1v8nA48u2zuj09K8WqNV1ihg1-LL9_jGH",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "06508": {
+     "folder": "1GZpVpl1vwqN5bulAjf2YG-GeJ6lOZD4k",
+     "title": "(รอบ 3) 06508 รพ.สต.แสนทอง",
+     "files": {
+      "AT1": {
+       "id": "1H6UWkWo0s664bxEuQyI7FAVCSEcrK1rP",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1LNYQExUwvTqqN5V7mYC0cU0gVwPRh7Bs",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1PcwYaWUtvmIIXx4MejxadXvvcT9K5KmC",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1v8N26_ECkZO1A5Ra-SqF7OQlKx5srj0O",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "06529": {
+     "folder": "1XoJkjwW8R9VQZpmoQ6MPdNEbxun51Csu",
+     "title": "(รอบ 3) 06529 รพ.สต.ปอน",
+     "files": {
+      "AT1": {
+       "id": "1b5UrVQMaQu8t8bBtkScSGZoQjtMGHMek",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1n0PknP6MljGIKvrpxcOt0i2GRnVpyvFl",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1BMD-DbhwNAQrvu2BiWl9VgUopNRYQrg1",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1DMQJicn0TzPhc3B4frY_uQqnYO6OwRst",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "06530": {
+     "folder": "1spD-ZOmes2qEA-9IV2wWS3Mp_eYIhffj",
+     "title": "(รอบ 3) 06530 รพ.สต.งอบ",
+     "files": {
+      "AT1": {
+       "id": "1ga0HjUIpxrrntPXb8byAtKATirtOgRTq",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "13CwLcPzM7qNIvpy2oKzdnuDx4BkJJkkS",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1oLJI397HcR2xRxwf_5QU3V0-wuz2Pe9t",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "13T7zAIFY9gL_b8btMvn4M3VojwnXz4yo",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "06531": {
+     "folder": "1llMfWKDRgYnLtE_uI1bMtD2h2O46HgBR",
+     "title": "(รอบ 3) 06531 รพ.สต.และ",
+     "files": {
+      "AT1": {
+       "id": "1C305ONrUCsDLeDBoXdiV2hF2Dvkvqrxn",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1lc3VIg-Zcskr-n_Xip4JWvTBdhWXPaEz",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "11Xa8Ru7qtXDDRp8GbHoCY9mcCJmxxQQx",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1EAIdxbSPpw-jisT4lLooMR9SDx32FKzJ",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "06549": {
+     "folder": "1gDllf3rJCmBFF8_fvrmnD21nbQtkTxRx",
+     "title": "(รอบ 3) 06549 รพ.สต.ชนแดน",
+     "files": {
+      "AT1": {
+       "id": "1KsEq0ey8zzjY-E5cBPuCAoytmRPxxqfi",
+       "name": "At1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1HhE-rC3HTRqWB108BrQN4GNMguM2itiu",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "144KoZt0HR2FT6537O33m2V3ZqIIl6bwn",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1VlDa2gvRXWJGNja5CcIMeOLpByxdPiDT",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    }
+   }
+  },
+  "4": {
+   "folder": "1efhOx0neKie2NbDQmvgngT2YVlu3wDf6",
+   "title": "รอบ 4",
+   "sites": {
+    "10379": {
+     "folder": "1LsCj5qGAZ0T1qxjyTyIGViY0g0WhqVk_",
+     "title": "(รอบ 4) 10379 สสช.ผาเวียง",
+     "files": {
+      "AT1": {
+       "id": "1EZgLGCXBeBJWj2UxaMTJBm_ke_ciRy9t",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1YsClLKeLfkMK6E258XbGfbZEs9YLuraq",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1E03JpGZhhV5yfFn7vUm2be_r8tGPh1Tz",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1s6zu-N6WtPh05A1wKwqPKgGtJfFv1j7O",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "10380": {
+     "folder": "1OlA_A02KnQQ6Bu4Okid-TAmRQUs47EKa",
+     "title": "(รอบ 4)10380 สสช.กอก",
+     "files": {
+      "AT1": {
+       "id": "1rNqsTDiGxo_09tP2jZJzaDoYONqH5MIk",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1qFmt2_hGrWf8vB-U1tyJspeBJo-y57Tx",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1yA5ze7fjAiGRKjDPBjfvD8Ojbe9iLx3C",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1A82voV3HCobf_hJzXBuXPYQl_rFPi9AF",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "10393": {
+     "folder": "1aeZvIxP5Woo7jt6PkZdQ4RO_VaoukEyb",
+     "title": "(รอบ 4) 10393 สสช.บ้านผาน้ำย้อย",
+     "files": {
+      "AT1": {
+       "id": "1rUllZI87UbWcIUcvjiGSfyC3GhsIF4lO",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1ksFCqom3SqRvh4ONqILYNDmsw93v5NPU",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1j8dyIodbHOtzmkOp0DIlVkzq_-C4sWx7",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1EQ795jKfuK5bK8QMV6JiQKfLzdb9SS5r",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "10405": {
+     "folder": "1jpO7xzVrpMEUntLjru_93P-x3E5zxM6F",
+     "title": "(รอบ 4 ) 10405 สสช.บ้านสบปืน",
+     "files": {
+      "AT1": {
+       "id": "1RVMPSny_rUHV4Oj9Ap_fMnbJ1TMg8TbC",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1Teo62oxs7IGyORzIYI1ep2guPgIc2GcZ",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1iNd55uRZgNdbE3YsRjCQYRtcWgu7qIBU",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1ojPtzN9EsKL7tKwzY3oGLWlnb9nIc-8s",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "10407": {
+     "folder": "1O-tilZ9nlJQq5VGkYyT07TbviYN3_BQk",
+     "title": "(รอบ 4) 10407 สสช.บ้านกิ่วจันทร์",
+     "files": {
+      "AT1": {
+       "id": "1hickdbL9Xw8ldca3ynKUg1hjkFn1CRB-",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1b_zIMriwIfdj_aurS1AaU7tMxVzNF-cU",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1GTVpq_6Mr4TNHVV2zjOEEXk3jxDym1ga",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "18Am4mbMDlfabCaTJcoNMxk0qP8T1eOZR",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "14016": {
+     "folder": "1-0iO49YaZ7ZA9hOHx3SevlCnKIA2xqR1",
+     "title": "(รอบ 4) 14016 รพ.สต.บ้านสะจุก",
+     "files": {
+      "AT1": {
+       "id": "1hIZNUAd8-D7RYas6cp85lhHpQEdSTyoI",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1jyJ64b7pS354kXva6jzSlwa68aXBXcWK",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1jEBcgRcHVJk2PEmJ24kWfoSe_gLksIlg",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1muBcAwnOtGLMnGU4zpB_mWeViQweODOF",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "14377": {
+     "folder": "1qxh6zQCnUH4Wc_W6fhHGQ85qmk2drjxq",
+     "title": "(รอบ 4) 14377 รพ.สต.ป่ากลาง",
+     "files": {
+      "AT1": {
+       "id": "1VhicMqooyntTjaGP24wZhPClH20ua-zj",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1ThQRgyrcTGx45qsHofik6jlmAL8c1aU7",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1exo_fxGRy3Sl96WCVflWaEF_Dzm59okA",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1cAZ_iX2lSrQXo0yIqNYtvcYruQzbRIzZ",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06490": {
+     "folder": "16gX_F3UxVcN1kO04lxdj7j5aPrIO8gBm",
+     "title": "(รอบ 4) 06490 รพ.สต.ศิลาแลง",
+     "files": {
+      "AT1": {
+       "id": "1XoowQxWpyR0qr5-F5ALXvaV60-py6NqG",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1b7Yia9bDpOEbNtpw3tnyOlh2Lbegz_YI",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1FmvT7jtAmF7rqjEPEe4-CESSud08Wpa3",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "19gtd-rVeZzpqLRQHhZHKobhC0ydI4ZTH",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06492": {
+     "folder": "1L_BSJRCfBdwrTyyk22cf-wDT2qBHv7vT",
+     "title": "(รอบ 4) 06492 รพ.สต.ศิลาเพชร",
+     "files": {
+      "AT1": {
+       "id": "1XwCeN36AJLK3lrxFylV4RAZLBTCDM0b9",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1kznTKlaA9o5wJXD33yp_67v2l9FC7Eai",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1cviZY5c1_lrQWaL1g0W4DD3hmD5KM6Q2",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "15dj1a02B_Mz-ZyYjNAHPnIgLOjjvAoPR",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06496": {
+     "folder": "1uBWd4bUJ1uul4LMU8PcGnqC2zw04TBJn",
+     "title": "(รอบ 4) 06496 รพ.สต.ภูคา",
+     "files": {
+      "AT1": {
+       "id": "1A_WvDlPyEPa_za-5VHRH_ZxFoY24t-yB",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1zOHqjsSUsaLGUTEukX7yWMT2CSeZAAb_",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1osqb_szke6Kn5LoSJCDXodvnqyoq_G6Q",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1Is-SVS_tGd1a710Sz58_B5hO2AUvFDdy",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06497": {
+     "folder": "1Cf3cQPXMp1dad3b-kNGtYrQH9bSGyTdv",
+     "title": "(รอบ 4) 06497 รพ.สต.สกาด",
+     "files": {
+      "AT1": {
+       "id": "1Wa2wftxxtm6Mslk88BHB_S2fkpH-8X1D",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1hfS34i2INTHXA6nrfdoLhPZLPhc6I4-I",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1-jfahHEdDzUu08tq8Hmg-1RBuVTGyn2G",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1HxEXqhiFB1e5OglliAZX7LG0aXeCKRGN",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06532": {
+     "folder": "1I7DkTvM9ZD4nItaIpR9qBHu_ogXIDkeK",
+     "title": "(รอบ 4) 06532 รพ.สต.บ้านชี",
+     "files": {
+      "AT1": {
+       "id": "1uMI6xhmLo2MbnkeuriSyQ6gp3vz5z3a5",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1KZ-0KCY_p-GDlRrNGaGCJnpOEqcw6RPk",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1TnuFShh-vBnOgyT-0dtpFnG-_h7XLPaQ",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1H2VSYd4ngrKMUNsTknZxBUMr8GgXYv_v",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06533": {
+     "folder": "1XTnH-Myg7Hm9vZAX6ca8rLMI6qFjtnfD",
+     "title": "(รอบ 4) 06533 รพ.สต.บ้านงิ้ว",
+     "files": {
+      "AT1": {
+       "id": "12KJJGxSP660bVN-RdHwM0xiEjghbIcaD",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1njwngl7NsgsE5rcXPQCdCX0NgCIbAsNB",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1OveqGxB_0ahBAO2m5uD7LWuTeG1JPBzx",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1KZyLrsSDe8RLeiIMQUjQy982GuyztFs9",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06534": {
+     "folder": "1WBQTj88TlbFrLhlnG9LYtKWFyY2eQgfz",
+     "title": "(รอบ 4) 06534 รพ.สต.บ้านส้อ",
+     "files": {
+      "AT1": {
+       "id": "10y778PEV67Rq8txuLXZaeMRv9sETtPhQ",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1FOSSYPVMhrcAMTNbyfEzbbmZIHRZluS7",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "17_ZaaaLe1t-kj9Ds4HdM2OAm10xFzj7k",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1PzvqivwlKDQa81GH2DSS0zD6GOfZa2-S",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06535": {
+     "folder": "1LJ07FbV1rE9jLzqiSdVDcZHOa5YIKnV7",
+     "title": "(รอบ 4) 06535 รพ.สต.เปือ",
+     "files": {
+      "AT1": {
+       "id": "1Y5B6IEuMlzg5AgPtNolnOTaMnZiKsC3w",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1APUYqQ0cnzQoxm43vTpwRaUfevJ0Tux2",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1TQWGFMJXCX2yLyuH9_c-_B_NvrJk12Xh",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1BZMF7-u3i_y7RcxI3MTrk8eaX4Js4bBz",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06536": {
+     "folder": "10Y1J372H4W3jBfZg5chVSAMt5LOdSH2p",
+     "title": "(รอบ 4) 06536 รพ.สต.เชียงคาน",
+     "files": {
+      "AT1": {
+       "id": "1fPTc9csFaozuuv58TU0epTmjPN06Gd2Y",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1-5Bcfb3QXHWl-n-0SM7jH3BhnoZnvwvE",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1yTqdQwYxIf1JpbzggLVeReFpupHwXI9f",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1nflNnVCmBxpvPrt1TtRG5wr8GRjuFzYd",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06537": {
+     "folder": "1WG6524_QmzgRSs9n3OPd8wRPvRzzWQh3",
+     "title": "(รอบ 4) 06537 รพ.สต.พระธาตุ",
+     "files": {
+      "AT1": {
+       "id": "1rH-fWB6MEpByD33OWzDYa4DxWiDOIuzB",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1l1p8gaLryubJoBvIf2Mxw7hj1X0nTT0_",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1NnFCZwgVsWSn5Y160uD-haCeLVF5uV4R",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1WS4k-6jGZWPzkxyZYJ7rzzgjkW1ZTEmY",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06538": {
+     "folder": "1d0QKkpMEt-rHuzHpExMvF9LSHBwKSeMk",
+     "title": "(รอบ 4) 06538 รพ.สต.ตำบลพญาแก้ว",
+     "files": {
+      "AT1": {
+       "id": "1xBHXsu-6nNp6_LBFtbv-B1UHDm86jw2J",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "14celnvFSFse90iBV_DgDZKUW_BY3UDrG",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "16EOZZpdlsuWekie0gbGs9-eVtTBDzFzU",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1VyB5Qnp6lxRVVyS3JjR1o4iUY6S-IjJK",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06539": {
+     "folder": "1Ej7C7go-6XfCSZzo0REUiTTxggdOWe42",
+     "title": "(รอบ 4) 06539 รพ.สต.ตำบลพระพุทธบาท",
+     "files": {
+      "AT1": {
+       "id": "1X8HI0wWQJEJOI11N94DaWOQLdqlxk9bq",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "12GkDvO3zNXMy-Fd3dFHcPeEkiuhLG_3l",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1T0KmWd_rwdf4PRKMdaCz5dr10RJDICEg",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "15Isa0lIMNL7jxCTXUTKrEKGgRlxNVFWx",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06551": {
+     "folder": "1X6H4SDdyxDKrNg9DUHRQ1VbTnE1gO-27",
+     "title": "(รอบ 4) 06551 รพ.สต.ห้วยโก๋น",
+     "files": {
+      "AT1": {
+       "id": "116OYdAzZUAMi1hsJ5GGBlhbkYnKe94pz",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "12LnXWohRCriNdfNRCordCOUuxsencnNJ",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1NKacWGUTOq048ZO7H9XQ6I9hfdI1AQOF",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1G0Lgyk9FD1lKCEgsdQflw4W82l1naXx6",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "06552": {
+     "folder": "1Z0ZiaPyjtqsV4nqyumg0YdvuEm9Ki0-x",
+     "title": "(รอบ 4) 06552 รพ.สต.บ้านด่าน",
+     "files": {
+      "AT1": {
+       "id": "1dwxbJ7iY8u8t7CLG8HnHeyodGTQPLM2J",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1hoz1Gc5AaQiljrzDDb5YF0Aok2jb_UO7",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1DR0pFADzdIJxRJj0aDQHzYox2topWPlH",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1_27Tj1zGsWCX9xmTRC0PWfsgk6iSkeKB",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    },
+    "06553": {
+     "folder": "1i4tw_j-XochGrCxcF2WjaUsI4JjBXWa5",
+     "title": "(รอบ 4) 06553 รพ.สต.น้ำรีพัฒนา",
+     "files": {
+      "AT1": {
+       "id": "1IucZyhFff05g9bz2Qs1cUPbwxXC-41_c",
+       "name": "AT1.jpg",
+       "image": true
+      },
+      "AT2": {
+       "id": "1zs-8DhbNG6GUSdQxoU8A0FU1EzhSI4Ww",
+       "name": "AT2.jpg",
+       "image": true
+      },
+      "BF1": {
+       "id": "1xrimWz7HdcRDfL2pq3wji8BECE8--BF0",
+       "name": "BF1.jpg",
+       "image": true
+      },
+      "BF2": {
+       "id": "1gnHSBvMWB8p4GDz_kvag1aUXlF1ZvQYy",
+       "name": "BF2.jpg",
+       "image": true
+      }
+     }
+    }
+   }
+  },
+  "pilot": {
+   "folder": "14VvVWFoIY4lAYUIPyZANxlsvZrZN-DYJ",
+   "title": "นำร่อง",
+   "sites": {
+    "10373": {
+     "folder": "1JJMQlyoG_O-vSDFClkR0c9QE_rEj9npU",
+     "title": "(นำร่อง) 10373 สสช.บ้านห้วยมอญ",
+     "files": {
+      "AT1": {
+       "id": "1HuqmkJCyz56XdjkVtKBgK3CK-MuVh1ZM",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "14ZnCUzGV0qNbzHKVkTZLWjrVDGbGiizl",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1rEFP0i_dlGIrmfNPvtI1qFemItDdTAmT",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1IZ0I5uanwZk3pFk8Q2EnKHinSkGsHQWb",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "14012": {
+     "folder": "1TG0PoTHOWGEGS9qSMxoYYJSC0w9Ned2I",
+     "title": "(นำร่อง) 14012 รพ.สต.ปัว",
+     "files": {
+      "AT1": {
+       "id": "1hUV2_Wfe6IahrTel8oNZ6ozPq84cQMP4",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1nAockpGFzZt0uCB_tIdaQLe0kRsdVfBA",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1fdr42B00AoxJoIf0F9ZD04HA29NOPqCA",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1wrz5sTnbKcuRfxt5Zhn0SpVrQgsZpOdZ",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06449": {
+     "folder": "1LO6BwINdw_14ChVqD6odO5jTW0YEJ3GJ",
+     "title": "(นำร่อง) 06449 รพ.สต.ผาสิงห์",
+     "files": {
+      "AT1": {
+       "id": "1i8f8I6A0KqCxOI2xbA-jxLCv0VIgOpXt",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1VhPEHL70k2nmvyXK0UdbQ2lREOGqyKCr",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1hwCZKwdIQj7nnFQSYgBmotX7ZDMeEEn8",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1aQVPEaQ1mmZmqlGFctld2SJcDqtXpnnL",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06450": {
+     "folder": "1IcxsZYtaj1ZocsnR_eQFhyGTyhptxFFd",
+     "title": "(นำร่อง) 06450 รพ.สต.ไชยสถาน",
+     "files": {
+      "AT1": {
+       "id": "1Q6PnTMrQlz6yx3AbUpMyziVelUKkYHc2",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1GQbi0SGbm5oPNwIDrvpwrY1Nne7D_hMl",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1Ps4CNqxuBPW2mBO_hnjDfkZM9JFpIW9F",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "19G3pKPJ1GcLQ8CnYqyl78dZqY894Uad1",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06463": {
+     "folder": "1qhagETyqs4qKiZ688OIu90TUWVN2cOjj",
+     "title": "(นำร่อง) 06463 รพ.สต.เมืองจัง",
+     "files": {
+      "AT1": {
+       "id": "1BHCWmpLeEvqretLH5esMHmC8TjOMa64I",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1_aW2kHr6Whs5sU5Bvke8NN-VdRksMMYh",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1Ev-JqU87clED2QodfXMnvZLIX9-mAv0V",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1wN6Nud0QpK8b5HCdOO7kRXv8bUYa90Z0",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06488": {
+     "folder": "1chVdwq3l3dEd04VaWMeybmCIVIphqza3",
+     "title": "(นำร่อง) 06488 รพ.สต.แงง",
+     "files": {
+      "AT1": {
+       "id": "1j2If8qs0LE-S0BT_TfhjCdaMfofTuPnS",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1TLpfPqXAwD_Cl4t0DROJFqoTkPXdiL0L",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1ktR7EuEAw44MKlpllci4vdSoxW_BUglY",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1b5gy65q4n8aiVBfwARoFMci582rGEU58",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06493": {
+     "folder": "1BwDsnS65sIwh1kxRctstcA5FSKqE0SAm",
+     "title": "(นำร่อง) 06493 รพ.สต.อวน",
+     "files": {
+      "AT1": {
+       "id": "1A2ZkSR73D9nRnBzptGvCU5OB5NNfn8fd",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1HcdpAsVFwLBFgkfONY2SvOke00keI7MK",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "10LzA0ZhoEd73hFGx4MOgvaz078LrB9A6",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1GKPas-YxgSafbKWi8yIcb6bE9KY_Yu3H",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06495": {
+     "folder": "1UuuERgWmb_lmwHqJmwPp9K6a6RJVZY8K",
+     "title": "(นำร่อง) 06495 รพ.สต.เจดีย์ชัย",
+     "files": {
+      "AT1": {
+       "id": "1rhmzDcNiiMgqVSuAmlhDPVV9LA_4oyZQ",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1k-kvkV30KPpPhqzTHNMHrSp1TydwHdk2",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1bZFRdXkHLTxdVPHQVUOlrnxTnRKPRAMP",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1KVIf8mFfy6oeqyX4a2wLqd7TbjlG1vJa",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06494": {
+     "folder": "1UUoj96qM1h1EmYRpm-hBDpemuYlvQVeG",
+     "title": "(นำร่อง)06494 รพ.สต.ไชยวัฒนา",
+     "files": {
+      "AT1": {
+       "id": "1DLnOS73FcSrcBy3c_g9lQk_6UD-RRafm",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "1BVYRpZem3ytA6EUlGu9sBVDXJ1XaNN6d",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "1clS5bNF8ku0dF4HytniziRAo4Wd10Y5o",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1pyUNeNlkJO1QaaLVdtCq8KP-ANlTYrtD",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    },
+    "06550": {
+     "folder": "1V4JzYcAmYMhagwfjk4lqFPW9m6HNFbRj",
+     "title": "(นำร่อง)06550 รพ.สต.ยอด",
+     "files": {
+      "AT1": {
+       "id": "1h-pHrhoV1XdRY5-hp0XkwSqkDYqor7F6",
+       "name": "AT1.png",
+       "image": true
+      },
+      "AT2": {
+       "id": "13VutQlD7uSXdEU8PWPOGRsekq0zzwVpi",
+       "name": "AT2.png",
+       "image": true
+      },
+      "BF1": {
+       "id": "10h_w-OMp3QBFBPo-DtDqutWFP6gdUJ29",
+       "name": "BF1.png",
+       "image": true
+      },
+      "BF2": {
+       "id": "1d9rHVUUXITMS2UHJybheN-KNZb5ukv0Q",
+       "name": "BF2.png",
+       "image": true
+      }
+     }
+    }
+   }
+  }
+ }
+}
